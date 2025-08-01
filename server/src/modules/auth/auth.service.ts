@@ -5,10 +5,10 @@ import {
   NotFoundException,
   Logger,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ProfilesService } from '../profiles/profiles.service';
