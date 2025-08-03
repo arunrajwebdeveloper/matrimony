@@ -84,7 +84,7 @@ export class AuthController {
       maxAge: refreshTokenExpiresIn * 1000,
     });
 
-    return { accessToken };
+    return { accessToken, user };
   }
 
   @Post('refresh')

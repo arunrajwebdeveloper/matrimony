@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lexend_Deca } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
+import Header from "@/components/Header";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+export const lexendDeca = Lexend_Deca({
+  subsets: ["latin"], // Specify the desired subsets
+  display: "swap", // Recommended for better performance
+  variable: "--font-lexend-deca", // Optional: Define a CSS variable for easier styling
 });
 
 export const metadata: Metadata = {
@@ -24,9 +22,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${lexendDeca.variable} antialiased`}>
+        <NextTopLoader
+          color="white"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          zIndex={9999}
+          template={`<div class="fixed top-0 left-0 h-[3px] w-full z-[9999] bg-gradient-to-r from-indigo-600 to-pink-500 animate-gradientMove" role="bar"></div>`}
+        />
+        <Header />
         {children}
       </body>
     </html>

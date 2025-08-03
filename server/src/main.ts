@@ -3,9 +3,12 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(cookieParser());
 
   // Global validation pipe for DTOs
   app.useGlobalPipes(
@@ -19,6 +22,13 @@ async function bootstrap() {
     }),
   );
 
+  // app.enableCors();
+  app.enableCors({
+    origin: ['http://localhost:3000'],
+    credentials: true, // Allow cookies
+  });
+  // app.setGlobalPrefix('api');
+
   // Global exception filter for consistent error responses
   app.useGlobalFilters(new HttpExceptionFilter());
 
@@ -31,9 +41,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document); // Access at /api-docs
-
-  // Enable CORS for frontend
-  app.enableCors();
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
