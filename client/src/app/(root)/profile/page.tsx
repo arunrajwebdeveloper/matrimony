@@ -5,19 +5,19 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import api from "@/lib/api";
-import { User } from "@/types";
+import { UserProfile } from "@/types";
 import { API_ENDPOINTS } from "@/utils/constants";
 
 const ProfilePage: React.FC = () => {
   const { user } = useAuth();
-  const [profileData, setProfileData] = useState<User | null>(null);
+  const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async (): Promise<void> => {
       try {
-        const response = await api.get<User>(API_ENDPOINTS.PROFILE);
+        const response = await api.get<UserProfile>(API_ENDPOINTS.PROFILE);
         setProfileData(response.data);
       } catch (err: any) {
         setError("Failed to load profile data");
@@ -57,7 +57,7 @@ const ProfilePage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Name
+                  First Name
                 </label>
                 <p className="mt-1 text-sm text-gray-900">
                   {profileData?.firstName || "N/A"}
@@ -65,28 +65,380 @@ const ProfilePage: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Email
+                  Last Name
                 </label>
                 <p className="mt-1 text-sm text-gray-900">
-                  {user?.email || "N/A"}
+                  {profileData?.lastName || "N/A"}
                 </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Role
+                  Gender
                 </label>
                 <p className="mt-1 text-sm text-gray-900">
-                  {profileData?.role || "User"}
+                  {profileData?.gender || "N/A"}
                 </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Member Since
+                  Date of Birth
                 </label>
                 <p className="mt-1 text-sm text-gray-900">
-                  {profileData?.createdAt
-                    ? new Date(profileData.createdAt).toLocaleDateString()
+                  {profileData?.dateOfBirth || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Religion
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.religion || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Mother Tongue
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.motherTongue || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Height
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.height || 0} cm
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Weight
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.weight || 0} kg
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Complexion
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.complexion || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Body Type
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.bodyType || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Disability Status
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.disabilityStatus || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  About Me
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.aboutMe || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Phone Number
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.phoneNumber || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Alternate Emails
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.alternateEmails?.join(", ") || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Country
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.country || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  State
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.state || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  City
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.city || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Residency Status
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.residencyStatus || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Family Type
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.familyType || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Family Status
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.familyStatus || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Father Occupation
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.fatherOccupation || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Mother Occupation
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.motherOccupation || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Brothers
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.brothers ?? 0}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Sisters
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.sisters ?? 0}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Brothers Married
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.brothersMarried ?? 0}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Sisters Married
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.sistersMarried ?? 0}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Family Values
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.familyValues || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Education Level
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.educationLevel || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Education Field
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.educationField || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Occupation
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.occupation || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Annual Income
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.annualIncome || 0}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Diet
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.diet || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Smoking Habit
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.smokingHabit || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Drinking Habit
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.drinkingHabit || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Hobbies
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.hobbies?.join(", ") || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Interests
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.interests?.join(", ") || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Marital Status
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.maritalStatus || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Children
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.children ?? 0}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Profile Picture
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.profilePicture || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Profile Photos
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.profilePhotos?.length
+                    ? profileData.profilePhotos.join(", ")
                     : "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Visibility
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.visibility || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Is Premium
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.isPremium ? "Yes" : "No"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Phone Verified
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.verification?.phone ? "Yes" : "No"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Email Verified
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.verification?.email ? "Yes" : "No"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  ID Verified
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.verification?.id ? "Yes" : "No"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Profile Review Status
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.verification?.profileReview || "pending"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Created At
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.createdAt || "N/A"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Updated At
+                </label>
+                <p className="mt-1 text-sm text-gray-900">
+                  {profileData?.updatedAt || "N/A"}
                 </p>
               </div>
             </div>
