@@ -22,7 +22,7 @@ function Header() {
       <div className="px-4 flex justify-between items-center h-[60px]">
         <div className="matrimony-logo">
           <Link
-            href={ROUTES.HOME}
+            href={isAuthenticated ? ROUTES.DASHBOARD : ROUTES.HOME}
             className="font-bold text-base text-pink-600"
           >
             Matrimony

@@ -60,7 +60,7 @@ const ProfilePage: React.FC = () => {
                   Name
                 </label>
                 <p className="mt-1 text-sm text-gray-900">
-                  {profileData?.name || "N/A"}
+                  {profileData?.firstName || "N/A"}
                 </p>
               </div>
               <div>
@@ -68,7 +68,7 @@ const ProfilePage: React.FC = () => {
                   Email
                 </label>
                 <p className="mt-1 text-sm text-gray-900">
-                  {profileData?.email || "N/A"}
+                  {user?.email || "N/A"}
                 </p>
               </div>
               <div>
