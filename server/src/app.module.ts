@@ -34,7 +34,7 @@ import { EmailModule } from './modules/email/email.module';
     ChatModule,
     SubscriptionsModule,
     AdminModule,
-    EmailModule, // Add EmailModule
+    EmailModule,
   ],
   controllers: [],
   providers: [],

@@ -4,14 +4,64 @@ import Image from "next/image";
 import Link from "next/link";
 import { Bell, Mail, Users } from "lucide-react";
 
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { ROUTES } from "@/utils/constants";
+
 function Header() {
+  const { user, isAuthenticated, logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async (): Promise<void> => {
+    await logout();
+    router.push(ROUTES.LOGIN);
+  };
+
   return (
     <header className="fixed top-0 left-0 z-[2000] w-full border-b-[1px] border-gray-200">
       <div className="px-4 flex justify-between items-center h-[60px]">
         <div className="matrimony-logo">
-          <Link href="/" className="font-bold text-base text-pink-600">
+          <Link
+            href={ROUTES.HOME}
+            className="font-bold text-base text-pink-600"
+          >
             Matrimony
           </Link>
+        </div>
+
+        <div className="flex items-center space-x-4">
+          {isAuthenticated ? (
+            <>
+              <Link
+                href={ROUTES.DASHBOARD}
+                className="text-gray-700 hover:text-blue-600"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href={ROUTES.PROFILE}
+                className="text-gray-700 hover:text-blue-600"
+              >
+                Profile
+              </Link>
+              <span className="text-gray-700">
+                Welcome, {user?.name || user?.email}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link
+              href={ROUTES.LOGIN}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Login
+            </Link>
+          )}
         </div>
 
         <div className="flex items-center gap-4">
