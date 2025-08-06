@@ -34,7 +34,7 @@ const ProfilePage: React.FC = () => {
     return (
       <ProtectedRoute>
         <div className="flex justify-center items-center h-64">
-          <LoadingSpinner size="lg" />
+          <LoadingSpinner size="md" />
         </div>
       </ProtectedRoute>
     );

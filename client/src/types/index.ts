@@ -1,4 +1,5 @@
 export * from "./auth";
+export * from "./profile";
 export * from "./api";
 
 export interface LoadingSpinnerProps {

@@ -76,8 +76,8 @@ export class AuthController {
       httpOnly: true,
       // Use secure in production to ensure HTTPS is used
       secure: this.configService.get<string>('NODE_ENV') === 'production',
-      // Set the path to the root so the cookie is available to all endpoints
-      path: '/auth',
+      // Set the path to the root so the cookie is available to auth endpoints
+      path: '/api/auth',
       // Use SameSite for CSRF protection
       sameSite: 'lax',
       // Set a clear expiration time
@@ -125,8 +125,8 @@ export class AuthController {
         httpOnly: true,
         // Use secure in production to ensure HTTPS is used
         secure: this.configService.get<string>('NODE_ENV') === 'production',
-        // Set the path to the root so the cookie is available to all endpoints
-        path: '/auth',
+        // Set the path to the root so the cookie is available to auth endpoints
+        path: '/api/auth',
         // Use SameSite for CSRF protection
         sameSite: 'lax',
         // Set a clear expiration time
