@@ -108,15 +108,21 @@ export class AuthController {
     }
 
     try {
+      const tokenRecord = await this.authService.findRefreshToken(refreshToken);
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid or expired refresh token.');
+      }
+
       const newAccessToken =
         await this.authService.getNewAccessToken(refreshToken);
+
       const refreshTokenExpiresIn = parseInt(
         this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN') || '604800',
         10,
       );
 
       const newRefreshToken = await this.authService.createRefreshToken(
-        req.user.sub,
+        tokenRecord?.userId?.toString(),
         refreshTokenExpiresIn,
       );
 

@@ -16,6 +16,7 @@ import { UserDocument } from '../users/schemas/user.schema';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ConfigService } from '@nestjs/config';
 import { RefreshTokenService } from './refresh-token.service';
+import { RefreshTokenDocument } from './schemas/refresh-token.schema';
 
 @Injectable()
 export class AuthService {
@@ -164,6 +165,12 @@ export class AuthService {
     return this.refreshTokenService.createToken(userId, expiresIn);
   }
 
+  async findRefreshToken(
+    refreshToken: string,
+  ): Promise<RefreshTokenDocument | null> {
+    return this.refreshTokenService.findRefreshToken(refreshToken);
+  }
+
   async validateUser(payload: any) {
     return this.usersService.findById(payload.sub);
   }
@@ -177,8 +184,9 @@ export class AuthService {
     await this.refreshTokenService.revokeToken(refreshToken);
 
     const user = await this.usersService.findById(
-      tokenRecord.userId?.toString(),
+      tokenRecord?.userId?.toString(),
     );
+
     if (!user || user.deletedAt) {
       await this.refreshTokenService.revokeAllUserTokens(
         tokenRecord.userId?.toString(),
@@ -190,10 +198,12 @@ export class AuthService {
     const profile = await this.profilesService.findByUserId(
       user?._id?.toString(),
     );
+
     const profileId = profile ? profile._id : null;
 
     const payload = { email: user.email, sub: user._id, profileId };
     const newAccessToken = await this.jwtService.signAsync(payload);
+
     return newAccessToken;
   }
 

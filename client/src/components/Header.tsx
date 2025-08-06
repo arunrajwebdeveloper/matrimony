@@ -41,6 +41,12 @@ function Header() {
               >
                 Profile
               </Link> */}
+        <Link
+          href={ROUTES.PROFILE}
+          className="text-gray-700 hover:text-blue-600"
+        >
+          Profile
+        </Link>
 
         {isAuthenticated ? (
           <div className="flex items-center gap-4">
