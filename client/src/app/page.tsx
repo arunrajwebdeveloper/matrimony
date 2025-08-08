@@ -1,12 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
+import { useRouter } from "next/navigation";
 
 const HomePage: React.FC = () => {
+  const router = useRouter();
+
   const { isAuthenticated, user } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push(ROUTES.DASHBOARD);
+    }
+  }, [isAuthenticated, router]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -15,7 +24,9 @@ const HomePage: React.FC = () => {
 
         {isAuthenticated ? (
           <div>
-            <p className="text-xl mb-6">Hello, {user?.name || user?.email}!</p>
+            <p className="text-xl mb-6">
+              Hello, {user?.fullName || user?.email}!
+            </p>
             <div className="space-x-4">
               <Link
                 href={ROUTES.DASHBOARD}

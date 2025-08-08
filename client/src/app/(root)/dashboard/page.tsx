@@ -15,7 +15,9 @@ const DashboardPage: React.FC = () => {
           <h2 className="text-xl font-semibold mb-4">
             Welcome to your dashboard!
           </h2>
-          <p className="text-gray-600">Hello, {user?.name || user?.email}!</p>
+          <p className="text-gray-600">
+            Hello, {user?.fullName || user?.email}!
+          </p>
 
           {/* Dashboard content */}
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

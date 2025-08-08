@@ -105,7 +105,7 @@ export class AuthService {
       },
     });
 
-    newUser.profile = newProfile._id?.toString();
+    newUser.profile = newProfile?._id?.toString();
     await newUser.save();
 
     this.eventEmitter.emit('user.created', {

@@ -10,6 +10,7 @@ import { ChatModule } from './modules/chat/chat.module';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { EmailModule } from './modules/email/email.module';
+import { MatchesModule } from './modules/matches/matches.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { EmailModule } from './modules/email/email.module';
     SubscriptionsModule,
     AdminModule,
     EmailModule,
+    MatchesModule,
   ],
   controllers: [],
   providers: [],
