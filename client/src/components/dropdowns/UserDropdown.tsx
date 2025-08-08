@@ -85,7 +85,7 @@ const UserDropdown: FC<UserDropdownProps> = ({
 
       {isOpen && (
         <div
-          className="origin-top-right absolute right-0 mt-2 w-[220px] rounded-md shadow-lg bg-white z-[2001]"
+          className="origin-top-right absolute right-0 mt-2 w-[220px] rounded-md shadow-lg bg-white z-[220]"
           role="menu"
         >
           <div className="py-1">

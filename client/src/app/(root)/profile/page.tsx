@@ -33,7 +33,7 @@ const ProfilePage: React.FC = () => {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className="flex justify-center items-center h-64 w-full">
+        <div className="flex justify-center items-center fixed top-0 left-0 z-[1000] w-full h-full">
           <LoadingSpinner size="md" />
         </div>
       </ProtectedRoute>
