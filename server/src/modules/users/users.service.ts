@@ -20,6 +20,7 @@ export class UsersService {
     // Select passwordHash explicitly as it's excluded by default
     return this.userModel
       .findOne({ email, deletedAt: null })
+      .populate('profile', 'profilePicture profilePhotos')
       .select('+passwordHash')
       .exec();
   }
@@ -31,7 +32,10 @@ export class UsersService {
   async findByIdWithProfile(
     id: string | Types.ObjectId,
   ): Promise<UserDocument | null> {
-    return this.userModel.findById(id).populate('profile').exec();
+    return this.userModel
+      .findById(id)
+      .populate('profile', 'profilePicture profilePhotos')
+      .exec();
   }
 
   async softDelete(id: string | Types.ObjectId): Promise<UserDocument | null> {

@@ -16,6 +16,7 @@ export const TOKEN_KEYS = {
 
 export const ROUTES = {
   LOGIN: "/login",
+  LOGOUT: "/logout",
   DASHBOARD: "/dashboard",
   PROFILE: "/profile",
   HOME: "/",

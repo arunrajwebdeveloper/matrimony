@@ -7,6 +7,7 @@ import { Bell, Mail, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
+import UserDropdown from "./dropdowns/UserDropdown";
 
 function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -18,7 +19,7 @@ function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 z-[2000] w-full border-b-[1px] border-gray-200">
+    <header className="fixed bg-white top-0 left-0 z-[2000] w-full border-b-[1px] border-gray-200">
       <div className="px-4 flex justify-between items-center h-[60px]">
         <div className="matrimony-logo">
           <Link
@@ -28,25 +29,6 @@ function Header() {
             Matrimony
           </Link>
         </div>
-
-        {/* <Link
-                href={ROUTES.DASHBOARD}
-                className="text-gray-700 hover:text-blue-600"
-              >
-                Dashboard
-              </Link>
-              <Link
-                href={ROUTES.PROFILE}
-                className="text-gray-700 hover:text-blue-600"
-              >
-                Profile
-              </Link> */}
-        <Link
-          href={ROUTES.PROFILE}
-          className="text-gray-700 hover:text-blue-600"
-        >
-          Profile
-        </Link>
 
         {isAuthenticated ? (
           <div className="flex items-center gap-4">
@@ -74,22 +56,26 @@ function Header() {
             >
               <span>Upgrade</span>
             </Link>
-            <div className="flex items-center gap-3 cursor-pointer">
-              <div className="font-medium text-black text-xs">
-                <span>Hello, {user?.fullName || user?.email}</span>
-                <span onClick={handleLogout} className="block">
-                  Logout
-                </span>
-              </div>
-              <div className="rounded-[50%] overflow-hidden w-[34px] h-[34px]">
-                <img
-                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=70"
-                  alt=""
-                  width={80}
-                  height={80}
-                  className="object-cover w-[34px] h-[34px]"
-                />
-              </div>
+            <div className="ms-4">
+              <UserDropdown
+                menu={[
+                  {
+                    name: "Dashboard",
+                    action: ROUTES.DASHBOARD,
+                  },
+                  {
+                    name: "Profile",
+                    action: ROUTES.PROFILE,
+                  },
+                  {
+                    name: "Logout",
+                    action: handleLogout,
+                  },
+                ]}
+                avatar={user?.profile?.profilePicture}
+                username={user?.fullName || ""}
+                email={user?.email || ""}
+              />
             </div>
           </div>
         ) : (

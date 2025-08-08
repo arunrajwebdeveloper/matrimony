@@ -1,3 +1,8 @@
+type UserProfileType = {
+  profilePicture: string;
+  profilePhotos: string[];
+};
+
 export interface User {
   id: string;
   email: string;
@@ -6,6 +11,7 @@ export interface User {
   avatar?: string;
   createdAt?: string;
   updatedAt?: string;
+  profile: UserProfileType;
 }
 
 export interface LoginCredentials {
