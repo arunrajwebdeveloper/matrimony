@@ -89,7 +89,7 @@ const ProfileCompletionCard = () => {
     email: "john.doe@example.com",
     dateOfBirth: "1990-01-01",
     profilePictureUrl: null, // This field is missing
-    address: "123 Main St",
+    address: "",
     city: "", // This field is missing
     bio: "A short bio about myself.",
   });
