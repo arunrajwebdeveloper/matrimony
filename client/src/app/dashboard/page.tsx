@@ -84,7 +84,10 @@ export const users: User[] = [
   },
 ];
 
-const pageBreadcrumbs = [{ label: "Dashboard", href: ROUTES.DASHBOARD }];
+const pageBreadcrumbs = [
+  { label: "Dashboard", href: ROUTES.DASHBOARD },
+  { label: "Feeds", href: "" },
+];
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
