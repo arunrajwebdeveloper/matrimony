@@ -53,3 +53,22 @@ export interface UserProfile {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface ProfileCardProps {
+  title?: string | null;
+  className?: string;
+  link?: string | null;
+  children: React.ReactNode;
+}
+
+export interface UserCardType {
+  name: string;
+  profileId: string;
+  height: string;
+  age: number;
+  profession: string;
+  location: string;
+  motherTongue: string;
+  isOnline: boolean;
+  profileImage: string;
+}

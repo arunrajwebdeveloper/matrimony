@@ -1,19 +1,9 @@
 import { useState, useRef, useEffect, FC, MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
-
-interface MenuType {
-  name: string;
-  action?: string | (() => void);
-}
-
-interface UserDropdownProps {
-  avatar?: string;
-  menu: MenuType[];
-  username: string;
-  email: string;
-}
+import UserSummaryDisplay from "../profile/UserSummaryDisplay";
+import { LucideIcon } from "lucide-react";
+import { UserDropdownProps } from "@/types/menu";
 
 const UserDropdown: FC<UserDropdownProps> = ({
   avatar,
@@ -84,22 +74,15 @@ const UserDropdown: FC<UserDropdownProps> = ({
           role="menu"
         >
           <div className="py-1">
-            <div className="p-4 flex items-center gap-4">
-              <div className="rounded-[50%] overflow-hidden w-[50px] h-[50px] flex-none relative">
-                <img
-                  src={avatar}
-                  alt=""
-                  className="object-cover w-[50px] h-[50px]"
-                  loading="lazy"
-                />
-              </div>
-              <div>
-                <p className="text-sm">{username}</p>
-                <p className="text-xs text-gray-500">{email}</p>
-              </div>
+            <div className="p-4">
+              <UserSummaryDisplay
+                avatar={avatar}
+                username={username}
+                email={email}
+              />
             </div>
             {/* Dropdown menu items */}
-            {menu?.map(({ name, action }) => {
+            {menu?.map(({ label, icon: Icon, action }) => {
               const isString = typeof action === "string";
 
               const handleAction = (action: any) => {
@@ -109,20 +92,26 @@ const UserDropdown: FC<UserDropdownProps> = ({
 
               return isString ? (
                 <Link
-                  key={name}
+                  key={label}
                   href={action}
                   onClick={toggleDropdown}
                   className="text-gray-700 block py-3 px-4 cursor-pointer text-sm hover:bg-gray-100 transition-colors"
                 >
-                  {name}
+                  <div className="flex items-center gap-3">
+                    <Icon size={18} />
+                    <span>{label}</span>
+                  </div>
                 </Link>
               ) : (
                 <a
-                  key={name}
+                  key={label}
                   onClick={() => handleAction(action)}
                   className="text-gray-700 block py-3 px-4 cursor-pointer text-sm hover:bg-gray-100 transition-colors"
                 >
-                  {name}
+                  <div className="flex items-center gap-3">
+                    <Icon size={18} />
+                    <span>{label}</span>
+                  </div>
                 </a>
               );
             })}

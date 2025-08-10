@@ -1,17 +1,6 @@
 import React from "react";
 import Link from "next/link";
-
-interface User {
-  name: string;
-  profileId: string;
-  height: string;
-  age: number;
-  profession: string;
-  location: string;
-  motherTongue: string;
-  isOnline: boolean;
-  profileImage: string;
-}
+import { UserCardType } from "@/types";
 
 function UserCard({
   name,
@@ -23,7 +12,7 @@ function UserCard({
   motherTongue,
   profileImage,
   isOnline,
-}: User) {
+}: UserCardType) {
   return (
     <Link
       href="/profile"

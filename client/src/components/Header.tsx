@@ -2,12 +2,21 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Bell, Mail, Users } from "lucide-react";
+import {
+  Bell,
+  LayoutDashboard,
+  LogOut,
+  LucideIcon,
+  Mail,
+  UserRound,
+  Users,
+} from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import UserDropdown from "./dropdowns/UserDropdown";
+import { UserDropdownMenuType } from "@/types/menu";
 
 function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -17,6 +26,24 @@ function Header() {
     await logout();
     router.push(ROUTES.LOGIN);
   };
+
+  const navItems: UserDropdownMenuType[] = [
+    {
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      action: ROUTES.DASHBOARD,
+    },
+    {
+      label: "Profile",
+      icon: UserRound,
+      action: ROUTES.PROFILE,
+    },
+    {
+      label: "Logout",
+      icon: LogOut,
+      action: handleLogout,
+    },
+  ];
 
   return (
     <header className="fixed bg-white top-0 left-0 z-[200] w-full border-b-[1px] border-gray-200">
@@ -58,20 +85,7 @@ function Header() {
             </Link>
             <div className="ms-4">
               <UserDropdown
-                menu={[
-                  {
-                    name: "Dashboard",
-                    action: ROUTES.DASHBOARD,
-                  },
-                  {
-                    name: "Profile",
-                    action: ROUTES.PROFILE,
-                  },
-                  {
-                    name: "Logout",
-                    action: handleLogout,
-                  },
-                ]}
+                menu={navItems}
                 avatar={user?.profile?.profilePicture}
                 username={user?.fullName || ""}
                 email={user?.email || ""}

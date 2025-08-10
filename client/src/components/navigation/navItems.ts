@@ -1,5 +1,5 @@
+import { NavigationItemType } from "@/types/menu";
 import {
-  LucideIcon,
   MailOpen,
   CircleCheck,
   Eye,
@@ -11,15 +11,13 @@ import {
   Settings2,
 } from "lucide-react";
 
-export interface NavItem {
-  label: string;
-  icon: LucideIcon;
-  count: number;
-  href: string;
-}
-
-export const navItems: NavItem[] = [
-  { label: "My Profile", icon: UserRound, count: 0, href: "/profile" },
+export const navItems: NavigationItemType[] = [
+  {
+    label: "My Profile",
+    icon: UserRound,
+    count: 0,
+    href: "/dashboard/profile",
+  },
   { label: "Inbox", icon: MailOpen, count: 12, href: "/" },
   { label: "Accepted", icon: CircleCheck, count: 25, href: "/" },
   { label: "Recently Viewed", icon: Eye, count: 54, href: "/" },

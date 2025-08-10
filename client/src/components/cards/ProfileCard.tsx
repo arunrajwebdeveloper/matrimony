@@ -1,11 +1,5 @@
+import { ProfileCardProps } from "@/types";
 import Link from "next/link";
-
-interface ProfileCardProps {
-  title?: string | null;
-  className?: string;
-  link?: string | null;
-  children: React.ReactNode;
-}
 
 function ProfileCard({
   title = null,

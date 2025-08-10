@@ -7,22 +7,16 @@ import api from "@/lib/api";
 import { UserProfile } from "@/types";
 import { API_ENDPOINTS } from "@/utils/constants";
 import {
-  UserCheck,
-  Star,
   User,
   Home,
-  Book,
   Heart,
-  Phone,
   MapPin,
-  Group,
   Briefcase,
   Pill,
-  Smile,
-  Image as ImageIcon,
   ShieldCheck,
-  Clock,
 } from "lucide-react";
+import Navigation from "@/components/navigation/Navigation";
+import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -69,8 +63,15 @@ const ProfilePage: React.FC = () => {
       <div className="w-[25%] px-2">
         <div className="mt-5">
           <div className="py-4">
-            <h3 className="font-semibold text-black text-md mb-6">Profile</h3>
-            dgdfgfdg
+            {/* <h3 className="font-semibold text-black text-md mb-6">Profile</h3> */}
+            <div className="mb-8">
+              <UserSummaryDisplay
+                avatar={user?.profile?.profilePicture}
+                username={user?.fullName || ""}
+                email={user?.email || ""}
+              />
+            </div>
+            <Navigation />
           </div>
         </div>
       </div>
