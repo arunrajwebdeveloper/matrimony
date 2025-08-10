@@ -8,6 +8,7 @@ import {
   LogOut,
   LucideIcon,
   Mail,
+  Settings2,
   UserRound,
   Users,
 } from "lucide-react";
@@ -38,6 +39,11 @@ function Header() {
       label: "Profile",
       icon: UserRound,
       action: ROUTES.PROFILE,
+    },
+    {
+      label: "Settings",
+      icon: Settings2,
+      action: ROUTES.SETTINGS,
     },
     {
       label: "Logout",

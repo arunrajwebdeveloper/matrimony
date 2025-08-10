@@ -24,18 +24,18 @@ function UserCard({
           src={profileImage}
           alt={name}
         />
-        <span
+        {/* <span
           className={`w-[10px] h-[10px] rounded-[50px] absolute top-1 right-1 z-30 border border-white ${
             isOnline ? "bg-green-500" : "bg-yellow-500"
           }`}
-        ></span>
+        ></span> */}
       </div>
       <div className="py-4 px-5">
         <div className="flex gap-2 items-center mb-1">
           <h3 className="text-md font-medium text-black">{name}</h3>
           <span className="text-sm text-gray-700">{profileId}</span>
         </div>
-        <p className="text-xs text-gray-600">{`${height}, ${age}, ${motherTongue}`}</p>
+        <p className="text-xs text-gray-600">{`${height}, ${age} Yrs, ${motherTongue}`}</p>
         <p className="text-xs text-gray-600">{`${profession}, ${location}`}</p>
       </div>
     </Link>

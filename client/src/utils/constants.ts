@@ -19,6 +19,7 @@ export const ROUTES = {
   LOGOUT: "/logout",
   DASHBOARD: "/dashboard",
   PROFILE: "/dashboard/profile",
+  SETTINGS: "/dashboard/settings",
   HOME: "/",
 } as const;
 
