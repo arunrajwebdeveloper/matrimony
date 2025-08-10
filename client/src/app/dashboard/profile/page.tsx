@@ -99,15 +99,7 @@ const ProfilePage: React.FC = () => {
               </div>
             )}
             <div className="space-y-8">
-              <ProfileImagesGrid
-                // mediaItems={profileData?.profilePhotos}
-                mediaItems={[
-                  "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
-                  "https://images.unsplash.com/photo-1607746882042-944635dfe10e?q=80&w=1000",
-                  "https://images.unsplash.com/photo-1607990283143-e81e7a2c9349?q=80&w=1000",
-                  "https://images.unsplash.com/photo-1629818385919-e6bfcd7f72cf?q=80&w=1000",
-                ]}
-              />
+              <ProfileImagesGrid mediaItems={profileData?.profilePhotos} />
               {/* About me */}
               <div className="px-6 py-4">
                 <h3 className="flex items-center font-semibold text-black text-md mb-6">
@@ -115,7 +107,7 @@ const ProfilePage: React.FC = () => {
                   About me
                 </h3>
                 <div>
-                  <p className="text-sm text-gray-800 font-normal leading-5">
+                  <p className="text-sm text-gray-600 font-normal leading-6">
                     {profileData?.aboutMe || "N/A"}
                   </p>
                 </div>
