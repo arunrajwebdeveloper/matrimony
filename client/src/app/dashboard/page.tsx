@@ -8,6 +8,8 @@ import UserCard from "@/components/profile/UserCard";
 import Navigation from "@/components/navigation/Navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { ROUTES } from "@/utils/constants";
+import SidebarCard from "@/components/cards/SidebarCard";
+import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
 
 interface User {
   name: string;
@@ -135,7 +137,35 @@ const DashboardPage: React.FC = () => {
         </div>
         <div className="w-[25%] px-2">
           <div className="mt-5">
-            <ProfileCompletionCard />
+            <div className="mb-3">
+              <ProfileCompletionCard />
+            </div>
+
+            {/* Sidebar items */}
+
+            <SidebarCard title="Interests Sent" link="/" className="mb-3">
+              <div className="flex flex-col gap-3">
+                {users?.map((user) => {
+                  return <UserCardSidebarItem key={user.name} {...user} />;
+                })}
+              </div>
+            </SidebarCard>
+
+            <SidebarCard title="Interests Received" link="/" className="mb-3">
+              <div className="flex flex-col gap-3">
+                {users?.map((user) => {
+                  return <UserCardSidebarItem key={user.name} {...user} />;
+                })}
+              </div>
+            </SidebarCard>
+
+            <SidebarCard title="Shortlisted" link="/" className="mb-3">
+              <div className="flex flex-col gap-3">
+                {users?.map((user) => {
+                  return <UserCardSidebarItem key={user.name} {...user} />;
+                })}
+              </div>
+            </SidebarCard>
           </div>
         </div>
       </div>

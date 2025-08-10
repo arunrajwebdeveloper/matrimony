@@ -61,6 +61,13 @@ export interface ProfileCardProps {
   children: React.ReactNode;
 }
 
+export interface SidebarCardProps {
+  title?: string | null;
+  className?: string;
+  link?: string | null;
+  children: React.ReactNode;
+}
+
 export interface UserCardType {
   name: string;
   profileId: string;
@@ -70,6 +77,12 @@ export interface UserCardType {
   location: string;
   motherTongue: string;
   isOnline: boolean;
+  profileImage: string;
+}
+
+export interface UserCardSidebarItemType {
+  name: string;
+  profileId: string;
   profileImage: string;
 }
 
