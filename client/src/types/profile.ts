@@ -72,3 +72,8 @@ export interface UserCardType {
   isOnline: boolean;
   profileImage: string;
 }
+
+export type MediaItem = {
+  source: string;
+  type: "video" | "image";
+};

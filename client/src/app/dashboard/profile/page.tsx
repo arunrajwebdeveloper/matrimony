@@ -14,9 +14,13 @@ import {
   Briefcase,
   Pill,
   ShieldCheck,
+  BookOpen,
 } from "lucide-react";
 import Navigation from "@/components/navigation/Navigation";
 import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
+import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
+import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
+import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -83,6 +87,27 @@ const ProfilePage: React.FC = () => {
             </div>
           )}
           <div className="space-y-8">
+            <ProfileImagesGrid
+              // mediaItems={profileData?.profilePhotos}
+              mediaItems={[
+                "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
+                "https://images.unsplash.com/photo-1607746882042-944635dfe10e?q=80&w=1000",
+                "https://images.unsplash.com/photo-1607990283143-e81e7a2c9349?q=80&w=1000",
+                "https://images.unsplash.com/photo-1629818385919-e6bfcd7f72cf?q=80&w=1000",
+              ]}
+            />
+            {/* About me */}
+            <div className="px-6 py-4">
+              <h3 className="flex items-center font-semibold text-black text-md mb-6">
+                <BookOpen size={20} className="mr-2 text-black" />
+                About me
+              </h3>
+              <div>
+                <p className="text-sm text-gray-800 font-normal leading-5">
+                  {profileData?.aboutMe || "N/A"}
+                </p>
+              </div>
+            </div>
             {/* Personal Information */}
             <div className="px-6 py-4">
               <h3 className="flex items-center font-semibold text-black text-md mb-6">
@@ -104,7 +129,7 @@ const ProfilePage: React.FC = () => {
                 />
                 <DetailRow
                   label="Date of Birth"
-                  value={profileData?.dateOfBirth || "N/A"}
+                  value={dateOfBirthFormat(profileData?.dateOfBirth)}
                 />
                 <DetailRow
                   label="Religion"
@@ -286,7 +311,7 @@ const ProfilePage: React.FC = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                 <DetailRow
-                  label="Is Premium"
+                  label="Premium Member"
                   value={profileData?.isPremium ? "Yes" : "No"}
                 />
                 <DetailRow
@@ -315,7 +340,9 @@ const ProfilePage: React.FC = () => {
         </div>
       </div>
       <div className="w-[25%] px-2">
-        <div className="mt-5">fhgfhgf</div>
+        <div className="mt-5">
+          <ProfileCompletionCard />
+        </div>
       </div>
     </div>
   );
