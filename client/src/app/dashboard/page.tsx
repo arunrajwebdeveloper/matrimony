@@ -111,21 +111,21 @@ const DashboardPage: React.FC = () => {
         <div className="w-[50%] px-2">
           <div className="mt-5">
             <ProfileCard title="Preferred Matches" link="/" className="mb-5">
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-3">
                 {users?.map((user) => {
                   return <UserCard key={user.name} {...user} />;
                 })}
               </div>
             </ProfileCard>
             <ProfileCard title="New Matches" link="/" className="mb-5">
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-3">
                 {users?.map((user) => {
                   return <UserCard key={user.name} {...user} />;
                 })}
               </div>
             </ProfileCard>
             <ProfileCard title="Recent profile visitors" link="/">
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-3">
                 {users?.map((user) => {
                   return <UserCard key={user.name} {...user} />;
                 })}

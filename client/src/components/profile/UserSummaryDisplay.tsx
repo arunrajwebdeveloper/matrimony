@@ -1,6 +1,5 @@
 import React from "react";
 import VerifiedIcon from "../ui/VerifiedIcon";
-import PremiumIcon from "../ui/PremiumIcon";
 import OnlineStatusDot from "./OnlineStatusDot";
 
 interface UserSummaryProps {
@@ -20,7 +19,7 @@ function UserSummaryDisplay({ avatar, username, email }: UserSummaryProps) {
           loading="lazy"
         />
         <div className="absolute bottom-0.5 right-0.5 z-10 w-[10px] h-[10px]">
-          <OnlineStatusDot />
+          <OnlineStatusDot isOnline={true} />
         </div>
       </div>
       <div>

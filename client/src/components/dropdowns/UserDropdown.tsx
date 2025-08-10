@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, FC, MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import UserSummaryDisplay from "../profile/UserSummaryDisplay";
-import { LucideIcon } from "lucide-react";
 import { UserDropdownProps } from "@/types/menu";
 import OnlineStatusDot from "../profile/OnlineStatusDot";
 
@@ -72,7 +71,7 @@ const UserDropdown: FC<UserDropdownProps> = ({
           className="object-cover w-[34px] h-[34px] overflow-hidden rounded-[50%]"
         />
         <div className="absolute bottom-0 right-0 z-10 w-[10px] h-[10px]">
-          <OnlineStatusDot />
+          <OnlineStatusDot isOnline={true} />
         </div>
       </div>
 

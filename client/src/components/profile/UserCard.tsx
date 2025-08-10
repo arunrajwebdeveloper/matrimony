@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { UserCardType } from "@/types";
+import OnlineStatusDot from "./OnlineStatusDot";
 
 function UserCard({
   name,
@@ -18,22 +19,25 @@ function UserCard({
       href="/profile"
       className="flex rounded-md shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100"
     >
-      <div className="w-[100px] relative">
+      <div className="w-[100px] relative flex-none">
         <img
           className="w-[100px] h-[100px] object-cover"
           src={profileImage}
           alt={name}
         />
-        {/* <span
-          className={`w-[10px] h-[10px] rounded-[50px] absolute top-1 right-1 z-30 border border-white ${
-            isOnline ? "bg-green-500" : "bg-yellow-500"
-          }`}
-        ></span> */}
       </div>
-      <div className="py-4 px-5">
-        <div className="flex gap-2 items-center mb-1">
-          <h3 className="text-md font-medium text-black">{name}</h3>
-          <span className="text-sm text-gray-700">{profileId}</span>
+      <div className="py-4 px-5 flex-auto">
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex gap-2 items-center">
+            <h3 className="text-md font-medium text-black">{name}</h3>
+            <span className="text-sm text-gray-700">{profileId}</span>
+          </div>
+          <div className="flex gap-0.5 items-center">
+            <OnlineStatusDot isOnline={isOnline} />
+            <span className="font-normal text-xs text-gray-700">
+              {isOnline ? "Online" : "Offline"}
+            </span>
+          </div>
         </div>
         <p className="text-xs text-gray-600">{`${height}, ${age} Yrs, ${motherTongue}`}</p>
         <p className="text-xs text-gray-600">{`${profession}, ${location}`}</p>

@@ -1,8 +1,12 @@
 import React from "react";
 
-function OnlineStatusDot() {
+function OnlineStatusDot({ isOnline }: { isOnline: boolean }) {
   return (
-    <div className="w-[10px] h-[10px] rounded-[50%] bg-green-500 border-[1px] border-white"></div>
+    <div
+      className={`w-[10px] h-[10px] rounded-[50%] border-[1px] border-white ${
+        isOnline ? "bg-green-500" : "bg-amber-400"
+      }`}
+    ></div>
   );
 }
 

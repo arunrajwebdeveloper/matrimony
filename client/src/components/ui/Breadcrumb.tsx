@@ -1,34 +1,32 @@
 import React from "react";
 import Link from "next/link";
 
-// Define the type for a single breadcrumb item
 interface BreadcrumbItem {
   label: string;
   href: string;
 }
 
-// Define the props for the Breadcrumb component
 interface BreadcrumbProps {
   breadcrumbs: BreadcrumbItem[];
 }
 
 /**
- * A reusable breadcrumb component for Next.js with Tailwind CSS styling.
  * It is a functional component that accepts an array of breadcrumb items.
  * @param {BreadcrumbProps} props The component props.
  * @returns {JSX.Element} The rendered breadcrumb component.
  */
+
 function Breadcrumb({
   breadcrumbs,
 }: BreadcrumbProps): React.JSX.Element | null {
-  if (!breadcrumbs || breadcrumbs.length === 0) {
+  if (!breadcrumbs || breadcrumbs?.length === 0) {
     return null;
   }
 
   return (
     <nav className="flex w-full" aria-label="Breadcrumb">
       <ul className="inline-flex items-center space-x-3">
-        {breadcrumbs.map((breadcrumb, index) => {
+        {breadcrumbs?.map((breadcrumb, index) => {
           const isLast = index === breadcrumbs.length - 1;
 
           return (
