@@ -1,6 +1,7 @@
 import React from "react";
 import VerifiedIcon from "../ui/VerifiedIcon";
 import PremiumIcon from "../ui/PremiumIcon";
+import OnlineStatusDot from "./OnlineStatusDot";
 
 interface UserSummaryProps {
   avatar?: string;
@@ -18,6 +19,9 @@ function UserSummaryDisplay({ avatar, username, email }: UserSummaryProps) {
           className="object-cover w-[50px] h-[50px] rounded-md overflow-hidden"
           loading="lazy"
         />
+        <div className="absolute bottom-0.5 right-0.5 z-10 w-[10px] h-[10px]">
+          <OnlineStatusDot />
+        </div>
       </div>
       <div>
         <div className="flex items-center gap-2">

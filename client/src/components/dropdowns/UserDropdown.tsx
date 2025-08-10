@@ -4,6 +4,7 @@ import Link from "next/link";
 import UserSummaryDisplay from "../profile/UserSummaryDisplay";
 import { LucideIcon } from "lucide-react";
 import { UserDropdownProps } from "@/types/menu";
+import OnlineStatusDot from "../profile/OnlineStatusDot";
 
 const UserDropdown: FC<UserDropdownProps> = ({
   avatar,
@@ -63,9 +64,16 @@ const UserDropdown: FC<UserDropdownProps> = ({
       <div
         aria-expanded={isOpen}
         onClick={toggleDropdown}
-        className="rounded-[50%] overflow-hidden w-[34px] h-[34px] cursor-pointer"
+        className="rounded-[50%] w-[34px] h-[34px] cursor-pointer relative"
       >
-        <img src={avatar} alt="" className="object-cover w-[34px] h-[34px]" />
+        <img
+          src={avatar}
+          alt=""
+          className="object-cover w-[34px] h-[34px] overflow-hidden rounded-[50%]"
+        />
+        <div className="absolute bottom-0 right-0 z-10 w-[10px] h-[10px]">
+          <OnlineStatusDot />
+        </div>
       </div>
 
       {isOpen && (
