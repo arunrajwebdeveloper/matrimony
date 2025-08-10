@@ -16,7 +16,7 @@ function UserCard({
   return (
     <Link
       href="/profile"
-      className="flex rounded-md shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+      className="flex rounded-md shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100"
     >
       <div className="w-[100px] relative">
         <img

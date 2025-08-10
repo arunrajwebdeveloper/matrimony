@@ -6,6 +6,8 @@ import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import ProfileCard from "@/components/cards/ProfileCard";
 import UserCard from "@/components/profile/UserCard";
 import Navigation from "@/components/navigation/Navigation";
+import Breadcrumb from "@/components/ui/Breadcrumb";
+import { ROUTES } from "@/utils/constants";
 
 interface User {
   name: string;
@@ -82,47 +84,56 @@ export const users: User[] = [
   },
 ];
 
+const pageBreadcrumbs = [{ label: "Dashboard", href: ROUTES.DASHBOARD }];
+
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="flex main-container">
-      <div className="w-[25%] px-2">
-        <div className="mt-5">
-          <div className="py-4">
-            <h3 className="font-semibold text-black text-md mb-6">Main</h3>
-            <Navigation />
+    <div className="main-container">
+      {/* Breadcrumb */}
+      <div className="py-2">
+        <Breadcrumb breadcrumbs={pageBreadcrumbs} />
+      </div>
+
+      <div className="flex">
+        <div className="w-[25%] px-2">
+          <div className="mt-5">
+            <div className="py-4">
+              <h3 className="font-semibold text-black text-md mb-6">Main</h3>
+              <Navigation />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="w-[50%] px-2">
-        <div className="mt-5">
-          <ProfileCard title="Preferred Matches" link="/" className="mb-5">
-            <div className="flex flex-col gap-5">
-              {users?.map((user) => {
-                return <UserCard key={user.name} {...user} />;
-              })}
-            </div>
-          </ProfileCard>
-          <ProfileCard title="New Matches" link="/" className="mb-5">
-            <div className="flex flex-col gap-5">
-              {users?.map((user) => {
-                return <UserCard key={user.name} {...user} />;
-              })}
-            </div>
-          </ProfileCard>
-          <ProfileCard title="Recent profile visitors" link="/">
-            <div className="flex flex-col gap-5">
-              {users?.map((user) => {
-                return <UserCard key={user.name} {...user} />;
-              })}
-            </div>
-          </ProfileCard>
+        <div className="w-[50%] px-2">
+          <div className="mt-5">
+            <ProfileCard title="Preferred Matches" link="/" className="mb-5">
+              <div className="flex flex-col gap-5">
+                {users?.map((user) => {
+                  return <UserCard key={user.name} {...user} />;
+                })}
+              </div>
+            </ProfileCard>
+            <ProfileCard title="New Matches" link="/" className="mb-5">
+              <div className="flex flex-col gap-5">
+                {users?.map((user) => {
+                  return <UserCard key={user.name} {...user} />;
+                })}
+              </div>
+            </ProfileCard>
+            <ProfileCard title="Recent profile visitors" link="/">
+              <div className="flex flex-col gap-5">
+                {users?.map((user) => {
+                  return <UserCard key={user.name} {...user} />;
+                })}
+              </div>
+            </ProfileCard>
+          </div>
         </div>
-      </div>
-      <div className="w-[25%] px-2">
-        <div className="mt-5">
-          <ProfileCompletionCard />
+        <div className="w-[25%] px-2">
+          <div className="mt-5">
+            <ProfileCompletionCard />
+          </div>
         </div>
       </div>
     </div>

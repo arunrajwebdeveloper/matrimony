@@ -18,9 +18,6 @@ function UserSummaryDisplay({ avatar, username, email }: UserSummaryProps) {
           className="object-cover w-[50px] h-[50px] rounded-md overflow-hidden"
           loading="lazy"
         />
-        <div className="absolute top-0 left-[50%] ms-[-9px] mt-[-12px] w-[18px] h-[18px] z-30">
-          <PremiumIcon size={18} color="#ff9d1e" />
-        </div>
       </div>
       <div>
         <div className="flex items-center gap-2">

@@ -34,7 +34,7 @@ export class UsersService {
   ): Promise<UserDocument | null> {
     return this.userModel
       .findById(id)
-      .populate('profile', 'profilePicture profilePhotos')
+      .populate('profile', 'profilePicture visibility isPremium')
       .exec();
   }
 

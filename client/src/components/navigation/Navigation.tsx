@@ -27,7 +27,7 @@ export default function Navigation() {
                 <span>{label}</span>
               </div>
               {count !== 0 && (
-                <span className="text-xs font-normal bg-yellow-100 text-gray-500 py-1 px-1 rounded-md min-w-[26px] text-center">
+                <span className="text-xs font-normal bg-amber-50 text-amber-500 py-1 px-1 rounded-md min-w-[26px] text-center">
                   {count}
                 </span>
               )}

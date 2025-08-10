@@ -1,6 +1,8 @@
 type UserProfileType = {
   profilePicture: string;
   profilePhotos: string[];
+  isPremium: boolean;
+  visibility: string;
 };
 
 export interface User {
