@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, FC, MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ShieldCheck } from "lucide-react";
 
 interface MenuType {
   name: string;
@@ -74,24 +75,28 @@ const UserDropdown: FC<UserDropdownProps> = ({
         onClick={toggleDropdown}
         className="rounded-[50%] overflow-hidden w-[34px] h-[34px] cursor-pointer"
       >
-        <img
-          src={avatar}
-          alt=""
-          width={80}
-          height={80}
-          className="object-cover w-[34px] h-[34px]"
-        />
+        <img src={avatar} alt="" className="object-cover w-[34px] h-[34px]" />
       </div>
 
       {isOpen && (
         <div
-          className="origin-top-right absolute right-0 mt-2 w-[220px] rounded-md shadow-lg bg-white z-[220]"
+          className="origin-top-right absolute right-0 mt-2 w-[280px] rounded-md shadow-lg bg-white z-[220]"
           role="menu"
         >
           <div className="py-1">
-            <div className="p-4">
-              <p className="text-sm">{username}</p>
-              <p className="text-xs text-gray-500">{email}</p>
+            <div className="p-4 flex items-center gap-4">
+              <div className="rounded-[50%] overflow-hidden w-[50px] h-[50px] flex-none relative">
+                <img
+                  src={avatar}
+                  alt=""
+                  className="object-cover w-[50px] h-[50px]"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <p className="text-sm">{username}</p>
+                <p className="text-xs text-gray-500">{email}</p>
+              </div>
             </div>
             {/* Dropdown menu items */}
             {menu?.map(({ name, action }) => {
@@ -107,7 +112,7 @@ const UserDropdown: FC<UserDropdownProps> = ({
                   key={name}
                   href={action}
                   onClick={toggleDropdown}
-                  className="text-gray-700 block p-4 cursor-pointer text-sm hover:bg-gray-100 transition-colors"
+                  className="text-gray-700 block py-3 px-4 cursor-pointer text-sm hover:bg-gray-100 transition-colors"
                 >
                   {name}
                 </Link>
@@ -115,7 +120,7 @@ const UserDropdown: FC<UserDropdownProps> = ({
                 <a
                   key={name}
                   onClick={() => handleAction(action)}
-                  className="text-gray-700 block p-4 cursor-pointer text-sm hover:bg-gray-100 transition-colors"
+                  className="text-gray-700 block py-3 px-4 cursor-pointer text-sm hover:bg-gray-100 transition-colors"
                 >
                   {name}
                 </a>
