@@ -12,7 +12,12 @@ export default function Navigation() {
     <div>
       {navItems.map(
         ({ label, icon: Icon, count, href }: NavigationItemType) => {
-          const isActive = pathname === href;
+          // const isActive = pathname === href;
+
+          const isActive =
+            pathname === href ||
+            (href.startsWith("/dashboard/settings") &&
+              pathname.startsWith("/dashboard/settings"));
 
           return (
             <Link
