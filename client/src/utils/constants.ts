@@ -19,8 +19,14 @@ export const ROUTES = {
   LOGOUT: "/logout",
   DASHBOARD: "/dashboard",
   PROFILE: "/dashboard/profile",
-  SETTINGS: "/dashboard/settings",
   HOME: "/",
+  SETTINGS: {
+    DEFAULT: "/dashboard/settings/my-profile",
+    MY_PROFILE: "/dashboard/settings/my-profile",
+    SECURITY: "/dashboard/settings/security",
+    NOTIFICATION: "/dashboard/settings/notification",
+    DELETE_ACCOUNT: "/dashboard/settings/delete-account",
+  },
 } as const;
 
 export type ApiEndpoint = (typeof API_ENDPOINTS)[keyof typeof API_ENDPOINTS];

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 

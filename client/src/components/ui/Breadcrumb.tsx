@@ -1,24 +1,32 @@
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-interface BreadcrumbItem {
-  label: string;
-  href: string;
-}
-
-interface BreadcrumbProps {
-  breadcrumbs: BreadcrumbItem[];
+// Capitalizes and replaces hyphens with spaces
+function formatBreadcrumb(segment: string) {
+  return segment
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 /**
  * It is a functional component that accepts an array of breadcrumb items.
- * @param {BreadcrumbProps} props The component props.
  * @returns {JSX.Element} The rendered breadcrumb component.
  */
 
-function Breadcrumb({
-  breadcrumbs,
-}: BreadcrumbProps): React.JSX.Element | null {
+function Breadcrumb(): React.JSX.Element | null {
+  const pathname = usePathname();
+  const segments = pathname.split("/").filter(Boolean);
+
+  const breadcrumbs = segments.map((segment, index) => {
+    const href = "/" + segments.slice(0, index + 1).join("/");
+    return {
+      label: formatBreadcrumb(segment),
+      href,
+    };
+  });
+
   if (!breadcrumbs || breadcrumbs?.length === 0) {
     return null;
   }
@@ -27,14 +35,14 @@ function Breadcrumb({
     <nav className="flex w-full" aria-label="Breadcrumb">
       <ul className="inline-flex items-center space-x-3">
         {breadcrumbs?.map((breadcrumb, index) => {
-          const isLast = index === breadcrumbs.length - 1;
+          const isLastElement = index === breadcrumbs.length - 1;
 
           return (
             <li
               key={breadcrumb.href}
               className="inline-flex items-center select-none"
             >
-              {isLast ? (
+              {isLastElement ? (
                 // The last item is not a link and has a different style
                 <span className="text-xs font-normal text-gray-400">
                   {breadcrumb.label}

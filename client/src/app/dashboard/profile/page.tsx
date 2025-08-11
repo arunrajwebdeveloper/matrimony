@@ -23,11 +23,6 @@ import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
-const pageBreadcrumbs = [
-  { label: "Dashboard", href: ROUTES.DASHBOARD },
-  { label: "My Profile", href: "" },
-];
-
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
   value,
@@ -72,7 +67,7 @@ const ProfilePage: React.FC = () => {
     <div className="main-container">
       {/* Breadcrumb */}
       <div className="py-2">
-        <Breadcrumb breadcrumbs={pageBreadcrumbs} />
+        <Breadcrumb />
       </div>
 
       <div className="flex">

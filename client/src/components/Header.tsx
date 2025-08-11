@@ -43,7 +43,7 @@ function Header() {
     {
       label: "Settings",
       icon: Settings2,
-      action: ROUTES.SETTINGS,
+      action: ROUTES.SETTINGS.DEFAULT,
     },
     {
       label: "Logout",

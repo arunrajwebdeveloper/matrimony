@@ -86,11 +86,6 @@ export const users: User[] = [
   },
 ];
 
-const pageBreadcrumbs = [
-  { label: "Dashboard", href: ROUTES.DASHBOARD },
-  { label: "Feeds", href: "" },
-];
-
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
 
@@ -98,7 +93,7 @@ const DashboardPage: React.FC = () => {
     <div className="main-container">
       {/* Breadcrumb */}
       <div className="py-2">
-        <Breadcrumb breadcrumbs={pageBreadcrumbs} />
+        <Breadcrumb />
       </div>
 
       <div className="flex">

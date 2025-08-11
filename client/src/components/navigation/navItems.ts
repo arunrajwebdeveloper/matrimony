@@ -26,5 +26,10 @@ export const navItems: NavigationItemType[] = [
   { label: "Sent", icon: Send, count: 17, href: "/" },
   { label: "Declined / Cancelled", icon: Ban, count: 0, href: "/" },
   { label: "Blocked", icon: EyeOff, count: 0, href: "/" },
-  { label: "Settings", icon: Settings2, count: 0, href: ROUTES.SETTINGS },
+  {
+    label: "Settings",
+    icon: Settings2,
+    count: 0,
+    href: ROUTES.SETTINGS.DEFAULT,
+  },
 ];
