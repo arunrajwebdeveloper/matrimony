@@ -1,4 +1,5 @@
 import { NavigationItemType } from "@/types/menu";
+import { ROUTES } from "@/utils/constants";
 import {
   MailOpen,
   CircleCheck,
@@ -16,7 +17,7 @@ export const navItems: NavigationItemType[] = [
     label: "My Profile",
     icon: UserRound,
     count: 0,
-    href: "/dashboard/profile",
+    href: ROUTES.PROFILE,
   },
   { label: "Inbox", icon: MailOpen, count: 12, href: "/" },
   { label: "Accepted", icon: CircleCheck, count: 25, href: "/" },
@@ -25,5 +26,5 @@ export const navItems: NavigationItemType[] = [
   { label: "Sent", icon: Send, count: 17, href: "/" },
   { label: "Declined / Cancelled", icon: Ban, count: 0, href: "/" },
   { label: "Blocked", icon: EyeOff, count: 0, href: "/" },
-  { label: "Settings", icon: Settings2, count: 0, href: "/" },
+  { label: "Settings", icon: Settings2, count: 0, href: ROUTES.SETTINGS },
 ];
