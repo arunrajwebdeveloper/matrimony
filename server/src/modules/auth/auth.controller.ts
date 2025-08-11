@@ -76,8 +76,8 @@ export class AuthController {
       httpOnly: true,
       // Use secure in production to ensure HTTPS is used
       secure: this.configService.get<string>('NODE_ENV') === 'production',
-      // Set the path to the root so the cookie is available to all endpoints
-      path: '/',
+      // Set the path to the root so the cookie is available to auth endpoints
+      path: '/api/auth',
       // Use SameSite for CSRF protection
       sameSite: 'lax',
       // Set a clear expiration time
@@ -108,15 +108,21 @@ export class AuthController {
     }
 
     try {
+      const tokenRecord = await this.authService.findRefreshToken(refreshToken);
+      if (!tokenRecord) {
+        throw new UnauthorizedException('Invalid or expired refresh token.');
+      }
+
       const newAccessToken =
         await this.authService.getNewAccessToken(refreshToken);
+
       const refreshTokenExpiresIn = parseInt(
         this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN') || '604800',
         10,
       );
 
       const newRefreshToken = await this.authService.createRefreshToken(
-        req.user.sub,
+        tokenRecord?.userId?.toString(),
         refreshTokenExpiresIn,
       );
 
@@ -125,8 +131,8 @@ export class AuthController {
         httpOnly: true,
         // Use secure in production to ensure HTTPS is used
         secure: this.configService.get<string>('NODE_ENV') === 'production',
-        // Set the path to the root so the cookie is available to all endpoints
-        path: '/',
+        // Set the path to the root so the cookie is available to auth endpoints
+        path: '/api/auth',
         // Use SameSite for CSRF protection
         sameSite: 'lax',
         // Set a clear expiration time

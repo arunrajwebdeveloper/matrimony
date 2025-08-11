@@ -38,6 +38,13 @@ export class RefreshTokenService {
     return token;
   }
 
+  async findRefreshToken(token: string): Promise<RefreshTokenDocument | null> {
+    const tokenRecord = await this.refreshTokenModel.findOne({
+      token,
+    });
+    return tokenRecord;
+  }
+
   /**
    * Finds a refresh token in the database.
    * @param token The refresh token string to find.

@@ -33,7 +33,7 @@ export class UsersController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized.',
   })
-  async getMe(@Request() req) {
+  async getMe(@Request() req: any) {
     // req.user is populated by JwtStrategy
     const user = await this.usersService.findByIdWithProfile(req.user._id);
     if (!user) {

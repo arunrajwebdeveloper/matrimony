@@ -44,7 +44,10 @@ export class AdminController {
     description: 'Invalid report data.',
   })
   @ApiBody({ type: CreateReportDto })
-  async createReport(@Request() req, @Body() createReportDto: CreateReportDto) {
+  async createReport(
+    @Request() req: any,
+    @Body() createReportDto: CreateReportDto,
+  ) {
     return this.adminService.createReport(req.user._id, createReportDto);
   }
 
@@ -91,7 +94,7 @@ export class AdminController {
   @ApiBody({ type: UpdateReportStatusDto })
   async updateReportStatus(
     @Param('id') reportId: string,
-    @Request() req,
+    @Request() req: any,
     @Body() updateStatusDto: UpdateReportStatusDto,
   ) {
     return this.adminService.updateReportStatus(

@@ -1,0 +1,192 @@
+"use client";
+
+import React, { createContext, useReducer, useEffect, ReactNode } from "react";
+import { authService } from "@/lib/auth";
+import Storage from "@/lib/storage";
+import {
+  AuthState,
+  AuthContextType,
+  AuthAction,
+  AuthActionType,
+  LoginCredentials,
+  AuthResult,
+  User,
+} from "@/types";
+import { TOKEN_KEYS } from "@/utils/constants";
+
+// Initial state
+const initialState: AuthState = {
+  user: null,
+  isAuthenticated: false,
+  isLoading: true,
+  error: null,
+};
+
+// Reducer
+const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+  switch (action.type) {
+    case AuthActionType.LOGIN_START:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+
+    case AuthActionType.LOGIN_SUCCESS:
+      return {
+        ...state,
+        user: action.payload.user,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      };
+
+    case AuthActionType.LOGIN_FAILURE:
+      return {
+        ...state,
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: action.payload,
+      };
+
+    case AuthActionType.LOGOUT:
+      return {
+        ...state,
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null,
+      };
+
+    case AuthActionType.SET_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+
+    case AuthActionType.SET_USER:
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: !!action.payload,
+        isLoading: false,
+      };
+
+    case AuthActionType.CLEAR_ERROR:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Create context
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Auth Provider
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [state, dispatch] = useReducer(authReducer, initialState);
+
+  // Check authentication status on mount
+  useEffect(() => {
+    const initializeAuth = async (): Promise<void> => {
+      const token = Storage.getItem(TOKEN_KEYS.ACCESS_TOKEN);
+
+      if (token) {
+        try {
+          const user = await authService.getMe();
+          dispatch({ type: AuthActionType.SET_USER, payload: user });
+        } catch (error) {
+          // Token might be expired, try to refresh
+          try {
+            await authService.refreshToken();
+            const user = await authService.getMe();
+            dispatch({ type: AuthActionType.SET_USER, payload: user });
+          } catch (refreshError) {
+            dispatch({ type: AuthActionType.LOGOUT });
+          }
+        }
+      } else {
+        dispatch({ type: AuthActionType.SET_LOADING, payload: false });
+      }
+    };
+
+    initializeAuth();
+  }, []);
+
+  // Login function
+
+  const login = async (credentials: LoginCredentials): Promise<AuthResult> => {
+    dispatch({ type: AuthActionType.LOGIN_START });
+
+    try {
+      const { user } = await authService.login(credentials);
+      dispatch({ type: AuthActionType.LOGIN_SUCCESS, payload: { user } });
+      return { success: true };
+    } catch (error: any) {
+      console.error("❌ Login failed in context:", error);
+
+      let errorMessage = "Login failed";
+
+      if (error.response) {
+        // Server responded with error status
+        console.error("📡 Server error response:", {
+          status: error.response.status,
+          data: error.response.data,
+          headers: error.response.headers,
+        });
+
+        errorMessage =
+          error.response.data?.message ||
+          error.response.data?.error ||
+          `Server error: ${error.response.status}`;
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error("🌐 Network error - no response:", error.request);
+        errorMessage = "Network error - please check your connection";
+      } else {
+        // Something else happened
+        console.error("⚠️ Other error:", error.message);
+        errorMessage = error.message || "An unexpected error occurred";
+      }
+
+      dispatch({ type: AuthActionType.LOGIN_FAILURE, payload: errorMessage });
+      return { success: false, error: errorMessage };
+    }
+  };
+
+  // Logout function
+  const logout = async (): Promise<void> => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      dispatch({ type: AuthActionType.LOGOUT });
+    }
+  };
+
+  // Clear error
+  const clearError = (): void => {
+    dispatch({ type: AuthActionType.CLEAR_ERROR });
+  };
+
+  const value: AuthContextType = {
+    ...state,
+    login,
+    logout,
+    clearError,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export default AuthContext;

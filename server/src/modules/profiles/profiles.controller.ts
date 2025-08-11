@@ -44,9 +44,9 @@ export class ProfilesController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized.',
   })
-  async getMyProfile(@Request() req) {
+  async getMyProfile(@Request() req: any) {
     // req.user.profileId is set by JwtStrategy
-    const profile = await this.profilesService.findById(req.user.profileId);
+    const profile = await this.profilesService.findById(req.user.profile);
     if (!profile) {
       return { message: 'Profile not found.' }; // This should ideally not happen after successful registration
     }

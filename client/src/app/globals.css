@@ -21,3 +21,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-lexend-deca);
 }
+.main-container {
+  max-width: 1080px;
+  margin: auto;
+}

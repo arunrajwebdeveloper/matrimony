@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import * as cookieParser from 'cookie-parser';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -27,10 +28,14 @@ async function bootstrap() {
     origin: ['http://localhost:3000'],
     credentials: true, // Allow cookies
   });
-  // app.setGlobalPrefix('api');
+
+  app.setGlobalPrefix('api');
 
   // Global exception filter for consistent error responses
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  // Global response format:
+  // app.useGlobalInterceptors(new TransformInterceptor());
 
   // Swagger API Documentation
   const config = new DocumentBuilder()

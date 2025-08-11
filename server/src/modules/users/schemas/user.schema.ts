@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, Types, Schema as MongooseSchema } from 'mongoose';
+import { Profile } from '../../../modules/profiles/schemas/profile.schema';
 
 export type UserDocument = User & Document;
 
@@ -36,8 +37,8 @@ export class User {
   @Prop({ required: true })
   fullName: string;
 
-  @Prop({})
-  profile?: string;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Profile' })
+  profile: Types.ObjectId | Profile;
 
   @Prop({ default: 'user', enum: ['user', 'admin'] })
   role: 'user' | 'admin'; // Add this line for role-based access control
