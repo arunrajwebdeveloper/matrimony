@@ -126,7 +126,7 @@ const ProfileCompletionCard = () => {
   }, [profileData]); // Recalculate whenever profileData changes
 
   return (
-    <div className="d flex items-center justify-center antialiased">
+    <div className="flex items-center justify-center antialiased">
       <div className="bg-white rounded-2xl border border-gray-100 p-8 w-full transition-all duration-300">
         <div>
           <h1 className="text-sm font-medium text-gray-800 text-center">

@@ -53,7 +53,7 @@ function Header() {
   ];
 
   return (
-    <header className="fixed bg-white top-0 left-0 z-[200] w-full border-b-[1px] border-gray-200">
+    <header className="fixed bg-white/90 top-0 left-0 z-[200] w-full border-b-[1px] border-gray-200">
       <div className="px-4 flex justify-between items-center h-[60px]">
         <div className="matrimony-logo">
           <Link

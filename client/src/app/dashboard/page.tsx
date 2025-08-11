@@ -10,6 +10,9 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import { ROUTES } from "@/utils/constants";
 import SidebarCard from "@/components/cards/SidebarCard";
 import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
+import Link from "next/link";
+import StatisticsCard from "@/components/dashboard/StatisticsCard";
+import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 
 interface User {
   name: string;
@@ -86,6 +89,15 @@ export const users: User[] = [
   },
 ];
 
+const statUsers = [
+  "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
+  "https://images.unsplash.com/photo-1607746882042-944635dfe10e?q=80&w=1000",
+  "https://images.unsplash.com/photo-1607990283143-e81e7a2c9349?q=80&w=1000",
+  "https://images.unsplash.com/photo-1629818385919-e6bfcd7f72cf?q=80&w=1000",
+  "https://images.unsplash.com/photo-1604546689004-4ca31460dba1?q=80&w=1000",
+  "https://images.unsplash.com/flagged/photo-1595523667797-051afce20d86?q=80&w=1000",
+];
+
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
 
@@ -107,6 +119,47 @@ const DashboardPage: React.FC = () => {
         </div>
         <div className="w-[50%] px-2">
           <div className="mt-5">
+            {/* BASIC STAT INFOS */}
+            <div className="py-4 px-6">
+              <div className="mb-6 flex items-center justify-between">
+                <h2 className="font-semibold text-black text-md">
+                  Basic Statistics
+                </h2>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <StatisticsCard
+                  value={30}
+                  title="Profile Views"
+                  label="This Week"
+                  users={statUsers}
+                  color="blue"
+                />
+                <StatisticsCard
+                  value={7}
+                  title="New Messages"
+                  label="Unread"
+                  users={statUsers}
+                  color="orange"
+                />
+                <StatisticsCard
+                  value={13}
+                  title="Shortlisted"
+                  label="By You"
+                  users={statUsers}
+                  color="green"
+                />
+                <StatisticsCard
+                  value={36}
+                  title="Matches"
+                  label="Available"
+                  users={statUsers}
+                  color="violet"
+                />
+              </div>
+            </div>
+
+            {/* LISTS */}
+
             <ProfileCard title="Preferred Matches" link="/" className="mb-5">
               <div className="flex flex-col gap-3">
                 {users?.map((user) => {
@@ -136,9 +189,13 @@ const DashboardPage: React.FC = () => {
               <ProfileCompletionCard />
             </div>
 
+            <div className="mb-3">
+              <UpgradePremiumCard />
+            </div>
+
             {/* Sidebar items */}
 
-            <SidebarCard title="Interests Sent" link="/" className="mb-3">
+            {/* <SidebarCard title="Interests Sent" link="/" className="mb-3">
               <div className="flex flex-col gap-3">
                 {users?.map((user) => {
                   return <UserCardSidebarItem key={user.name} {...user} />;
@@ -160,7 +217,7 @@ const DashboardPage: React.FC = () => {
                   return <UserCardSidebarItem key={user.name} {...user} />;
                 })}
               </div>
-            </SidebarCard>
+            </SidebarCard> */}
           </div>
         </div>
       </div>
