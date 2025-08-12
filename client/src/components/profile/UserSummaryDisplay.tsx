@@ -1,6 +1,6 @@
 import React from "react";
-import VerifiedIcon from "../ui/VerifiedIcon";
 import OnlineStatusDot from "./OnlineStatusDot";
+import { BadgeCheck } from "lucide-react";
 
 interface UserSummaryProps {
   avatar?: string;
@@ -23,9 +23,9 @@ function UserSummaryDisplay({ avatar, username, email }: UserSummaryProps) {
         </div>
       </div>
       <div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <p className="text-sm">{username}</p>
-          <VerifiedIcon size={18} color="#2042f4" />
+          <BadgeCheck size={20} color="#fff" fill="#2042f4" />
         </div>
         <p className="text-xs text-gray-500">{email}</p>
       </div>

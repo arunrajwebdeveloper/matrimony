@@ -1,3 +1,5 @@
+import { LucideIcon } from "lucide-react";
+
 export interface UserProfile {
   _id?: string;
   user?: string;
