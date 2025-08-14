@@ -148,6 +148,22 @@ export class UpdateProfileDto {
   @IsString()
   aboutMe?: string;
 
+  @ApiPropertyOptional({
+    example: 'john-345789',
+    description: 'username',
+  })
+  @IsOptional()
+  @IsString()
+  username?: string;
+
+  @ApiPropertyOptional({
+    example: 'MW-234569',
+    description: 'profile ID',
+  })
+  @IsOptional()
+  @IsString()
+  profileId?: string;
+
   @ApiPropertyOptional({ example: 'Hindu' })
   @IsOptional()
   @IsEnum([

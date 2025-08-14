@@ -90,6 +90,12 @@ export class Profile {
   @Prop()
   aboutMe: string; // Free text description
 
+  @Prop()
+  username: string;
+
+  @Prop()
+  profileId: string;
+
   // --- Contact Details ---
   @Prop()
   phoneNumber: string;

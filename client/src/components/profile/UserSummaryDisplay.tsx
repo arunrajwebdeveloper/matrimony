@@ -1,6 +1,7 @@
 import React from "react";
 import OnlineStatusDot from "./OnlineStatusDot";
 import { BadgeCheck } from "lucide-react";
+import Link from "next/link";
 
 interface UserSummaryProps {
   avatar?: string;
@@ -28,6 +29,9 @@ function UserSummaryDisplay({ avatar, username, email }: UserSummaryProps) {
           <BadgeCheck size={20} color="#fff" fill="#2042f4" />
         </div>
         <p className="text-xs text-gray-500">{email}</p>
+        <Link className="text-xs text-blue-600" href="/dashboard/profile">
+          Edit profile
+        </Link>
       </div>
     </div>
   );
