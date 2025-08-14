@@ -9,6 +9,9 @@ export class User {
   @Prop({ required: true, unique: true, index: true })
   email: string;
 
+  @Prop({ required: true, unique: true, index: true })
+  phoneNumber: string;
+
   @Prop({ required: true, select: false }) // Password should not be returned by default
   passwordHash: string;
 
@@ -55,5 +58,6 @@ UserSchema.methods.toJSON = function () {
 
 // Index for frequently queried fields
 UserSchema.index({ email: 1 });
+UserSchema.index({ phoneNumber: 1 });
 UserSchema.index({ status: 1 });
 UserSchema.index({ gender: 1, dateOfBirth: 1 }); // For basic search filters

@@ -15,6 +15,8 @@ import {
   Pill,
   ShieldCheck,
   BookOpen,
+  Verified,
+  ShieldAlert,
 } from "lucide-react";
 import Navigation from "@/components/navigation/Navigation";
 import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
@@ -93,13 +95,46 @@ const ProfilePage: React.FC = () => {
                 {error}
               </div>
             )}
-            <div className="space-y-8">
+            <div className="space-y-2">
+              <div className="px-6 py-4">
+                <h3 className="flex items-center font-semibold text-black text-md mb-6">
+                  <BookOpen size={20} className="mr-2 text-black" />
+                  Basic Contacts
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium text-gray-500 flex gap-1 items-center">
+                      <span>Email</span>
+                      <span className="text-xs font-normal text-green-500 flex gap-1 items-center select-none">
+                        <ShieldCheck size={18} color="white" fill="#00c951" />
+                        <span>Verified</span>
+                      </span>
+                    </label>
+                    <p className="mt-1 text-sm font-semibold text-gray-800 ">
+                      {user?.email}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium text-gray-500  flex gap-1 items-center">
+                      <span>Phone Number</span>
+                      <span className="text-xs font-normal text-red-500 flex gap-1 items-center select-none">
+                        <ShieldCheck size={18} color="white" fill="#fb2c36" />
+                        <span>Not verified</span>
+                      </span>
+                    </label>
+                    <p className="mt-1 text-sm font-semibold text-gray-800 flex gap-1 items-center">
+                      {user?.phoneNumber}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               <ProfileImagesGrid mediaItems={profileData?.profilePhotos} />
               {/* About me */}
               <div className="px-6 py-4">
                 <h3 className="flex items-center font-semibold text-black text-md mb-6">
                   <BookOpen size={20} className="mr-2 text-black" />
-                  About me
+                  About Me
                 </h3>
                 <div>
                   <p className="text-sm text-gray-600 font-normal leading-6">

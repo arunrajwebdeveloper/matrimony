@@ -8,6 +8,7 @@ type UserProfileType = {
 export interface User {
   id: string;
   email: string;
+  phoneNumber: string;
   fullName?: string;
   role?: string;
   avatar?: string;

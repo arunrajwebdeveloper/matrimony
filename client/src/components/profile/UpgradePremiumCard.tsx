@@ -23,6 +23,14 @@ function UpgradePremiumCard() {
           <Check size={12} color="green" />
           <span>Profile priority</span>
         </p>
+        <p className="flex items-center gap-2 text-xs text-slate-600 text-center justify-center">
+          <Check size={12} color="green" />
+          <span>Contact details access</span>
+        </p>
+        <p className="flex items-center gap-2 text-xs text-slate-600 text-center justify-center">
+          <Check size={12} color="green" />
+          <span>Ad-free experience</span>
+        </p>
       </div>
       <div className="mt-5">
         <a
