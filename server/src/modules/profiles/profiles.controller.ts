@@ -77,6 +77,24 @@ export class ProfilesController {
     return this.profilesService.update(req.user._id, updateProfileDto);
   }
 
+  @Get(':profileId')
+  @ApiOperation({ summary: 'Get a public profile by profileId' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Profile retrieved successfully.',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Profile not found or not public.',
+  })
+  async getProfileByprofileId(@Param('profileId') profileId: string) {
+    const profile = await this.profilesService.findByprofileId(profileId);
+    if (!profile || profile.visibility !== 'public' || profile.deletedAt) {
+      throw new NotFoundException('Profile not found or not accessible.');
+    }
+    return profile;
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a public profile by ID' })
   @ApiResponse({

@@ -22,9 +22,6 @@ export class User {
   passwordHash: string;
 
   @Prop({ unique: true, sparse: true })
-  username?: string;
-
-  @Prop({ unique: true, sparse: true })
   profileId?: string;
 
   @Prop({ default: 'pending' }) // 'pending', 'active', 'suspended', 'deactivated'

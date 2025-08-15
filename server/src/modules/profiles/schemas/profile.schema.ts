@@ -88,14 +88,14 @@ export class Profile {
   aboutMe: string;
 
   @Prop()
-  username: string;
-
-  @Prop()
   profileId: string;
 
   // --- Contact Details ---
   @Prop()
   phoneNumber: string;
+
+  @Prop()
+  email: string;
 
   @Prop()
   whatsappNumber?: string;

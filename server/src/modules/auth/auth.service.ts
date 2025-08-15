@@ -33,31 +33,22 @@ export class AuthService {
 
   // GENERATE USERNAME AND PROFILEID
 
-  private async generateUniqueIds(
-    firstName: string,
-    lastName?: string,
-  ): Promise<{ username: string; profileId: string }> {
+  private async generateUniqueIds(): Promise<{ profileId: string }> {
     let isUnique = false;
-    let username = '';
     let profileId = '';
 
     while (!isUnique) {
       const randomNum = Math.floor(100000 + Math.random() * 900000);
-      username =
-        `${firstName}${lastName ?? ''}`.toLowerCase() + `-${randomNum}`;
       profileId = `MW-${randomNum}`;
 
-      const existing = await this.usersService.findByUsernameOrProfileId(
-        username,
-        profileId,
-      );
+      const existing = await this.usersService.findByProfileId(profileId);
 
       if (!existing) {
         isUnique = true;
       }
     }
 
-    return { username, profileId };
+    return { profileId };
   }
 
   async register(
@@ -80,12 +71,9 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const { username, profileId } = await this.generateUniqueIds(
-      firstName,
-      lastName,
-    );
+    const { profileId } = await this.generateUniqueIds();
 
-    if (!username || !profileId) {
+    if (!profileId) {
       throw new Error('Failed to generate unique IDs');
     }
 
@@ -95,7 +83,6 @@ export class AuthService {
       firstName,
       lastName,
       gender,
-      username,
       profileId,
       dateOfBirth: new Date(dateOfBirth),
       phoneNumber,
@@ -109,14 +96,14 @@ export class AuthService {
     }
 
     const newProfile = await this.profilesService.create({
-      user: newUser._id as Types.ObjectId,
+      user: newUser?._id as Types.ObjectId,
       firstName,
       lastName,
-      username: newUser.username,
-      profileId: newUser.profileId,
-      gender: newUser.gender,
-      dateOfBirth: newUser.dateOfBirth,
-      phoneNumber: newUser.phoneNumber,
+      profileId: newUser?.profileId,
+      gender: newUser?.gender,
+      dateOfBirth: newUser?.dateOfBirth,
+      phoneNumber: newUser?.phoneNumber,
+      email: newUser?.email,
       religion: 'Not Specified',
       motherTongue: 'Not Specified',
       height: 0,
@@ -157,13 +144,13 @@ export class AuthService {
       },
     });
 
-    newUser.profile = newProfile._id as Types.ObjectId;
+    newUser.profile = newProfile?._id as Types.ObjectId;
     await newUser.save();
 
     this.eventEmitter.emit('user.created', {
-      userId: newUser._id,
-      email: newUser.email,
-      firstName: newUser.firstName,
+      userId: newUser?._id,
+      email: newUser?.email,
+      firstName: newUser?.firstName,
     });
 
     return {

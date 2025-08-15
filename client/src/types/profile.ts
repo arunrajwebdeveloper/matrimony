@@ -18,6 +18,7 @@ export interface UserProfile {
   disabilityStatus?: string;
   aboutMe?: string;
   phoneNumber?: string;
+  email?: string;
   alternateEmails?: string[];
   country?: string;
   state?: string;

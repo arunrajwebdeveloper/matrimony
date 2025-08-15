@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
   REFRESH: "/api/auth/refresh",
   ME: "/api/users/me",
   PROFILE: "/api/profiles/my-profile",
+  USER_BY_PROFILE_ID: "/api/profiles",
   LOGOUT: "/api/auth/logout",
 } as const;
 

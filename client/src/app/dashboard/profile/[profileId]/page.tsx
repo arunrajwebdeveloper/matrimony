@@ -32,6 +32,7 @@ import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
 import avatarSource from "@/utils/avatarSource";
+import { useParams } from "next/navigation";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -44,6 +45,8 @@ const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
 );
 
 const ProfilePage: React.FC = () => {
+  const { profileId } = useParams<{ profileId: string }>();
+
   const { user } = useAuth();
   const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -52,7 +55,9 @@ const ProfilePage: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async (): Promise<void> => {
       try {
-        const response = await api.get<UserProfile>(API_ENDPOINTS.PROFILE);
+        const response = await api.get<UserProfile>(
+          `${API_ENDPOINTS.USER_BY_PROFILE_ID}/${profileId}`
+        );
         setProfileData(response.data);
       } catch (err: any) {
         setError("Failed to load profile data");
@@ -74,8 +79,8 @@ const ProfilePage: React.FC = () => {
   }
 
   const imageUrl = avatarSource({
-    avatar: user?.profile?.profilePicture,
-    gender: user?.gender,
+    avatar: profileData?.profilePicture,
+    gender: profileData?.gender,
   });
 
   return (
@@ -103,49 +108,59 @@ const ProfilePage: React.FC = () => {
             )}
             <div className="space-y-2">
               <div className="px-6 py-4">
-                <div className="flex">
-                  <div className="w-[160px] h-[160px] rounded-[6px] relative flex-none">
+                <div className="w-full h-[240px] overflow-hidden">
+                  <img
+                    className="w-full h-[240px] object-cover rounded-2xl"
+                    src="/cover/cover-image-1.jpg"
+                    alt=""
+                  />
+                </div>
+                <div className="-mt-20">
+                  <div className="w-[160px] h-[160px] rounded-[50%] relative mx-auto">
                     <img
-                      className="w-[160px] h-[160px] object-cover rounded-[6px] overflow-hidden"
+                      className="w-[160px] h-[160px] object-cover rounded-[50%] overflow-hidden border-2 border-white"
                       src={imageUrl}
                       alt=""
                     />
-                    <div className="absolute bottom-1 right-1 z-10 w-[10px] h-[10px]">
-                      <OnlineStatusDot isOnline={true} />
+                    <div className="absolute bottom-4.5 right-4.5 z-10">
+                      <OnlineStatusDot isOnline={true} size="md" />
                     </div>
                   </div>
-                  <div className="ps-8 space-y-0.5">
-                    <p className="text-xs text-slate-400">
+                  <div className="space-y-1 mx-auto text-center mt-4">
+                    <p className="text-xs text-slate-500">
                       {profileData?.profileId}
                     </p>
-                    <p className="text-lg font-medium text-slate-700 flex gap-1 items-center">
-                      {`${user?.firstName} ${user?.lastName || ""}`}
+                    <p className="text-lg font-semibold text-slate-700 flex gap-1 items-center justify-center">
+                      {`${profileData?.firstName} ${
+                        profileData?.lastName || ""
+                      }`}
                       <BadgeCheck size={20} color="#fff" fill="#2042f4" />
                     </p>
-                    {/* <p>{`@${profileData?.username}`}</p> */}
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
+                    <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
                       <Cake size={16} />
                       <span>{dateOfBirthFormat(profileData?.dateOfBirth)}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
+                    </p>
+                    <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
                       <BriefcaseBusiness size={16} />
                       <span>{profileData?.occupation}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
+                    </p>
+                    <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
                       <MapPin size={16} />
                       <span>{`${profileData?.city}, ${profileData?.state}, ${profileData?.country}`}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Mail size={16} />
-                      <span>{user?.email}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Smartphone size={16} />
-                      <span>{user?.phoneNumber}</span>
+                    </p>
+                    <div className="mt-4 space-y-1">
+                      <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
+                        <Mail size={16} />
+                        <span>{profileData?.email}</span>
+                      </p>
+                      <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
+                        <Smartphone size={16} />
+                        <span>{profileData?.phoneNumber}</span>
+                      </p>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 mt-6">
+                <div className="flex items-center justify-center gap-3 mt-6">
                   <button className="h-[36px] px-2 font-medium text-xs flex items-center gap-2 rounded bg-pink-100 text-pink-600 cursor-pointer transition-colors hover:bg-pink-200">
                     <HeartIcon size={18} color="#e60076" />
                     <span>Send Interest</span>
@@ -172,7 +187,7 @@ const ProfilePage: React.FC = () => {
               <div className="px-6 py-4">
                 <h3 className="flex items-center font-semibold text-black text-md mb-6">
                   <BookOpen size={20} className="mr-2 text-black" />
-                  {`About ${user?.firstName || "Me"}`}
+                  {`About ${profileData?.firstName || "Me"}`}
                 </h3>
                 <div>
                   <p className="text-sm text-gray-600 font-normal leading-6">
