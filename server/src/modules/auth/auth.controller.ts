@@ -45,6 +45,7 @@ export class AuthController {
   })
   @ApiBody({ type: RegisterUserDto })
   async register(@Body() registerUserDto: RegisterUserDto) {
+    console.log('registerUserDto :>> ', registerUserDto);
     return this.authService.register(registerUserDto);
   }
 

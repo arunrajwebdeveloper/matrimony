@@ -88,7 +88,7 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
               <div className="mb-8">
                 <UserSummaryDisplay
                   avatar={user?.profile?.profilePicture}
-                  username={user?.fullName || ""}
+                  username={`${user?.firstName} ${user?.lastName || ""}`}
                   email={user?.email || ""}
                 />
               </div>

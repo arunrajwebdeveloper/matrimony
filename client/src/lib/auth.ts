@@ -7,6 +7,7 @@ import {
   AuthResponse,
   User,
   RefreshTokenResponse,
+  RegisterPayloads,
 } from "@/types";
 import { TOKEN_KEYS } from "@/utils/constants";
 
@@ -36,6 +37,35 @@ export const authService = {
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error("Login error:", {
+        message: axiosError.message,
+        status: axiosError.response?.status,
+        data: axiosError.response?.data,
+        config: {
+          url: axiosError.config?.url,
+          method: axiosError.config?.method,
+          baseURL: axiosError.config?.baseURL,
+        },
+      });
+      throw axiosError;
+    }
+  },
+
+  // Register
+
+  async register(credentials: RegisterPayloads) {
+    try {
+      const response = await api.post<AuthResponse>(
+        API_ENDPOINTS.REGISTER,
+        credentials
+      );
+
+      // response.data;
+
+      console.log("response :>> ", response);
+      console.log("response.data :>> ", response.data);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.error("Register error:", {
         message: axiosError.message,
         status: axiosError.response?.status,
         data: axiosError.response?.data,

@@ -11,6 +11,7 @@ import {
   LoginCredentials,
   AuthResult,
   User,
+  RegisterPayloads,
 } from "@/types";
 import { TOKEN_KEYS } from "@/utils/constants";
 
@@ -45,6 +46,29 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
       return {
         ...state,
         user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: action.payload,
+      };
+
+    case AuthActionType.REGISTER_START:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+
+    case AuthActionType.REGISTER_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null,
+      };
+
+    case AuthActionType.REGISTER_FAILURE:
+      return {
+        ...state,
         isAuthenticated: false,
         isLoading: false,
         error: action.payload,
@@ -163,6 +187,52 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // register
+
+  const register = async (
+    credentials: RegisterPayloads
+  ): Promise<AuthResult> => {
+    dispatch({ type: AuthActionType.REGISTER_START });
+
+    try {
+      await authService.register(credentials);
+      dispatch({ type: AuthActionType.REGISTER_SUCCESS });
+      return { success: true };
+    } catch (error: any) {
+      console.error("❌ Register failed in context:", error);
+
+      let errorMessage = "Register failed";
+
+      if (error.response) {
+        // Server responded with error status
+        console.error("📡 Server error response:", {
+          status: error.response.status,
+          data: error.response.data,
+          headers: error.response.headers,
+        });
+
+        errorMessage =
+          error.response.data?.message ||
+          error.response.data?.error ||
+          `Server error: ${error.response.status}`;
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error("🌐 Network error - no response:", error.request);
+        errorMessage = "Network error - please check your connection";
+      } else {
+        // Something else happened
+        console.error("⚠️ Other error:", error.message);
+        errorMessage = error.message || "An unexpected error occurred";
+      }
+
+      dispatch({
+        type: AuthActionType.REGISTER_FAILURE,
+        payload: errorMessage,
+      });
+      return { success: false, error: errorMessage };
+    }
+  };
+
   // Logout function
   const logout = async (): Promise<void> => {
     try {
@@ -182,6 +252,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const value: AuthContextType = {
     ...state,
     login,
+    register,
     logout,
     clearError,
   };

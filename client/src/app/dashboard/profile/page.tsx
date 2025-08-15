@@ -24,6 +24,7 @@ import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
 import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import avatarSource from "@/utils/avatarSource";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -65,6 +66,11 @@ const ProfilePage: React.FC = () => {
     );
   }
 
+  const imageUrl = avatarSource({
+    avatar: user?.profile?.profilePicture,
+    gender: user?.gender,
+  });
+
   return (
     <div className="main-container">
       {/* Breadcrumb */}
@@ -79,8 +85,8 @@ const ProfilePage: React.FC = () => {
               {/* <h3 className="font-semibold text-black text-md mb-6">Profile</h3> */}
               <div className="mb-8">
                 <UserSummaryDisplay
-                  avatar={user?.profile?.profilePicture}
-                  username={user?.fullName || ""}
+                  avatar={imageUrl}
+                  username={`${user?.firstName} ${user?.lastName || ""}`}
                   email={user?.email || ""}
                 />
               </div>

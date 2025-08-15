@@ -154,7 +154,7 @@ export class UpdateProfileDto {
   })
   @IsOptional()
   @IsString()
-  username?: string;
+  username: string;
 
   @ApiPropertyOptional({
     example: 'MW-234569',
@@ -162,7 +162,7 @@ export class UpdateProfileDto {
   })
   @IsOptional()
   @IsString()
-  profileId?: string;
+  profileId: string;
 
   @ApiPropertyOptional({ example: 'Hindu' })
   @IsOptional()
@@ -381,8 +381,8 @@ export class UpdateProfileDto {
 
   @ApiPropertyOptional({ example: 'url_to_main_profile_picture.jpg' })
   @IsOptional()
-  @IsString()
-  profilePicture?: string;
+  @IsString({ message: 'Profile picture must be a string' })
+  profilePicture?: string | null;
 
   @ApiPropertyOptional({
     example: 'public',

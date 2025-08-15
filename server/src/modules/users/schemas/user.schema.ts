@@ -6,17 +6,26 @@ export type UserDocument = User & Document;
 
 @Schema({ timestamps: true }) // createdAt, updatedAt
 export class User {
+  @Prop({ required: true })
+  firstName: string;
+
+  @Prop()
+  lastName?: string;
+
   @Prop({ required: true, unique: true, index: true })
   email: string;
 
-  @Prop({ required: true, unique: true, index: true })
+  @Prop({ required: true, unique: true })
   phoneNumber: string;
 
   @Prop({ required: true, select: false }) // Password should not be returned by default
   passwordHash: string;
 
-  @Prop({ unique: true, sparse: true }) // Optional, for direct user links
+  @Prop({ unique: true, sparse: true })
   username?: string;
+
+  @Prop({ unique: true, sparse: true })
+  profileId?: string;
 
   @Prop({ default: 'pending' }) // 'pending', 'active', 'suspended', 'deactivated'
   status: string;
@@ -37,9 +46,6 @@ export class User {
   @Prop({ required: true })
   dateOfBirth: Date;
 
-  @Prop({ required: true })
-  fullName: string;
-
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Profile' })
   profile: Types.ObjectId | Profile;
 
@@ -58,6 +64,5 @@ UserSchema.methods.toJSON = function () {
 
 // Index for frequently queried fields
 UserSchema.index({ email: 1 });
-UserSchema.index({ phoneNumber: 1 });
 UserSchema.index({ status: 1 });
 UserSchema.index({ gender: 1, dateOfBirth: 1 }); // For basic search filters

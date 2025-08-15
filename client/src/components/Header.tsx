@@ -19,6 +19,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import UserDropdown from "./dropdowns/UserDropdown";
 import { UserDropdownMenuType } from "@/types/menu";
+import avatarSource from "@/utils/avatarSource";
 
 function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -51,6 +52,11 @@ function Header() {
       action: handleLogout,
     },
   ];
+
+  const imageUrl = avatarSource({
+    avatar: user?.profile?.profilePicture,
+    gender: user?.gender,
+  });
 
   return (
     <header className="fixed bg-white/90 top-0 left-0 z-[200] w-full border-b-[1px] border-gray-200">
@@ -100,8 +106,8 @@ function Header() {
             <div className="ms-4">
               <UserDropdown
                 menu={navItems}
-                avatar={user?.profile?.profilePicture}
-                username={user?.fullName || ""}
+                avatar={imageUrl}
+                username={`${user?.firstName} ${user?.lastName || ""}`}
                 email={user?.email || ""}
               />
             </div>

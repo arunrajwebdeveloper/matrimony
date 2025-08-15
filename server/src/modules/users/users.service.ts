@@ -16,6 +16,17 @@ export class UsersService {
     return this.userModel.findOne({ email, deletedAt: null }).exec();
   }
 
+  async findByUsernameOrProfileId(
+    username: string,
+    profileId: string,
+  ): Promise<UserDocument | null> {
+    return this.userModel
+      .findOne({
+        $or: [{ username }, { profileId }],
+      })
+      .exec();
+  }
+
   async findByEmailWithPassword(email: string): Promise<UserDocument | null> {
     // Select passwordHash explicitly as it's excluded by default
     return this.userModel

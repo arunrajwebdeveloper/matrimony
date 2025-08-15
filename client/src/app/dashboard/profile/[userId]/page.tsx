@@ -31,6 +31,7 @@ import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
+import avatarSource from "@/utils/avatarSource";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -72,6 +73,11 @@ const ProfilePage: React.FC = () => {
     );
   }
 
+  const imageUrl = avatarSource({
+    avatar: user?.profile?.profilePicture,
+    gender: user?.gender,
+  });
+
   return (
     <div className="main-container">
       {/* Breadcrumb */}
@@ -84,13 +90,6 @@ const ProfilePage: React.FC = () => {
           <div className="mt-5">
             <div className="py-4">
               {/* <h3 className="font-semibold text-black text-md mb-6">Profile</h3> */}
-              {/* <div className="mb-8">
-                <UserSummaryDisplay
-                  avatar={user?.profile?.profilePicture}
-                  username={user?.fullName || ""}
-                  email={user?.email || ""}
-                />
-              </div> */}
               <Navigation />
             </div>
           </div>
@@ -108,7 +107,7 @@ const ProfilePage: React.FC = () => {
                   <div className="w-[160px] h-[160px] rounded-[6px] relative">
                     <img
                       className="w-[160px] h-[160px] object-cover rounded-[6px] overflow-hidden"
-                      src={user?.profile?.profilePicture}
+                      src={imageUrl}
                       alt=""
                     />
                     <div className="absolute bottom-1 right-1 z-10 w-[10px] h-[10px]">
@@ -120,7 +119,7 @@ const ProfilePage: React.FC = () => {
                       {profileData?.profileId}
                     </p>
                     <p className="text-lg font-medium text-slate-700 flex gap-1 items-center">
-                      {user?.fullName || ""}
+                      {`${user?.firstName} ${user?.lastName || ""}`}
                       <BadgeCheck size={20} color="#fff" fill="#2042f4" />
                     </p>
                     {/* <p>{`@${profileData?.username}`}</p> */}
@@ -173,7 +172,7 @@ const ProfilePage: React.FC = () => {
               <div className="px-6 py-4">
                 <h3 className="flex items-center font-semibold text-black text-md mb-6">
                   <BookOpen size={20} className="mr-2 text-black" />
-                  {`About ${user?.fullName || "Me"}`}
+                  {`About ${user?.firstName || "Me"}`}
                 </h3>
                 <div>
                   <p className="text-sm text-gray-600 font-normal leading-6">

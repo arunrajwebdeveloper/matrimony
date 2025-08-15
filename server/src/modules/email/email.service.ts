@@ -53,11 +53,11 @@ export class EmailService {
   async handleUserCreatedEvent(payload: {
     userId: string;
     email: string;
-    fullName: string;
+    firstName: string;
   }) {
     const subject = 'Welcome to Matrimony App!';
     const html = `
-      <p>Dear ${payload.fullName},</p>
+      <p>Dear ${payload.firstName},</p>
       <p>Welcome to our Matrimony App! We are thrilled to have you join our community.</p>
       <p>Start building your profile and find your perfect match.</p>
       <p>Best regards,<br/>The Matrimony Team</p>
@@ -76,7 +76,7 @@ export class EmailService {
     }
     const subject = 'Your Password Has Been Changed';
     const html = `
-      <p>Dear ${user.fullName || user.email},</p>
+      <p>Dear ${user.firstName || user.email},</p>
       <p>This is to confirm that your password for your Matrimony App account has been successfully changed.</p>
       <p>If you did not make this change, please contact our support team immediately.</p>
       <p>Best regards,<br/>The Matrimony Team</p>
@@ -102,14 +102,14 @@ export class EmailService {
 
     if (payload.status === 'approved') {
       htmlContent = `
-        <p>Dear ${user.fullName || user.email},</p>
+        <p>Dear ${user.firstName || user.email},</p>
         <p>Great news! Your profile on our Matrimony App has been <strong>approved</strong>.</p>
         <p>Your profile is now fully visible to other members, increasing your chances of finding a match.</p>
         <p>Best regards,<br/>The Matrimony Team</p>
       `;
     } else if (payload.status === 'rejected') {
       htmlContent = `
-        <p>Dear ${user.fullName || user.email},</p>
+        <p>Dear ${user.firstName || user.email},</p>
         <p>We regret to inform you that your profile on our Matrimony App has been <strong>rejected</strong> during our review process.</p>
         <p>This could be due to incomplete information, inappropriate content, or other reasons. Please log in to your account to review the details and make necessary corrections.</p>
         <p>If you believe this is a mistake or need assistance, please contact our support team.</p>
@@ -136,10 +136,10 @@ export class EmailService {
       return;
     }
 
-    const subject = `New Match Request from ${sender.fullName || sender.email}`;
+    const subject = `New Match Request from ${sender.firstName || sender.email}`;
     const html = `
-      <p>Dear ${recipient.fullName || recipient.email},</p>
-      <p>You have received a new match request from <strong>${sender.fullName || sender.email}</strong>!</p>
+      <p>Dear ${recipient.firstName || recipient.email},</p>
+      <p>You have received a new match request from <strong>${sender.firstName || sender.email}</strong>!</p>
       <p>Log in to your account to view their profile and respond to the request.</p>
       <p>Best regards,<br/>The Matrimony Team</p>
     `;
@@ -161,20 +161,20 @@ export class EmailService {
     }
 
     // Notify user1
-    const subject1 = `Congratulations! Your Match Request to ${user2.fullName || user2.email} was Accepted!`;
+    const subject1 = `Congratulations! Your Match Request to ${user2.firstName || user2.email} was Accepted!`;
     const html1 = `
-      <p>Dear ${user1.fullName || user1.email},</p>
-      <p>Great news! Your match request to <strong>${user2.fullName || user2.email}</strong> has been accepted!</p>
+      <p>Dear ${user1.firstName || user1.email},</p>
+      <p>Great news! Your match request to <strong>${user2.firstName || user2.email}</strong> has been accepted!</p>
       <p>You can now start chatting with them. Log in to your account to begin your conversation.</p>
       <p>Best regards,<br/>The Matrimony Team</p>
     `;
     await this.sendMail(user1.email, subject1, html1);
 
     // Notify user2
-    const subject2 = `Congratulations! You have a New Match with ${user1.fullName || user1.email}!`;
+    const subject2 = `Congratulations! You have a New Match with ${user1.firstName || user1.email}!`;
     const html2 = `
-      <p>Dear ${user2.fullName || user2.email},</p>
-      <p>Congratulations! You have a new match with <strong>${user1.fullName || user1.email}</strong>!</p>
+      <p>Dear ${user2.firstName || user2.email},</p>
+      <p>Congratulations! You have a new match with <strong>${user1.firstName || user1.email}</strong>!</p>
       <p>You can now start chatting with them. Log in to your account to begin your conversation.</p>
       <p>Best regards,<br/>The Matrimony Team</p>
     `;
@@ -198,10 +198,10 @@ export class EmailService {
       return;
     }
 
-    const subject = `Update on Your Match Request to ${recipient.fullName || recipient.email}`;
+    const subject = `Update on Your Match Request to ${recipient.firstName || recipient.email}`;
     const html = `
-      <p>Dear ${sender.fullName || sender.email},</p>
-      <p>We regret to inform you that your match request to <strong>${recipient.fullName || recipient.email}</strong> was rejected.</p>
+      <p>Dear ${sender.firstName || sender.email},</p>
+      <p>We regret to inform you that your match request to <strong>${recipient.firstName || recipient.email}</strong> was rejected.</p>
       <p>Don't be disheartened! There are many other profiles waiting for you. Keep searching!</p>
       <p>Best regards,<br/>The Matrimony Team</p>
     `;
@@ -222,11 +222,11 @@ export class EmailService {
 
     const subject = 'Your Matrimony Account Has Been Suspended';
     const html = `
-      <p>Dear ${user.fullName || user.email},</p>
+      <p>Dear ${user.firstName || user.email},</p>
       <p>We regret to inform you that your account on our Matrimony App has been <strong>suspended</strong>.</p>
       <p>This action was taken due to a violation of our terms of service. Please review our guidelines to understand the reasons for suspension.</p>
       <p>If you believe this is a mistake, please contact our support team immediately.</p>
-      <p>Admin: ${admin ? admin.fullName || admin.email : 'System Admin'}</p>
+      <p>Admin: ${admin ? admin.firstName || admin.email : 'System Admin'}</p>
       <p>Best regards,<br/>The Matrimony Team</p>
     `;
     await this.sendMail(user.email, subject, html);
@@ -246,10 +246,10 @@ export class EmailService {
 
     const subject = 'Your Matrimony Account Has Been Re-Activated';
     const html = `
-      <p>Dear ${user.fullName || user.email},</p>
+      <p>Dear ${user.firstName || user.email},</p>
       <p>Good news! Your account on our Matrimony App has been successfully <strong>re-activated</strong> by our administration team.</p>
       <p>You can now log in and continue your search for a life partner.</p>
-      <p>Admin: ${admin ? admin.fullName || admin.email : 'System Admin'}</p>
+      <p>Admin: ${admin ? admin.firstName || admin.email : 'System Admin'}</p>
       <p>Best regards,<br/>The Matrimony Team</p>
     `;
     await this.sendMail(user.email, subject, html);

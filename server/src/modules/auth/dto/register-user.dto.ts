@@ -25,11 +25,24 @@ export class RegisterUserDto {
   @MaxLength(50)
   password: string;
 
-  @ApiProperty({ example: 'John Doe', description: 'Full name of the user' })
+  @ApiProperty({ example: 'John', description: 'First name of the user' })
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
-  fullName: string;
+  firstName: string;
+
+  @ApiProperty({
+    example: '0000000000',
+    description: 'Phonenumber of the user',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(10)
+  phoneNumber: string;
+
+  @ApiProperty({ example: 'Doe', description: 'Last name of the user' })
+  @IsString()
+  lastName?: string;
 
   @ApiProperty({
     example: 'Male',

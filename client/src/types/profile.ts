@@ -44,7 +44,7 @@ export interface UserProfile {
   maritalStatus?: string;
   children?: number;
   profilePhotos?: string[];
-  profilePicture?: string;
+  profilePicture?: string | null;
   visibility?: "public" | "private";
   isPremium?: boolean;
   verification?: {
