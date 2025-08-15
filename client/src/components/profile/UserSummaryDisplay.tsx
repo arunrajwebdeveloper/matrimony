@@ -3,6 +3,7 @@ import OnlineStatusDot from "./OnlineStatusDot";
 import { BadgeCheck } from "lucide-react";
 import Link from "next/link";
 import Avatar from "./Avatar";
+import { trimText } from "@/utils/trimeText";
 
 interface UserSummaryProps {
   avatar?: string | undefined;
@@ -24,7 +25,7 @@ function UserSummaryDisplay({ avatar, username, email }: UserSummaryProps) {
           <p className="text-sm">{username}</p>
           <BadgeCheck size={20} color="#fff" fill="#2042f4" />
         </div>
-        <p className="text-xs text-gray-500">{email}</p>
+        <p className="text-xs text-gray-500">{trimText(email)}</p>
         <Link className="text-xs text-blue-600" href="/dashboard/profile">
           Edit profile
         </Link>

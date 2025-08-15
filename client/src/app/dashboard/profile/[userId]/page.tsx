@@ -104,7 +104,7 @@ const ProfilePage: React.FC = () => {
             <div className="space-y-2">
               <div className="px-6 py-4">
                 <div className="flex">
-                  <div className="w-[160px] h-[160px] rounded-[6px] relative">
+                  <div className="w-[160px] h-[160px] rounded-[6px] relative flex-none">
                     <img
                       className="w-[160px] h-[160px] object-cover rounded-[6px] overflow-hidden"
                       src={imageUrl}
