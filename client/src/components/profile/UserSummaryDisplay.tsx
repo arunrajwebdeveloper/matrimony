@@ -9,9 +9,15 @@ interface UserSummaryProps {
   avatar?: string | undefined;
   username: string;
   email: string;
+  callback?: () => void;
 }
 
-function UserSummaryDisplay({ avatar, username, email }: UserSummaryProps) {
+function UserSummaryDisplay({
+  avatar,
+  username,
+  email,
+  callback,
+}: UserSummaryProps) {
   return (
     <div className="flex items-center gap-4">
       <div className="rounded-md w-[50px] h-[50px] flex-none relative">
@@ -29,6 +35,7 @@ function UserSummaryDisplay({ avatar, username, email }: UserSummaryProps) {
         <Link
           className="text-xs text-blue-600"
           href="/dashboard/profile/settings"
+          onClick={callback}
         >
           Edit profile
         </Link>
