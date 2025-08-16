@@ -77,10 +77,10 @@ export async function addWatermark(
   } = {}
 ): Promise<Blob> {
   const {
-    text = "© MyApp",
+    text = "© Matrimony",
     position = "bottom-right",
     opacity = 0.7,
-    padding = 12,
+    padding = 25,
   } = options;
 
   const src = URL.createObjectURL(blob);
@@ -97,17 +97,17 @@ export async function addWatermark(
   ctx.drawImage(img, 0, 0);
 
   // watermark
-  const fontSize = Math.max(12, Math.floor(canvas.width / 20));
+  const fontSize = Math.max(12, Math.floor(canvas.width / 12));
   ctx.font = `${fontSize}px sans-serif`;
   ctx.fillStyle = `rgba(255,255,255,${opacity})`;
   ctx.textBaseline = "alphabetic";
 
   // outline to improve readability
-  ctx.strokeStyle = `rgba(0,0,0,${opacity})`;
+  // ctx.strokeStyle = `rgba(0,0,0,${opacity})`;
+  ctx.strokeStyle = `rgba(0,0,0,0)`;
   ctx.lineWidth = Math.max(2, Math.floor(fontSize / 10));
 
   const metrics = ctx.measureText(text);
-  const textWidth = metrics.width;
   const textHeight = fontSize;
 
   let x = canvas.width - padding;

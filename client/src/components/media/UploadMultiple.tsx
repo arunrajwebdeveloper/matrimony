@@ -70,7 +70,11 @@ export default function UploadMultiplePage() {
       `image-${idx + 1}.jpg`,
       {
         compress: { maxSizeMB: 0.8, maxWidthOrHeight: 800 },
-        watermark: { text: "© MyApp", position: "bottom-right", opacity: 0.6 },
+        watermark: {
+          text: "© Matrimony",
+          position: "bottom-right",
+          opacity: 0.8,
+        },
       }
     );
 

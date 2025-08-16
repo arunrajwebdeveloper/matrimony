@@ -45,7 +45,11 @@ export default function UploadSinglePage() {
       "profile.jpg",
       {
         compress: { maxSizeMB: 0.8, maxWidthOrHeight: 800 },
-        watermark: { text: "© MyApp", position: "bottom-right", opacity: 0.6 },
+        watermark: {
+          text: "© Matrimony",
+          position: "bottom-right",
+          opacity: 0.8,
+        },
       }
     );
     setFinalPreview(URL.createObjectURL(processed));
