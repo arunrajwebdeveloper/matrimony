@@ -36,10 +36,11 @@ export default function ImageCropper({
         onZoomChange={setZoom}
         onCropComplete={(_, area) => onCropComplete(area as Pixels)}
         restrictPosition={true}
-        showGrid={false}
+        showGrid={true}
       />
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/60 h-8 rounded-lg flex items-center px-4">
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white/60 h-8 rounded-lg flex items-center px-4">
         <input
+          id="zoom-range"
           type="range"
           min={1}
           max={3}
