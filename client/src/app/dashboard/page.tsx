@@ -13,6 +13,8 @@ import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
 import Link from "next/link";
 import StatisticsCard from "@/components/dashboard/StatisticsCard";
 import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
+import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
+import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 
 interface User {
   name: string;
@@ -191,6 +193,14 @@ const DashboardPage: React.FC = () => {
 
             <div className="mb-3">
               <UpgradePremiumCard />
+            </div>
+
+            <div className="mb-3">
+              <InfoSidebarCard />
+            </div>
+
+            <div className="mb-3">
+              <SafeTipsSidebarCard />
             </div>
 
             {/* Sidebar items */}

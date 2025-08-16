@@ -24,6 +24,7 @@ import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import Link from "next/link";
+import avatarSource from "@/utils/avatarSource";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -74,6 +75,11 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
     );
   }
 
+  const imageUrl = avatarSource({
+    avatar: user?.profile?.profilePicture,
+    gender: user?.gender,
+  });
+
   return (
     <div className="main-container">
       {/* Breadcrumb */}
@@ -87,7 +93,7 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
             <div className="py-4">
               <div className="mb-8">
                 <UserSummaryDisplay
-                  avatar={user?.profile?.profilePicture}
+                  avatar={imageUrl}
                   username={`${user?.firstName} ${user?.lastName || ""}`}
                   email={user?.email || ""}
                 />
