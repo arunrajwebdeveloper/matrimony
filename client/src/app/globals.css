@@ -72,3 +72,23 @@ body {
     transform: scale(1);
   }
 }
+
+.range {
+  height: 1px;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #fff;
+  outline: none;
+  border-radius: 15px;
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #155dfc;
+  cursor: pointer;
+  box-shadow: none;
+}

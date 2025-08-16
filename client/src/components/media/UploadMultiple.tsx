@@ -154,7 +154,6 @@ export default function UploadMultiplePage() {
                 return next;
               });
             }}
-            className="relative w-full h-[320px] bg-black rounded-lg overflow-hidden"
           />
 
           <div className="flex items-center gap-2">

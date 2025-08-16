@@ -23,7 +23,7 @@ export default function ImageCropper({
   return (
     <div
       className={
-        className ?? "relative w-full h-72 bg-black rounded-lg overflow-hidden"
+        className ?? "relative w-full h-72 bg-white rounded-sm overflow-hidden"
       }
     >
       <Cropper
@@ -31,13 +31,14 @@ export default function ImageCropper({
         crop={crop}
         zoom={zoom}
         aspect={1} // square
+        cropShape="rect" // can be "round" if needed
         onCropChange={setCrop}
         onZoomChange={setZoom}
         onCropComplete={(_, area) => onCropComplete(area as Pixels)}
-        restrictPosition={false}
+        restrictPosition={true}
         showGrid={false}
       />
-      <div className="absolute bottom-2 left-0 right-0 flex items-center gap-2 px-4">
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/60 h-8 rounded-lg flex items-center px-4">
         <input
           type="range"
           min={1}
@@ -45,7 +46,7 @@ export default function ImageCropper({
           step={0.01}
           value={zoom}
           onChange={(e) => setZoom(Number(e.target.value))}
-          className="w-full"
+          className="range"
         />
       </div>
     </div>
