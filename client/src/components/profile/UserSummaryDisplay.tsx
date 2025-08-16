@@ -26,7 +26,10 @@ function UserSummaryDisplay({ avatar, username, email }: UserSummaryProps) {
           <BadgeCheck size={20} color="#fff" fill="#2042f4" />
         </div>
         <p className="text-xs text-gray-500">{trimText(email)}</p>
-        <Link className="text-xs text-blue-600" href="/dashboard/profile">
+        <Link
+          className="text-xs text-blue-600"
+          href="/dashboard/profile/settings"
+        >
           Edit profile
         </Link>
       </div>

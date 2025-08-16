@@ -67,9 +67,7 @@ export default function UploadSinglePage() {
   };
 
   return (
-    <main className="max-w-xl mx-auto p-6 space-y-4">
-      <h1 className="text-xl font-semibold">Upload Single Image</h1>
-
+    <main className="space-y-4">
       <input
         type="file"
         accept="image/*"

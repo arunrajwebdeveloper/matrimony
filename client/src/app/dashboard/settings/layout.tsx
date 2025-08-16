@@ -37,7 +37,6 @@ const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
 );
 
 const settingsMenu = [
-  { href: ROUTES.SETTINGS.MY_PROFILE, label: "My Profile" },
   { href: ROUTES.SETTINGS.SECURITY, label: "Security" },
   { href: ROUTES.SETTINGS.NOTIFICATION, label: "Notification" },
   { href: ROUTES.SETTINGS.DELETE_ACCOUNT, label: "Delete Account" },

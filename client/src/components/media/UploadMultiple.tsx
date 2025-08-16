@@ -127,9 +127,7 @@ export default function UploadMultiplePage() {
   };
 
   return (
-    <main className="max-w-3xl mx-auto p-6 space-y-6">
-      <h1 className="text-xl font-semibold">Upload Multiple Images (max 5)</h1>
-
+    <main className="space-y-6">
       <input
         type="file"
         accept="image/*"
