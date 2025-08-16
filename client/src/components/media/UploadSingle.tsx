@@ -31,6 +31,7 @@ export default function UploadSinglePage() {
 
   const onFileChange = (file?: File) => {
     if (!file) return;
+
     setValue("image", file);
     const url = fileToObjectURL(file);
     setPreviewUrl(url);
@@ -42,7 +43,7 @@ export default function UploadSinglePage() {
     const processed = await processImagePipeline(
       previewUrl,
       cropPixels,
-      "profile.jpg",
+      `profile-${Date.now().toString()}.jpg`,
       {
         compress: { maxSizeMB: 0.8, maxWidthOrHeight: 800 },
         watermark: {
@@ -59,6 +60,7 @@ export default function UploadSinglePage() {
   const onSubmit = async () => {
     const file = await buildAndPreview();
     if (!file) return;
+
     const fd = new FormData();
     fd.append("file", file);
 

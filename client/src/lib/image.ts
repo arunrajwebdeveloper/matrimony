@@ -108,6 +108,7 @@ export async function addWatermark(
   ctx.lineWidth = Math.max(2, Math.floor(fontSize / 10));
 
   const metrics = ctx.measureText(text);
+
   const textHeight = fontSize;
 
   let x = canvas.width - padding;

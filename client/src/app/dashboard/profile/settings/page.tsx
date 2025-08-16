@@ -376,10 +376,28 @@ const Page: React.FC = () => {
                   {/* <h1 className="text-xl font-semibold text-gray-800 mb-6">
                     Image Uploads
                   </h1> */}
+
+                  {activeTab === "image-uploads" && (
+                    <section className="mb-6 space-y-4">
+                      <div>
+                        <h2 className="font-semibold text-black text-md mb-4">
+                          Upload profile image
+                        </h2>
+                        <UploadSinglePage />
+                      </div>
+                      <div>
+                        <h2 className="font-semibold text-black text-md mb-4">
+                          Upload profile photos
+                        </h2>
+                        <UploadMultiplePage />
+                      </div>
+                    </section>
+                  )}
+
                   <form onSubmit={handleSubmit(onSubmit)}>
                     {/* Image uploads */}
 
-                    {activeTab === "image-uploads" && (
+                    {/* {activeTab === "image-uploads" && (
                       <section className="mb-6 space-y-4">
                         <div>
                           <h2 className="font-semibold text-black text-md mb-4">
@@ -394,7 +412,7 @@ const Page: React.FC = () => {
                           <UploadMultiplePage />
                         </div>
                       </section>
-                    )}
+                    )} */}
 
                     {/* --- Personal Details Section --- */}
                     {activeTab === "personal-details" && (
