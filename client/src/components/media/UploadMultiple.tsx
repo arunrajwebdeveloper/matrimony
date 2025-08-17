@@ -3,10 +3,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
-import { multipleImagesSchema } from "@/schemas/schemas";
 
 type FormData = { images: File[] };
 
@@ -19,11 +17,9 @@ export default function UploadMultiplePage() {
     setValue,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(multipleImagesSchema) as any,
     defaultValues: { images: [] },
   });
 
-  const [rawFiles, setRawFiles] = useState<File[]>([]);
   const [srcUrls, setSrcUrls] = useState<string[]>([]);
   const [cropPixels, setCropPixels] = useState<(any | null)[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -49,7 +45,6 @@ export default function UploadMultiplePage() {
       files = files.slice(0, 5);
     }
     setValue("images", files);
-    setRawFiles(files);
     const urls = files.map((f) => fileToObjectURL(f));
     setSrcUrls(urls);
     setCropPixels(new Array(files.length).fill(null));

@@ -3,10 +3,8 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
-import { singleImageSchema } from "@/schemas/schemas";
 
 type FormData = {
   image: File | null;
@@ -25,7 +23,6 @@ export default function UploadSinglePage() {
     setValue,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(singleImageSchema) as any,
     defaultValues: { image: null },
   });
 
