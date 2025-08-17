@@ -162,13 +162,9 @@ const DashboardPage: React.FC = () => {
 
             {/* LISTS */}
 
-            <ProfileCard title="Preferred Matches" link="/" className="mb-5">
-              <div className="flex flex-col gap-3">
-                {users?.map((user) => {
-                  return <UserCard key={user.name} {...user} />;
-                })}
-              </div>
-            </ProfileCard>
+            {/* New Matches: Recently joined profiles that meet 
+            your basic criteria like age, location, and education. */}
+
             <ProfileCard title="New Matches" link="/" className="mb-5">
               <div className="flex flex-col gap-3">
                 {users?.map((user) => {
@@ -176,13 +172,62 @@ const DashboardPage: React.FC = () => {
                 })}
               </div>
             </ProfileCard>
-            <ProfileCard title="Recent profile visitors" link="/">
+
+            {/* Preferred Matches: Highly compatible profiles (85%+ match) based on 
+            advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
+
+            <ProfileCard title="Preferred Matches" link="/" className="mb-5">
               <div className="flex flex-col gap-3">
                 {users?.map((user) => {
                   return <UserCard key={user.name} {...user} />;
                 })}
               </div>
             </ProfileCard>
+
+            <div className="py-4 px-6">
+              <div className="mb-6 flex items-center justify-between">
+                <h2 className="font-semibold text-black text-md">
+                  Recent Activity
+                </h2>
+                <Link className="font-normal text-blue-500 text-xs" href={""}>
+                  View all
+                </Link>
+              </div>
+              <div>
+                <div className="flex items-center justify-between py-2">
+                  <p className="text-slate-600 font-normal text-sm m-0">
+                    Sneha K. viewed your profile
+                  </p>
+                  <p className="text-slate-500 font-normal text-xs m-0">
+                    2 hours ago
+                  </p>
+                </div>
+                <div className="flex items-center justify-between py-2">
+                  <p className="text-slate-600 font-normal text-sm m-0">
+                    New message from Amit
+                  </p>
+                  <p className="text-slate-500 font-normal text-xs m-0">
+                    5 hours ago
+                  </p>
+                </div>
+                <div className="flex items-center justify-between py-2">
+                  <p className="text-slate-600 font-normal text-sm m-0">
+                    Kavya R. shortlisted your profile
+                  </p>
+                  <p className="text-slate-500 font-normal text-xs m-0">
+                    1 day ago
+                  </p>
+                </div>
+                <div className="flex items-center justify-between py-2">
+                  <p className="text-slate-600 font-normal text-sm m-0">
+                    Meera sent interest
+                  </p>
+                  <p className="text-slate-500 font-normal text-xs m-0">
+                    2 days ago
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="w-[25%] px-2">

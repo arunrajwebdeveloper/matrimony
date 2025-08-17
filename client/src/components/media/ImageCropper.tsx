@@ -23,7 +23,8 @@ export default function ImageCropper({
   return (
     <div
       className={
-        className ?? "relative w-full h-72 bg-white rounded-sm overflow-hidden"
+        // className ?? "relative w-full h-72 bg-white rounded-sm overflow-hidden"
+        className ?? "relative w-full h-[340px] bg-white overflow-hidden "
       }
     >
       <Cropper
