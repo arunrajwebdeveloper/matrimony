@@ -80,8 +80,17 @@ export default function UploadSinglePage() {
     setShowModal(false);
   };
 
+  const onHandleCrop = () => {
+    setShowModal(true);
+    setPreviewUrl(previewUrl); // not necessary
+  };
+
   return (
     <main className="space-y-4">
+      {errors.image && (
+        <p className="text-red-600">{String(errors.image.message)}</p>
+      )}
+
       <label className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition">
         <input
           type="file"
@@ -95,9 +104,6 @@ export default function UploadSinglePage() {
           <p className="text-sm text-slate-600 font-medium m-0">Upload Image</p>
         </div>
       </label>
-      {errors.image && (
-        <p className="text-red-600">{String(errors.image.message)}</p>
-      )}
 
       {/* Show processed preview if available, else raw preview */}
       {(finalPreview || previewUrl) && (
@@ -115,6 +121,16 @@ export default function UploadSinglePage() {
               className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
             >
               ✕
+            </button>
+
+            {/* --- */}
+
+            <button
+              type="button"
+              className="absolute bottom-1 left-1 bg-blue-600 text-white text-xs px-2 py-1 rounded"
+              onClick={onHandleCrop}
+            >
+              Crop
             </button>
           </div>
         </div>

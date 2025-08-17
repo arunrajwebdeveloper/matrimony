@@ -22,6 +22,7 @@ export default function UploadMultiplePage() {
   });
 
   const [showModal, setShowModal] = useState(false);
+  const [isSingleEdit, setIsSingleEdit] = useState(false);
   const [srcUrls, setSrcUrls] = useState<string[]>([]);
   const [cropPixels, setCropPixels] = useState<(any | null)[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -146,6 +147,19 @@ export default function UploadMultiplePage() {
     alert("Uploaded all images!");
   };
 
+  const doneSingleCrop = async () => {
+    await processCurrent();
+    setShowModal(false);
+    setCurrentIndex(0);
+    setIsSingleEdit(false);
+  };
+
+  const onHandleCrop = (idx: number) => {
+    setIsSingleEdit(true);
+    setCurrentIndex(idx);
+    setShowModal(true);
+  };
+
   return (
     <main className="space-y-6">
       {/* {finalFiles.length > 0 && ( */}
@@ -167,6 +181,16 @@ export default function UploadMultiplePage() {
                     className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
                   >
                     ✕
+                  </button>
+
+                  {/* ---- */}
+
+                  <button
+                    type="button"
+                    className="absolute bottom-1 left-1 bg-blue-600 text-white text-xs px-2 py-1 rounded"
+                    onClick={() => onHandleCrop(i)}
+                  >
+                    Crop
                   </button>
                 </div>
               )
@@ -232,26 +256,37 @@ export default function UploadMultiplePage() {
                   Cancel
                 </button>
               </div>
-              <div>
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                  onClick={handlePrev}
-                  disabled={currentIndex === 0}
-                >
-                  Prev
-                </button>
+              {isSingleEdit ? (
                 <button
                   type="button"
                   className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 disabled:opacity-50"
                   disabled={!canProceed}
-                  onClick={handleNext}
+                  onClick={doneSingleCrop}
                 >
-                  {currentIndex === srcUrls.length - 1
-                    ? "Save & Finish"
-                    : "Save & Next"}
+                  Save
                 </button>
-              </div>
+              ) : (
+                <div>
+                  <button
+                    type="button"
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    onClick={handlePrev}
+                    disabled={currentIndex === 0}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    type="button"
+                    className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 disabled:opacity-50"
+                    disabled={!canProceed}
+                    onClick={handleNext}
+                  >
+                    {currentIndex === srcUrls.length - 1
+                      ? "Save & Finish"
+                      : "Save & Next"}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
