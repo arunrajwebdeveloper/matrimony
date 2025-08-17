@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
+import { ImagePlus } from "lucide-react";
 
 type FormData = {
   image: File | null;
@@ -73,7 +74,7 @@ export default function UploadSinglePage() {
   };
 
   const handleRemove = () => {
-    reset(); // reset RHF
+    reset();
     setPreviewUrl(null);
     setFinalPreview(null);
     setShowModal(false);
@@ -81,15 +82,51 @@ export default function UploadSinglePage() {
 
   return (
     <main className="space-y-4">
-      <input
-        type="file"
-        accept="image/*"
-        {...register("image")}
-        onChange={(e) => onFileChange(e.target.files?.[0])}
-      />
+      <label className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition">
+        <input
+          type="file"
+          accept="image/*"
+          {...register("image")}
+          onChange={(e) => onFileChange(e.target.files?.[0])}
+          className=" hidden w-0 h-0 opacity-0"
+        />
+        <div className="m-auto flex justify-center items-center flex-col gap-1">
+          <ImagePlus size={30} color="#45556c" />
+          <p className="text-sm text-slate-600 font-medium m-0">Upload Image</p>
+        </div>
+      </label>
       {errors.image && (
         <p className="text-red-600">{String(errors.image.message)}</p>
       )}
+
+      {/* Show processed preview if available, else raw preview */}
+      {(finalPreview || previewUrl) && (
+        <div className="space-y-2">
+          <p className="text-sm text-gray-600">Preview</p>
+          <div className="relative w-40 h-40">
+            <img
+              src={finalPreview || previewUrl!}
+              alt="preview"
+              className="w-40 h-40 object-cover rounded"
+            />
+            <button
+              type="button"
+              onClick={handleRemove}
+              className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      <button
+        className="px-4 py-2 bg-blue-600 text-white rounded"
+        onClick={handleSubmit(onSubmit)}
+        disabled={!finalPreview} // only enable when processed
+      >
+        Upload
+      </button>
 
       {/* Modal for cropping */}
       {previewUrl && showModal && (
@@ -119,35 +156,6 @@ export default function UploadSinglePage() {
           </div>
         </div>
       )}
-
-      {/* Show processed preview if available, else raw preview */}
-      {(finalPreview || previewUrl) && (
-        <div className="space-y-2">
-          <p className="text-sm text-gray-600">Preview</p>
-          <div className="relative w-60 h-60">
-            <img
-              src={finalPreview || previewUrl!}
-              alt="preview"
-              className="w-60 h-60 object-cover rounded"
-            />
-            <button
-              type="button"
-              onClick={handleRemove}
-              className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
-
-      <button
-        className="px-4 py-2 bg-blue-600 text-white rounded"
-        onClick={handleSubmit(onSubmit)}
-        disabled={!finalPreview} // only enable when processed
-      >
-        Upload
-      </button>
     </main>
   );
 }

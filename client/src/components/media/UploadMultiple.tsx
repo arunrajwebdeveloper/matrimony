@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
+import { ImagePlus } from "lucide-react";
 
 type FormData = { images: File[] };
 
@@ -147,13 +148,56 @@ export default function UploadMultiplePage() {
 
   return (
     <main className="space-y-6">
-      <input
-        type="file"
-        accept="image/*"
-        multiple
-        {...register("images")}
-        onChange={(e) => onFilesPicked(Array.from(e.target.files || []))}
-      />
+      {/* {finalFiles.length > 0 && ( */}
+      <section className="space-y-2">
+        <p className="text-sm text-gray-600">Preview</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {finalFiles.map(
+            (file, i) =>
+              file && (
+                <div key={i} className="relative w-40 h-40">
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`final-${i}`}
+                    className="w-40 h-40 object-cover rounded"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemove(i)}
+                    className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )
+          )}
+          <label className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition">
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              {...register("images")}
+              onChange={(e) => onFilesPicked(Array.from(e.target.files || []))}
+              className=" hidden w-0 h-0 opacity-0"
+            />
+            <div className="m-auto flex justify-center items-center flex-col gap-1">
+              <ImagePlus size={30} color="#45556c" />
+              <p className="text-sm text-slate-600 font-medium m-0">
+                Upload Images
+              </p>
+            </div>
+          </label>
+        </div>
+      </section>
+      {/* )} */}
+
+      <button
+        className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
+        disabled={srcUrls.length === 0}
+        onClick={handleSubmit(onSubmit)}
+      >
+        Upload All
+      </button>
 
       {srcUrls.length > 0 && showModal && (
         <div className="fixed inset-0 h-full w-full bg-transparent z-[600]">
@@ -212,41 +256,6 @@ export default function UploadMultiplePage() {
           </div>
         </div>
       )}
-
-      {finalFiles.length > 0 && (
-        <section className="space-y-2">
-          <p className="text-sm text-gray-600">Preview</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {finalFiles.map(
-              (file, i) =>
-                file && (
-                  <div key={i} className="relative">
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={`final-${i}`}
-                      className="w-40 h-40 object-cover rounded"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleRemove(i)}
-                      className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                )
-            )}
-          </div>
-        </section>
-      )}
-
-      <button
-        className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
-        disabled={srcUrls.length === 0}
-        onClick={handleSubmit(onSubmit)}
-      >
-        Upload All
-      </button>
     </main>
   );
 }
