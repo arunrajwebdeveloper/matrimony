@@ -17,6 +17,7 @@ export interface User {
   updatedAt?: string;
   profile: UserProfileType;
   gender: string;
+  profileId?: string;
 }
 
 export interface LoginCredentials {

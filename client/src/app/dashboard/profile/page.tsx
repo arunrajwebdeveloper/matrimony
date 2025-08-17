@@ -25,6 +25,7 @@ import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import avatarSource from "@/utils/avatarSource";
+import ProfileUserCard from "@/components/profile/ProfileUserCard";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -102,6 +103,14 @@ const ProfilePage: React.FC = () => {
               </div>
             )}
             <div className="space-y-2">
+              <div className="px-6 py-4">
+                <ProfileUserCard
+                  profileData={profileData}
+                  cover="/cover/cover-image-2.jpg"
+                  currentUser={user}
+                />
+              </div>
+
               <div className="px-6 py-4">
                 <h3 className="flex items-center font-semibold text-black text-md mb-6">
                   <BookOpen size={20} className="mr-2 text-black" />
@@ -384,7 +393,9 @@ const ProfilePage: React.FC = () => {
         </div>
         <div className="w-[25%] px-2">
           <div className="mt-5">
-            <ProfileCompletionCard />
+            <div className="py-4">
+              <ProfileCompletionCard />
+            </div>
           </div>
         </div>
       </div>

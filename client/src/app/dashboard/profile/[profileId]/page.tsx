@@ -15,24 +15,14 @@ import {
   Pill,
   ShieldCheck,
   BookOpen,
-  ShieldAlert,
-  HeartIcon,
-  Mail,
-  Ban,
-  Smartphone,
-  BriefcaseBusiness,
-  Cake,
-  BadgeCheck,
 } from "lucide-react";
 import Navigation from "@/components/navigation/Navigation";
-import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
 import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
 import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
-import avatarSource from "@/utils/avatarSource";
 import { useParams } from "next/navigation";
+import ProfileUserCard from "@/components/profile/ProfileUserCard";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -78,11 +68,6 @@ const ProfilePage: React.FC = () => {
     );
   }
 
-  const imageUrl = avatarSource({
-    avatar: profileData?.profilePicture,
-    gender: profileData?.gender,
-  });
-
   return (
     <div className="main-container">
       {/* Breadcrumb */}
@@ -108,79 +93,47 @@ const ProfilePage: React.FC = () => {
             )}
             <div className="space-y-2">
               <div className="px-6 py-4">
-                <div className="w-full h-[240px] overflow-hidden">
-                  <img
-                    className="w-full h-[240px] object-cover rounded-2xl"
-                    src="/cover/cover-image-1.jpg"
-                    alt=""
-                  />
-                </div>
-                <div className="-mt-20">
-                  <div className="w-[160px] h-[160px] rounded-[50%] relative mx-auto">
-                    <img
-                      className="w-[160px] h-[160px] object-cover rounded-[50%] overflow-hidden border-2 border-white"
-                      src={imageUrl}
-                      alt=""
-                    />
-                    <div className="absolute bottom-4.5 right-4.5 z-10">
-                      <OnlineStatusDot isOnline={true} size="md" />
-                    </div>
-                  </div>
-                  <div className="space-y-1 mx-auto text-center mt-4">
-                    <p className="text-xs text-slate-500">
-                      {profileData?.profileId}
-                    </p>
-                    <p className="text-lg font-semibold text-slate-700 flex gap-1 items-center justify-center">
-                      {`${profileData?.firstName} ${
-                        profileData?.lastName || ""
-                      }`}
-                      <BadgeCheck size={20} color="#fff" fill="#2042f4" />
-                    </p>
-                    <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
-                      <Cake size={16} />
-                      <span>{dateOfBirthFormat(profileData?.dateOfBirth)}</span>
-                    </p>
-                    <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
-                      <BriefcaseBusiness size={16} />
-                      <span>{profileData?.occupation}</span>
-                    </p>
-                    <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
-                      <MapPin size={16} />
-                      <span>{`${profileData?.city}, ${profileData?.state}, ${profileData?.country}`}</span>
-                    </p>
-                    <div className="mt-4 space-y-1">
-                      <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
-                        <Mail size={16} />
-                        <span>{profileData?.email}</span>
-                      </p>
-                      <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
-                        <Smartphone size={16} />
-                        <span>{profileData?.phoneNumber}</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-center gap-3 mt-6">
-                  <button className="h-[36px] px-2 font-medium text-xs flex items-center gap-2 rounded bg-pink-100 text-pink-600 cursor-pointer transition-colors hover:bg-pink-200">
-                    <HeartIcon size={18} color="#e60076" />
-                    <span>Send Interest</span>
-                  </button>
-                  <button className="h-[36px] px-2 font-medium text-xs flex items-center gap-2 rounded bg-green-100 text-green-600 cursor-pointer transition-colors hover:bg-green-200">
-                    <Mail size={18} color="#00a63e" />
-                    <span>Send Message</span>
-                  </button>
-                  <button className="h-[36px] px-2 font-medium text-xs flex items-center gap-2 rounded bg-amber-100 text-amber-600 cursor-pointer transition-colors hover:bg-amber-200">
-                    <Ban size={18} color="#e17100" />
-                    <span>Block</span>
-                  </button>
-                  <button className="h-[36px] px-2 font-medium text-xs flex items-center gap-2 rounded bg-red-100 text-red-600 cursor-pointer transition-colors hover:bg-red-200">
-                    <ShieldAlert size={18} color="#e7000b" />
-                    <span>Report</span>
-                  </button>
-                </div>
+                <ProfileUserCard
+                  profileData={profileData}
+                  cover="/cover/cover-image-1.jpg"
+                  currentUser={user}
+                />
               </div>
 
               {/* -------- */}
+
+              <div className="px-6 py-4">
+                <h3 className="flex items-center font-semibold text-black text-md mb-6">
+                  <BookOpen size={20} className="mr-2 text-black" />
+                  Basic Contacts
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium text-gray-500 flex gap-1 items-center">
+                      <span>Email</span>
+                      <span className="text-xs font-normal text-green-500 flex gap-1 items-center select-none">
+                        <ShieldCheck size={18} color="white" fill="#00c951" />
+                        <span>Verified</span>
+                      </span>
+                    </label>
+                    <p className="mt-1 text-sm font-semibold text-gray-800 ">
+                      {user?.email}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium text-gray-500  flex gap-1 items-center">
+                      <span>Phone Number</span>
+                      <span className="text-xs font-normal text-red-500 flex gap-1 items-center select-none">
+                        <ShieldCheck size={18} color="white" fill="#fb2c36" />
+                        <span>Not verified</span>
+                      </span>
+                    </label>
+                    <p className="mt-1 text-sm font-semibold text-gray-800 flex gap-1 items-center">
+                      {user?.phoneNumber}
+                    </p>
+                  </div>
+                </div>
+              </div>
 
               <ProfileImagesGrid mediaItems={profileData?.profilePhotos} />
               {/* About me */}
