@@ -100,16 +100,20 @@ const SecuritySettings: React.FC = () => {
         </section>
 
         <section className="mb-6 flex justify-between items-center">
-          <h2 className="font-semibold text-black text-md mb-4">
+          <p className="font-medium text-slate-600 text-sm m-0">
             Two-Factor Authentication (2FA)
-          </h2>
+          </p>
           {/* <FormCheckbox
             label="Enable Two-Factor Authentication"
             name="twoFactorAuthEnabled"
             control={control}
           /> */}
 
-          <FormToggleSwitch name="twoFactorAuthEnabled" control={control} />
+          <FormToggleSwitch
+            name="twoFactorAuthEnabled"
+            control={control}
+            // disabled
+          />
         </section>
 
         <div className="mt-8">
