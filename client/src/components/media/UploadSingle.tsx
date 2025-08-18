@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
-import { ImagePlus } from "lucide-react";
+import { Crop, ImagePlus, Trash2 } from "lucide-react";
 
 type FormData = {
   image: File | null;
@@ -73,11 +73,19 @@ export default function UploadSinglePage() {
     alert("Uploaded!");
   };
 
-  const handleRemove = () => {
+  const handleRemoveImage = () => {
     reset();
     setPreviewUrl(null);
     setFinalPreview(null);
     setShowModal(false);
+  };
+
+  const handleCancel = () => {
+    if (finalPreview) {
+      setShowModal(false);
+    } else {
+      handleRemoveImage();
+    }
   };
 
   const onHandleCrop = () => {
@@ -91,25 +99,11 @@ export default function UploadSinglePage() {
         <p className="text-red-600">{String(errors.image.message)}</p>
       )}
 
-      <label className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition">
-        <input
-          type="file"
-          accept="image/*"
-          {...register("image")}
-          onChange={(e) => onFileChange(e.target.files?.[0])}
-          className=" hidden w-0 h-0 opacity-0"
-        />
-        <div className="m-auto flex justify-center items-center flex-col gap-1">
-          <ImagePlus size={30} color="#45556c" />
-          <p className="text-sm text-slate-600 font-medium m-0">Upload Image</p>
-        </div>
-      </label>
-
       {/* Show processed preview if available, else raw preview */}
-      {(finalPreview || previewUrl) && (
-        <div className="space-y-2">
-          <p className="text-sm text-gray-600">Preview</p>
-          <div className="relative w-40 h-40">
+
+      <div className="space-y-2">
+        {finalPreview || previewUrl ? (
+          <div className="relative w-40 h-40 overflow-hidden rounded group ">
             <img
               src={finalPreview || previewUrl!}
               alt="preview"
@@ -117,27 +111,42 @@ export default function UploadSinglePage() {
             />
             <button
               type="button"
-              onClick={handleRemove}
-              className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
+              onClick={handleRemoveImage}
+              className="absolute top-1 right-1 bg-red-600 rounded z-20 cursor-pointer w-7 h-7 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
             >
-              ✕
+              <Trash2 size={18} color="white" />
             </button>
-
-            {/* --- */}
 
             <button
               type="button"
-              className="absolute bottom-1 left-1 bg-blue-600 text-white text-xs px-2 py-1 rounded"
+              className="absolute inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
               onClick={onHandleCrop}
             >
-              Crop
+              <Crop size={18} color="white" />
+              <span>Crop image</span>
             </button>
           </div>
-        </div>
-      )}
+        ) : (
+          <label className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition">
+            <input
+              type="file"
+              accept="image/*"
+              {...register("image")}
+              onChange={(e) => onFileChange(e.target.files?.[0])}
+              className=" hidden w-0 h-0 opacity-0"
+            />
+            <div className="m-auto flex justify-center items-center flex-col gap-1">
+              <ImagePlus size={30} color="#45556c" />
+              <p className="text-sm text-slate-600 font-medium m-0">
+                Upload Image
+              </p>
+            </div>
+          </label>
+        )}
+      </div>
 
       <button
-        className="px-4 py-2 bg-blue-600 text-white rounded"
+        className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
         onClick={handleSubmit(onSubmit)}
         disabled={!finalPreview} // only enable when processed
       >
@@ -164,7 +173,7 @@ export default function UploadSinglePage() {
               <button
                 type="button"
                 className="px-4 py-2 bg-gray-500 text-white rounded cursor-pointer hover:bg-gray-600 transition-colors"
-                onClick={handleRemove}
+                onClick={handleCancel}
               >
                 Cancel
               </button>

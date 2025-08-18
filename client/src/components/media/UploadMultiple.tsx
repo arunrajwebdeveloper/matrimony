@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
-import { ImagePlus } from "lucide-react";
+import { Crop, ImagePlus, Trash2 } from "lucide-react";
 
 type FormData = { images: File[] };
 
@@ -27,6 +27,12 @@ export default function UploadMultiplePage() {
   const [cropPixels, setCropPixels] = useState<(any | null)[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [finalFiles, setFinalFiles] = useState<File[]>([]);
+
+  console.log("srcUrls[currentIndex] :>> ", srcUrls[currentIndex]);
+  console.log("finalFiles :>> ", finalFiles);
+  console.log("currentIndex :>> ", currentIndex);
+  console.log("cropPixels :>> ", cropPixels);
+  console.log("srcUrls :>> ", srcUrls);
 
   const canProceed = useMemo(() => {
     if (!srcUrls.length) return false;
@@ -125,6 +131,24 @@ export default function UploadMultiplePage() {
     setValue("images", updatedFiles);
   };
 
+  const doneSingleCrop = async () => {
+    await processCurrent();
+    setShowModal(false);
+    setCurrentIndex(0);
+    setIsSingleEdit(false);
+  };
+
+  const onHandleCrop = (idx: number) => {
+    setCurrentIndex(idx);
+    setIsSingleEdit(true);
+    setShowModal(true);
+  };
+
+  const handleCancel = () => {
+    setShowModal(false);
+    setIsSingleEdit(false);
+  };
+
   const onSubmit = async () => {
     await processCurrent();
 
@@ -147,70 +171,65 @@ export default function UploadMultiplePage() {
     alert("Uploaded all images!");
   };
 
-  const doneSingleCrop = async () => {
-    await processCurrent();
-    setShowModal(false);
-    setCurrentIndex(0);
-    setIsSingleEdit(false);
-  };
-
-  const onHandleCrop = (idx: number) => {
-    setIsSingleEdit(true);
-    setCurrentIndex(idx);
-    setShowModal(true);
-  };
-
   return (
     <main className="space-y-6">
       {/* {finalFiles.length > 0 && ( */}
       <section className="space-y-2">
-        <p className="text-sm text-gray-600">Preview</p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {finalFiles.map(
-            (file, i) =>
-              file && (
-                <div key={i} className="relative w-40 h-40">
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`final-${i}`}
-                    className="w-40 h-40 object-cover rounded"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemove(i)}
-                    className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
+          {finalFiles.length > 0 &&
+            finalFiles.map(
+              (file, i) =>
+                file && (
+                  <div
+                    key={i}
+                    className="relative w-40 h-40 overflow-hidden rounded group "
                   >
-                    ✕
-                  </button>
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`final-${i}`}
+                      className="w-40 h-40 object-cover rounded"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(i)}
+                      className="absolute top-1 right-1 bg-red-600 rounded z-20 cursor-pointer w-7 h-7 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Trash2 size={18} color="white" />
+                    </button>
 
-                  {/* ---- */}
+                    {/* ---- */}
 
-                  <button
-                    type="button"
-                    className="absolute bottom-1 left-1 bg-blue-600 text-white text-xs px-2 py-1 rounded"
-                    onClick={() => onHandleCrop(i)}
-                  >
-                    Crop
-                  </button>
-                </div>
-              )
+                    <button
+                      type="button"
+                      className="absolute inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => onHandleCrop(i)}
+                    >
+                      <Crop size={18} color="white" />
+                      <span>Crop image</span>
+                    </button>
+                  </div>
+                )
+            )}
+          {finalFiles.length !== 5 && (
+            <label className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition">
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                {...register("images")}
+                onChange={(e) =>
+                  onFilesPicked(Array.from(e.target.files || []))
+                }
+                className=" hidden w-0 h-0 opacity-0"
+              />
+              <div className="m-auto flex justify-center items-center flex-col gap-1">
+                <ImagePlus size={30} color="#45556c" />
+                <p className="text-sm text-slate-600 font-medium m-0">
+                  Upload Images
+                </p>
+              </div>
+            </label>
           )}
-          <label className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition">
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              {...register("images")}
-              onChange={(e) => onFilesPicked(Array.from(e.target.files || []))}
-              className=" hidden w-0 h-0 opacity-0"
-            />
-            <div className="m-auto flex justify-center items-center flex-col gap-1">
-              <ImagePlus size={30} color="#45556c" />
-              <p className="text-sm text-slate-600 font-medium m-0">
-                Upload Images
-              </p>
-            </div>
-          </label>
         </div>
       </section>
       {/* )} */}
@@ -249,9 +268,7 @@ export default function UploadMultiplePage() {
                 <button
                   type="button"
                   className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                  onClick={() => {
-                    setShowModal(false);
-                  }}
+                  onClick={handleCancel}
                 >
                   Cancel
                 </button>
