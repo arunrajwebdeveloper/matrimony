@@ -383,6 +383,9 @@ const Page: React.FC = () => {
                         <h2 className="font-semibold text-black text-md mb-4">
                           Upload profile image
                         </h2>
+                        <p className="font-normal text-gray-500 text-sm mb-4">
+                          This image will be used as your main profile picture.
+                        </p>
                         <UploadSinglePage
                           sourceImage={user?.profile?.profilePicture}
                         />
@@ -391,6 +394,9 @@ const Page: React.FC = () => {
                         <h2 className="font-semibold text-black text-md mb-4">
                           Upload profile photos
                         </h2>
+                        <p className="font-normal text-gray-500 text-sm mb-4">
+                          Add up to 5 photos to showcase your profile better.
+                        </p>
                         <UploadMultiplePage
                           sourceImages={user?.profile?.profilePhotos}
                         />
@@ -400,23 +406,6 @@ const Page: React.FC = () => {
 
                   <form onSubmit={handleSubmit(onSubmit)}>
                     {/* Image uploads */}
-
-                    {/* {activeTab === "image-uploads" && (
-                      <section className="mb-6 space-y-4">
-                        <div>
-                          <h2 className="font-semibold text-black text-md mb-4">
-                            Upload profile image
-                          </h2>
-                          <UploadSinglePage />
-                        </div>
-                        <div>
-                          <h2 className="font-semibold text-black text-md mb-4">
-                            Upload profile photos
-                          </h2>
-                          <UploadMultiplePage />
-                        </div>
-                      </section>
-                    )} */}
 
                     {/* --- Personal Details Section --- */}
                     {activeTab === "personal-details" && (
