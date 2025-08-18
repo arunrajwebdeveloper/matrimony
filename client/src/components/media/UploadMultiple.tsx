@@ -127,7 +127,7 @@ export default function UploadMultiplePage({
       {/* Upload area (dynamic slots) */}
       <div className="flex gap-4 flex-wrap">
         {/* Show previews */}
-        {processedImages.map((img) => (
+        {processedImages?.map((img) => (
           <div
             key={img.id}
             className="relative w-40 h-40 overflow-hidden rounded group "
@@ -162,8 +162,25 @@ export default function UploadMultiplePage({
           </div>
         ))}
 
+        {processedImages?.length !== MAX_SLOTS && (
+          <label className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition">
+            <input
+              type="file"
+              accept="image/*"
+              className=" hidden w-0 h-0 opacity-0"
+              onChange={(e) => onFileChange(e.target.files?.[0])}
+            />
+            <div className="m-auto flex justify-center items-center flex-col gap-1">
+              <ImagePlus size={30} color="#45556c" />
+              <p className="text-sm text-slate-600 font-medium m-0">
+                Upload Images
+              </p>
+            </div>
+          </label>
+        )}
+
         {/* Show remaining empty slots */}
-        {Array.from({ length: emptySlots }).map((_, i) => (
+        {/* {Array.from({ length: emptySlots }).map((_, i) => (
           <label
             key={`empty-${i}`}
             className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition"
@@ -181,13 +198,16 @@ export default function UploadMultiplePage({
               </p>
             </div>
           </label>
-        ))}
+        ))} */}
       </div>
 
       {/* Modal for Crop */}
       {showModal && activeImage && (
         <div className="fixed inset-0 h-full w-full bg-transparent z-[600]">
-          <div className="fixed inset-0 bg-gray-900/50"></div>
+          <div
+            className="fixed inset-0 bg-gray-900/50"
+            onClick={cancelCrop}
+          ></div>
           <div className="max-w-[600px] w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[605] bg-white rounded-md overflow-hidden">
             <ImageCropper
               imageSrc={activeImage.originalUrl!}

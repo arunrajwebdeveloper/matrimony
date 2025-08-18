@@ -172,7 +172,10 @@ export default function UploadSinglePage({
       {/* Modal for cropping */}
       {image?.originalUrl && showModal && !image.source && (
         <div className="fixed inset-0 h-full w-full bg-transparent z-[600]">
-          <div className="fixed inset-0 bg-gray-900/50"></div>
+          <div
+            className="fixed inset-0 bg-gray-900/50"
+            onClick={handleCancel}
+          ></div>
           <div className="max-w-[600px] w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[605] bg-white rounded-md overflow-hidden">
             <ImageCropper
               imageSrc={image.originalUrl}
