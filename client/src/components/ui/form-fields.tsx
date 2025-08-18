@@ -100,9 +100,11 @@ export const FormSelect: React.FC<FormSelectProps> = ({
 );
 
 interface FormCheckboxProps {
-  label: string;
+  label?: string;
   name: string;
   control: Control<any>;
+  disabled?: boolean;
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
 export const FormCheckbox: React.FC<FormCheckboxProps> = ({
@@ -132,3 +134,44 @@ export const FormCheckbox: React.FC<FormCheckboxProps> = ({
     </label>
   </div>
 );
+
+export const FormToggleSwitch: React.FC<FormCheckboxProps> = ({
+  name,
+  control,
+  disabled = false,
+  size = "md",
+  ...rest
+}) => {
+  const toggleSize = {
+    sm: "",
+    md: "",
+    lg: "",
+    xl: "w-44 h-25",
+  }[size];
+
+  return (
+    <div className="flex items-center select-none">
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <input
+            type="checkbox"
+            id={name}
+            checked={field.value}
+            onChange={field.onChange}
+            className="w-0 h-0 hidden opacity-0 peer"
+            disabled={disabled}
+            {...rest}
+          />
+        )}
+      />
+      <label
+        className="relative text-[0px] block w-44 h-25 rounded-[100px] bg-slate-500 transition cursor-pointer peer-disabled:opacity-50 peer-disabled:cursor-default peer-checked:bg-green-500 indent-[-9999px] after:content-[''] after:absolute after:top-[5px] after:left-[5px] after:w-[90px] after:h-[90px] after:bg-white after:rounded-[90px] after:transition-all after:duration-300 active:after:w-[100px] peer-disabled:after:!w-[90px] peer-checked:after:left-[calc(100%-5px)] peer-checked:after:translate-x-[-100%]"
+        htmlFor={name}
+      >
+        Toggle
+      </label>
+    </div>
+  );
+};

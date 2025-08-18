@@ -1,6 +1,10 @@
 "use client";
 
-import { FormCheckbox, FormInput } from "@/components/ui/form-fields";
+import {
+  FormCheckbox,
+  FormInput,
+  FormToggleSwitch,
+} from "@/components/ui/form-fields";
 import React, { useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 
@@ -95,15 +99,17 @@ const SecuritySettings: React.FC = () => {
           </div>
         </section>
 
-        <section className="mb-6">
+        <section className="mb-6 flex justify-between items-center">
           <h2 className="font-semibold text-black text-md mb-4">
             Two-Factor Authentication (2FA)
           </h2>
-          <FormCheckbox
+          {/* <FormCheckbox
             label="Enable Two-Factor Authentication"
             name="twoFactorAuthEnabled"
             control={control}
-          />
+          /> */}
+
+          <FormToggleSwitch name="twoFactorAuthEnabled" control={control} />
         </section>
 
         <div className="mt-8">
