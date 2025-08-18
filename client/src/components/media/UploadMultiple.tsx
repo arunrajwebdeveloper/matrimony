@@ -1,26 +1,43 @@
 // app/upload-multiple/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
 import { Crop, ImagePlus, Trash2 } from "lucide-react";
 
 type ImageItem = {
   id: string;
-  originalFile: File;
-  originalUrl: string;
+  originalFile?: File; // only for new uploads
+  originalUrl?: string;
   processedFile?: File;
   processedUrl?: string;
+  source?: boolean; // flag for backend images
 };
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:5050";
 
-export default function UploadMultiplePage() {
+export default function UploadMultiplePage({
+  sourceImages = [],
+}: {
+  sourceImages?: string[];
+}) {
   const [images, setImages] = useState<ImageItem[]>([]);
   const [activeImage, setActiveImage] = useState<ImageItem | null>(null);
   const [cropPixels, setCropPixels] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (sourceImages?.length) {
+      // ✅ preload source images as processed
+      const preloaded = sourceImages?.map((url, i) => ({
+        id: `source-${i}`,
+        processedUrl: url,
+        source: true,
+      }));
+      setImages(preloaded);
+    }
+  }, []);
 
   const onFileChange = (file?: File) => {
     if (!file) return;
@@ -40,7 +57,7 @@ export default function UploadMultiplePage() {
     if (!activeImage || !cropPixels) return;
 
     const processed = await processImagePipeline(
-      activeImage.originalUrl,
+      activeImage.originalUrl!,
       cropPixels,
       `profile-${Date.now().toString()}.jpg`,
       {
@@ -88,6 +105,7 @@ export default function UploadMultiplePage() {
     const fd = new FormData();
     images.forEach((img) => {
       if (img.processedFile) {
+        // ✅ only upload newly processed images
         fd.append("files", img.processedFile);
       }
     });
@@ -108,7 +126,7 @@ export default function UploadMultiplePage() {
     <main className="space-y-4">
       {/* Upload area (dynamic slots) */}
       <div className="flex gap-4 flex-wrap">
-        {/* Show previews first */}
+        {/* Show previews */}
         {processedImages.map((img) => (
           <div
             key={img.id}
@@ -119,6 +137,7 @@ export default function UploadMultiplePage() {
               alt="preview"
               className="w-40 h-40 object-cover rounded"
             />
+            {/* Delete always available */}
             <button
               type="button"
               className="absolute top-1 right-1 bg-red-600 rounded z-20 cursor-pointer w-7 h-7 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
@@ -126,21 +145,24 @@ export default function UploadMultiplePage() {
             >
               <Trash2 size={18} color="white" />
             </button>
-            <button
-              type="button"
-              className="absolute inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={() => {
-                setActiveImage(img);
-                setShowModal(true);
-              }}
-            >
-              <Crop size={18} color="white" />
-              <span>Edit</span>
-            </button>
+            {/* Edit only if not source */}
+            {!img.source && (
+              <button
+                type="button"
+                className="absolute inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => {
+                  setActiveImage(img);
+                  setShowModal(true);
+                }}
+              >
+                <Crop size={18} color="white" />
+                <span>Edit</span>
+              </button>
+            )}
           </div>
         ))}
 
-        {/* Show remaining empty labels */}
+        {/* Show remaining empty slots */}
         {Array.from({ length: emptySlots }).map((_, i) => (
           <label
             key={`empty-${i}`}
@@ -168,7 +190,7 @@ export default function UploadMultiplePage() {
           <div className="fixed inset-0 bg-gray-900/50"></div>
           <div className="max-w-[600px] w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[605] bg-white rounded-md overflow-hidden">
             <ImageCropper
-              imageSrc={activeImage.originalUrl}
+              imageSrc={activeImage.originalUrl!}
               onCropComplete={setCropPixels}
             />
             <div className="flex gap-2 p-4 justify-center items-center">

@@ -383,13 +383,17 @@ const Page: React.FC = () => {
                         <h2 className="font-semibold text-black text-md mb-4">
                           Upload profile image
                         </h2>
-                        <UploadSinglePage />
+                        <UploadSinglePage
+                          sourceImage={user?.profile?.profilePicture}
+                        />
                       </div>
                       <div>
                         <h2 className="font-semibold text-black text-md mb-4">
                           Upload profile photos
                         </h2>
-                        <UploadMultiplePage />
+                        <UploadMultiplePage
+                          sourceImages={user?.profile?.profilePhotos}
+                        />
                       </div>
                     </section>
                   )}

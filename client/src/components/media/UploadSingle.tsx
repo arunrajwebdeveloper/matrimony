@@ -13,7 +13,11 @@ type FormData = {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:5050";
 
-export default function UploadSinglePage() {
+export default function UploadSinglePage({
+  sourceImage = null,
+}: {
+  sourceImage?: string | null;
+}) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null); // raw preview
   const [cropPixels, setCropPixels] = useState<any>(null);
