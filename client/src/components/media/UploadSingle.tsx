@@ -123,7 +123,7 @@ export default function UploadSinglePage() {
               onClick={onHandleCrop}
             >
               <Crop size={18} color="white" />
-              <span>Crop image</span>
+              <span>Edit</span>
             </button>
           </div>
         ) : (
