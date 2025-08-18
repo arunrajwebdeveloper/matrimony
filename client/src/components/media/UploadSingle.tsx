@@ -1,7 +1,7 @@
 // app/upload-single/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
@@ -22,6 +22,7 @@ export default function UploadSinglePage({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null); // raw preview
   const [cropPixels, setCropPixels] = useState<any>(null);
   const [finalPreview, setFinalPreview] = useState<string | null>(null); // processed preview
+  const [isSource, setIsSource] = useState<boolean>(false); // track if preview is source
 
   const {
     register,
@@ -33,12 +34,21 @@ export default function UploadSinglePage({
     defaultValues: { image: null },
   });
 
+  // load source image if exists
+  useEffect(() => {
+    if (sourceImage) {
+      setFinalPreview(sourceImage);
+      setIsSource(true);
+    }
+  }, [sourceImage]);
+
   const onFileChange = (file?: File) => {
     if (!file) return;
     setValue("image", file);
     const url = fileToObjectURL(file);
     setPreviewUrl(url); // show raw preview immediately
     setFinalPreview(null);
+    setIsSource(false); // new upload is not a source
     setShowModal(true); // open modal automatically
   };
 
@@ -63,6 +73,11 @@ export default function UploadSinglePage({
   };
 
   const onSubmit = async () => {
+    if (isSource) {
+      alert("Source image already exists on backend, no need to upload.");
+      return;
+    }
+
     const file = await buildAndPreview();
     if (!file) return;
 
@@ -82,10 +97,11 @@ export default function UploadSinglePage({
     setPreviewUrl(null);
     setFinalPreview(null);
     setShowModal(false);
+    setIsSource(false);
   };
 
   const handleCancel = () => {
-    if (finalPreview) {
+    if (finalPreview || isSource) {
       setShowModal(false);
     } else {
       handleRemoveImage();
@@ -93,8 +109,9 @@ export default function UploadSinglePage({
   };
 
   const onHandleCrop = () => {
+    if (isSource) return; // source cannot be edited
     setShowModal(true);
-    setPreviewUrl(previewUrl); // not necessary
+    setPreviewUrl(previewUrl);
   };
 
   return (
@@ -103,8 +120,7 @@ export default function UploadSinglePage({
         <p className="text-red-600">{String(errors.image.message)}</p>
       )}
 
-      {/* Show processed preview if available, else raw preview */}
-
+      {/* Show processed preview if available, else raw preview, else source */}
       <div className="space-y-2">
         {finalPreview || previewUrl ? (
           <div className="relative w-40 h-40 overflow-hidden rounded group ">
@@ -113,6 +129,7 @@ export default function UploadSinglePage({
               alt="preview"
               className="w-40 h-40 object-cover rounded"
             />
+            {/* Remove button */}
             <button
               type="button"
               onClick={handleRemoveImage}
@@ -121,14 +138,17 @@ export default function UploadSinglePage({
               <Trash2 size={18} color="white" />
             </button>
 
-            <button
-              type="button"
-              className="absolute inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={onHandleCrop}
-            >
-              <Crop size={18} color="white" />
-              <span>Edit</span>
-            </button>
+            {/* Edit button only if NOT source */}
+            {!isSource && (
+              <button
+                type="button"
+                className="absolute inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={onHandleCrop}
+              >
+                <Crop size={18} color="white" />
+                <span>Edit</span>
+              </button>
+            )}
           </div>
         ) : (
           <label className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition">
@@ -152,7 +172,7 @@ export default function UploadSinglePage({
       <button
         className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
         onClick={handleSubmit(onSubmit)}
-        disabled={!finalPreview} // only enable when processed
+        disabled={!finalPreview || isSource} // allow upload if processed
       >
         Upload
       </button>
