@@ -13,6 +13,7 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import avatarSource from "@/utils/avatarSource";
 import UploadSinglePage from "@/components/media/UploadSingle";
 import UploadMultiplePage from "@/components/media/UploadMultiple";
+import ToggleSwitch from "@/components/ui/ToggleSwitch";
 
 // --- DTO Interfaces (Copied from user's DTOs for a self-contained component) ---
 interface PartnerPreferencesDto {
@@ -376,6 +377,8 @@ const Page: React.FC = () => {
                   {/* <h1 className="text-xl font-semibold text-gray-800 mb-6">
                     Image Uploads
                   </h1> */}
+
+                  <ToggleSwitch />
 
                   {activeTab === "image-uploads" && (
                     <section className="mb-6 space-y-4">
