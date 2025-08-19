@@ -1,10 +1,9 @@
 // components/ImageCropper.tsx
 "use client";
 
+import { Pixels } from "@/types/imageCropper";
 import { useState } from "react";
 import Cropper from "react-easy-crop";
-
-type Pixels = { x: number; y: number; width: number; height: number };
 
 export default function ImageCropper({
   imageSrc,
