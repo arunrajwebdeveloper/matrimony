@@ -46,6 +46,7 @@ export default function UploadMultiplePage({
       id: Date.now().toString(),
       originalFile: file,
       originalUrl: fileToObjectURL(file),
+      source: false,
     };
 
     setImages((prev) => [...prev, newImage]);
@@ -118,7 +119,7 @@ export default function UploadMultiplePage({
     alert("Uploaded!");
   };
 
-  const MAX_SLOTS = 5;
+  const MAX_SLOTS = 6;
   const processedImages = images.filter((img) => img.processedUrl);
   const emptySlots = MAX_SLOTS - processedImages.length;
 
@@ -201,6 +202,14 @@ export default function UploadMultiplePage({
         ))} */}
       </div>
 
+      <button
+        className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+        onClick={onSubmit}
+        disabled={!images?.some((pic) => !pic?.source && pic?.processedUrl)}
+      >
+        Upload
+      </button>
+
       {/* Modal for Crop */}
       {showModal && activeImage && (
         <div className="fixed inset-0 h-full w-full bg-transparent z-[600]">
@@ -232,14 +241,6 @@ export default function UploadMultiplePage({
           </div>
         </div>
       )}
-
-      <button
-        className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
-        onClick={onSubmit}
-        disabled={images.length === 0}
-      >
-        Upload
-      </button>
     </main>
   );
 }

@@ -15,6 +15,7 @@ import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
 import { User, UserProfile } from "@/types";
 import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
 import avatarSource from "@/utils/avatarSource";
+import MoreDropdown from "../dropdowns/MoreDropdown";
 
 function ProfileUserCard({
   profileData,
@@ -82,14 +83,16 @@ function ProfileUserCard({
             <Mail size={18} color="#00a63e" />
             <span>Send Message</span>
           </button>
-          <button className="h-[36px] px-2 font-medium text-xs flex items-center gap-2 rounded bg-amber-100 text-amber-600 cursor-pointer transition-colors hover:bg-amber-200">
+          {/* <button className="h-[36px] px-2 font-medium text-xs flex items-center gap-2 rounded bg-amber-100 text-amber-600 cursor-pointer transition-colors hover:bg-amber-200">
             <Ban size={18} color="#e17100" />
             <span>Block</span>
           </button>
           <button className="h-[36px] px-2 font-medium text-xs flex items-center gap-2 rounded bg-red-100 text-red-600 cursor-pointer transition-colors hover:bg-red-200">
             <ShieldAlert size={18} color="#e7000b" />
             <span>Report</span>
-          </button>
+          </button> */}
+
+          <MoreDropdown />
         </div>
       )}
       {isCurrentUser && (

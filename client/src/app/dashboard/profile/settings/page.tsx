@@ -317,8 +317,8 @@ const Page: React.FC = () => {
   }
 
   const imageUrl = avatarSource({
-    avatar: user?.profile?.profilePicture,
-    gender: user?.gender,
+    avatar: profileData?.profilePicture,
+    gender: profileData?.gender,
   });
 
   return (
@@ -387,7 +387,7 @@ const Page: React.FC = () => {
                           This image will be used as your main profile picture.
                         </p>
                         <UploadSinglePage
-                          sourceImage={user?.profile?.profilePicture}
+                          sourceImage={profileData?.profilePicture}
                         />
                       </div>
                       <div>
@@ -398,7 +398,7 @@ const Page: React.FC = () => {
                           Add up to 5 photos to showcase your profile better.
                         </p>
                         <UploadMultiplePage
-                          sourceImages={user?.profile?.profilePhotos}
+                          sourceImages={profileData?.profilePhotos}
                         />
                       </div>
                     </section>

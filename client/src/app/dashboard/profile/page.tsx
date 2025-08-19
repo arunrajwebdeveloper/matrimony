@@ -26,6 +26,9 @@ import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import avatarSource from "@/utils/avatarSource";
 import ProfileUserCard from "@/components/profile/ProfileUserCard";
+import SidebarCard from "@/components/cards/SidebarCard";
+import { users } from "../page";
+import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -393,9 +396,17 @@ const ProfilePage: React.FC = () => {
         </div>
         <div className="w-[25%] px-2">
           <div className="mt-5">
-            <div className="py-4">
+            <div className="mb-3">
               <ProfileCompletionCard />
             </div>
+
+            <SidebarCard title="Online Users" link="/" className="mb-3">
+              <div className=" space-y-1">
+                {users?.map((user) => {
+                  return <UserCardSidebarItem key={user.name} {...user} />;
+                })}
+              </div>
+            </SidebarCard>
           </div>
         </div>
       </div>
