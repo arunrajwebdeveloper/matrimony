@@ -79,8 +79,8 @@ export async function addWatermark(
   const {
     text = "© Matrimony",
     position = "bottom-right",
-    opacity = 0.7,
-    padding = 25,
+    opacity = 0.5,
+    padding = 30,
   } = options;
 
   const src = URL.createObjectURL(blob);
@@ -97,24 +97,25 @@ export async function addWatermark(
   ctx.drawImage(img, 0, 0);
 
   // watermark
-  const fontSize = Math.max(12, Math.floor(canvas.width / 12));
+  const fontSize = Math.max(12, Math.floor(canvas.width / 10));
+
   ctx.font = `${fontSize}px sans-serif`;
   ctx.fillStyle = `rgba(255,255,255,${opacity})`;
   ctx.textBaseline = "alphabetic";
 
   // outline to improve readability
   // ctx.strokeStyle = `rgba(0,0,0,${opacity})`;
+  // ctx.lineWidth = Math.max(2, Math.floor(fontSize / 10));
+
   ctx.strokeStyle = `rgba(0,0,0,0)`;
-  ctx.lineWidth = Math.max(2, Math.floor(fontSize / 10));
+  ctx.lineWidth = 0;
 
   const metrics = ctx.measureText(text);
-
-  const textHeight = fontSize;
 
   let x = canvas.width - padding;
   let y = canvas.height - padding;
 
-  if (position.includes("top")) y = padding + textHeight;
+  if (position.includes("top")) y = padding + fontSize;
   if (position.includes("left")) x = padding;
 
   ctx.textAlign = position.includes("left") ? "left" : "right";
