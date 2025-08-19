@@ -29,6 +29,7 @@ import ProfileUserCard from "@/components/profile/ProfileUserCard";
 import SidebarCard from "@/components/cards/SidebarCard";
 import { users } from "../page";
 import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
+import VerificationLabelBadge from "@/components/profile/VerificationLabelBadge";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -74,6 +75,22 @@ const ProfilePage: React.FC = () => {
     avatar: user?.profile?.profilePicture,
     gender: user?.gender,
   });
+
+  const profileCompletionInfo = {
+    firstName: profileData?.firstName,
+    dateOfBirth: profileData?.dateOfBirth,
+    profilePicture: profileData?.profilePicture,
+    state: profileData?.state,
+    city: profileData?.city,
+    aboutMe: profileData?.aboutMe,
+    phoneNumber: profileData?.phoneNumber,
+    occupation: profileData?.occupation,
+    verification: {
+      phone: profileData?.verification?.phone,
+      email: profileData?.verification?.email,
+      id: profileData?.verification?.id,
+    },
+  };
 
   return (
     <div className="main-container">
@@ -123,10 +140,9 @@ const ProfilePage: React.FC = () => {
                   <div className="flex flex-col">
                     <label className="text-sm font-medium text-gray-500 flex gap-1 items-center">
                       <span>Email</span>
-                      <span className="text-xs font-normal text-green-500 flex gap-1 items-center select-none">
-                        <ShieldCheck size={18} color="white" fill="#00c951" />
-                        <span>Verified</span>
-                      </span>
+                      <VerificationLabelBadge
+                        item={profileData?.verification?.email!}
+                      />
                     </label>
                     <p className="mt-1 text-sm font-semibold text-gray-800 ">
                       {user?.email}
@@ -135,10 +151,9 @@ const ProfilePage: React.FC = () => {
                   <div className="flex flex-col">
                     <label className="text-sm font-medium text-gray-500  flex gap-1 items-center">
                       <span>Phone Number</span>
-                      <span className="text-xs font-normal text-red-500 flex gap-1 items-center select-none">
-                        <ShieldCheck size={18} color="white" fill="#fb2c36" />
-                        <span>Not verified</span>
-                      </span>
+                      <VerificationLabelBadge
+                        item={profileData?.verification?.phone!}
+                      />
                     </label>
                     <p className="mt-1 text-sm font-semibold text-gray-800 flex gap-1 items-center">
                       {user?.phoneNumber}
@@ -397,7 +412,9 @@ const ProfilePage: React.FC = () => {
         <div className="w-[25%] px-2">
           <div className="mt-5">
             <div className="mb-3">
-              <ProfileCompletionCard />
+              <ProfileCompletionCard
+                profileCompletionInfo={profileCompletionInfo}
+              />
             </div>
 
             <SidebarCard title="Online Users" link="/" className="mb-3">

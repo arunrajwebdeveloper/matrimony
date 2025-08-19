@@ -232,9 +232,9 @@ const DashboardPage: React.FC = () => {
         </div>
         <div className="w-[25%] px-2">
           <div className="mt-5">
-            <div className="mb-3">
+            {/* <div className="mb-3">
               <ProfileCompletionCard />
-            </div>
+            </div> */}
 
             <div className="mb-3">
               <UpgradePremiumCard />

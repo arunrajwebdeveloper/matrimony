@@ -1,16 +1,35 @@
 import { useState, useEffect } from "react";
-import { UserCheck, Star } from "lucide-react";
+import { UserCheck, Star, PartyPopper } from "lucide-react";
 import Link from "next/link";
+import Confetti from "../icons/Confetti";
 
 // Define the shape of the user's profile data
+
 interface UserProfile {
-  fullName: string;
-  email: string;
-  dateOfBirth: string;
-  profilePictureUrl: string | null;
-  address: string;
-  city: string;
-  bio: string;
+  firstName?: string;
+  dateOfBirth?: string;
+  profilePicture?: string | null;
+  state?: string;
+  city?: string;
+  aboutMe?: string;
+  phoneNumber?: string;
+  occupation?: string;
+  isPhoneVerified?: boolean;
+  isEmailVerified?: boolean;
+  isIdVerified?: boolean;
+}
+
+interface VerificationItems {
+  phone?: boolean;
+  email?: boolean;
+  id?: boolean;
+}
+interface ProfileVerificationItems extends UserProfile {
+  verification: VerificationItems;
+}
+
+interface ProfileCompletionProps {
+  profileCompletionInfo: ProfileVerificationItems;
 }
 
 // Define the props for the progress circle component
@@ -83,31 +102,51 @@ const ProfileCompletionCircle: React.FC<ProgressCircleProps> = ({
 };
 
 // Main App component to demonstrate the widget
-const ProfileCompletionCard = () => {
+const ProfileCompletionCard = (props: ProfileCompletionProps) => {
+  const { profileCompletionInfo } = props;
+  const { verification, ...rest } = profileCompletionInfo;
+
   const [profileData, setProfileData] = useState<UserProfile>({
-    fullName: "John Doe",
-    email: "john.doe@example.com",
-    dateOfBirth: "1990-01-01",
-    profilePictureUrl: null, // This field is missing
-    address: "",
-    city: "", // This field is missing
-    bio: "A short bio about myself.",
+    firstName: "",
+    dateOfBirth: "",
+    profilePicture: null,
+    state: "",
+    city: "",
+    aboutMe: "",
+    phoneNumber: "",
+    occupation: "",
+    isPhoneVerified: false,
+    isEmailVerified: false,
+    isIdVerified: false,
   });
 
   const [completionPercentage, setCompletionPercentage] = useState<number>(0);
+
+  useEffect(() => {
+    setProfileData({
+      ...rest,
+      isPhoneVerified: verification?.phone,
+      isEmailVerified: verification?.email,
+      isIdVerified: verification?.id,
+    });
+  }, [props]);
 
   useEffect(() => {
     // --- Profile Completion Logic ---
     // Define the fields you want to track for completion.
     // This is where you would customize the logic.
     const fieldsToTrack: Array<keyof UserProfile> = [
-      "fullName",
-      "email",
+      "firstName",
       "dateOfBirth",
-      "profilePictureUrl",
-      "address",
+      "profilePicture",
+      "state",
       "city",
-      "bio",
+      "aboutMe",
+      "phoneNumber",
+      "occupation",
+      "isPhoneVerified",
+      "isEmailVerified",
+      "isIdVerified",
     ];
 
     let completedFields = 0;
@@ -115,7 +154,7 @@ const ProfileCompletionCard = () => {
       // Check if the field exists and is not an empty string or null.
       // TypeScript's keyof operator ensures this is type-safe.
       const value = profileData[field];
-      if (value !== null && value !== "" && value !== undefined) {
+      if (value !== null && value !== "" && value !== undefined && value) {
         completedFields++;
       }
     });
@@ -128,29 +167,43 @@ const ProfileCompletionCard = () => {
   return (
     <div className="flex items-center justify-center antialiased">
       <div className="bg-white rounded-2xl border border-gray-100 p-8 w-full transition-all duration-300">
-        <div>
-          <h1 className="text-sm font-medium text-gray-800 text-center">
-            Complete your profile
-          </h1>
-          {completionPercentage === 100 && (
-            <Star className="text-yellow-500" size={28} fill="currentColor" />
-          )}
-        </div>
+        {completionPercentage === 100 && (
+          <div>
+            <h1 className="text-lg font-semibold text-slate-700 text-center leading-6">
+              Your profile looks good!
+            </h1>
+            <div className="flex justify-center my-6">
+              <Confetti size={100} />
+            </div>
+            <p className="text-xs text-gray-500 text-center mb-4">
+              You have added almost all important informations, so you will get
+              more attention.
+            </p>
+          </div>
+        )}
 
-        <div className="flex items-center justify-center">
-          <ProfileCompletionCircle percentage={completionPercentage} />
-        </div>
-        <p className="text-xs text-gray-400 text-center mb-4">
-          Add basic informations to get more attention.
-        </p>
-        <div>
-          <Link
-            className="flex items-center justify-center border-2 border-blue-600 px-2.5 py-2 rounded-full text-blue-600 font-medium text-xs"
-            href="/profile"
-          >
-            Complete now
-          </Link>
-        </div>
+        {completionPercentage < 100 && (
+          <>
+            <h1 className="text-sm font-medium text-gray-800 text-center">
+              Complete your profile
+            </h1>
+            <div className="flex items-center justify-center">
+              <ProfileCompletionCircle percentage={completionPercentage} />
+            </div>
+
+            <p className="text-xs text-gray-400 text-center mb-4">
+              Add basic informations to get more attention.
+            </p>
+            <div>
+              <Link
+                className="flex items-center justify-center border-2 border-blue-600 px-2.5 py-2 rounded-full text-blue-600 font-medium text-xs"
+                href="/profile"
+              >
+                Complete now
+              </Link>
+            </div>
+          </>
+        )}
 
         {/* <div className="">
           <h2 className="text-md font-medium text-gray-700 ">Your Progress</h2>
