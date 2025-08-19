@@ -184,17 +184,17 @@ export default function UploadSinglePage({
             <div className="flex gap-2 p-4 justify-center items-center">
               <button
                 type="button"
-                className="px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700 transition-colors"
-                onClick={buildAndPreview}
-              >
-                Done
-              </button>
-              <button
-                type="button"
                 className="px-4 py-2 bg-gray-500 text-white rounded cursor-pointer hover:bg-gray-600 transition-colors"
                 onClick={handleCancel}
               >
                 Cancel
+              </button>
+              <button
+                type="button"
+                className="px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700 transition-colors"
+                onClick={buildAndPreview}
+              >
+                Done
               </button>
             </div>
           </div>
