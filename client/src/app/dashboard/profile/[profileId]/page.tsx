@@ -63,6 +63,22 @@ const ProfilePage: React.FC = () => {
     fetchProfile();
   }, []);
 
+  const profileCompletionInfo = {
+    firstName: profileData?.firstName,
+    dateOfBirth: profileData?.dateOfBirth,
+    profilePicture: profileData?.profilePicture,
+    state: profileData?.state,
+    city: profileData?.city,
+    aboutMe: profileData?.aboutMe,
+    phoneNumber: profileData?.phoneNumber,
+    occupation: profileData?.occupation,
+    verification: {
+      phone: profileData?.verification?.phone,
+      email: profileData?.verification?.email,
+      id: profileData?.verification?.id,
+    },
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center fixed top-0 left-0 z-[1000] w-full h-full">
@@ -388,8 +404,9 @@ const ProfilePage: React.FC = () => {
         <div className="w-[25%] px-2">
           <div className="mt-5">
             <div className="mb-3">
-              {" "}
-              <ProfileCompletionCard />
+              <ProfileCompletionCard
+                profileCompletionInfo={profileCompletionInfo}
+              />
             </div>
             <SidebarCard title="Similar Profiles" link="/" className="mb-3">
               <div className=" space-y-1">

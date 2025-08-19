@@ -24,8 +24,8 @@ function UserCardSidebarItem({
         </div>
       </div>
       <div className="px-4 flex-auto">
+        <span className="text-xs text-gray-700 m-0">{profileId}</span>
         <h3 className="text-sm font-medium text-black m-0">{name}</h3>
-        <span className="text-xs text-gray-700 ">{profileId}</span>
       </div>
     </Link>
   );

@@ -24,7 +24,7 @@ export const dateOfBirthFormat = (
     }
 
     // Format the date as 'DD-Month-YYYY'
-    const formattedDate = birthDate.format("DD-MMMM-YYYY");
+    const formattedDate = birthDate.format("DD MMMM YYYY");
 
     // Calculate the age in years from the current date
     const age = moment().diff(birthDate, "years");
