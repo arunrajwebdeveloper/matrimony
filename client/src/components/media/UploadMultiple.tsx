@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
-import { Crop, ImagePlus, Trash2 } from "lucide-react";
+import { Crop, ImagePlus, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
 
 type ImageItem = {
@@ -165,7 +165,7 @@ export default function UploadMultiplePage({
         ))}
 
         {processedImages?.length !== MAX_SLOTS && (
-          <label className="w-40 h-40 rounded-md bg-slate-50 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition">
+          <label className="w-40 h-40 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
             <input
               type="file"
               accept="image/*"
@@ -173,10 +173,10 @@ export default function UploadMultiplePage({
               onChange={(e) => onFileChange(e.target.files?.[0])}
             />
             <div className="m-auto flex justify-center items-center flex-col gap-1">
-              <ImagePlus size={30} color="#45556c" />
-              <p className="text-sm text-slate-600 font-medium m-0">
-                Upload Images
-              </p>
+              <Plus
+                size={30}
+                className="text-slate-400 group-hover:text-slate-500 transition duration-300"
+              />
             </div>
           </label>
         )}
