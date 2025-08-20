@@ -6,6 +6,7 @@ import {
   Delete,
   Req,
   Body,
+  UseGuards,
 } from '@nestjs/common';
 import { MatchesService } from './matches.service';
 import {
@@ -16,7 +17,9 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { ProfileDto } from './dto/profile.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @ApiTags('Matches')
 @ApiBearerAuth()
 @Controller('matches')
@@ -30,9 +33,9 @@ export class MatchesController {
     description: 'List of profiles matching preferences',
     type: [ProfileDto],
   })
-  async getPreferredMatches(@Req() req) {
-    // req.user.id would come from a real authentication guard
-    return this.matchesService.getPreferredMatches(req.user.id);
+  async getPreferredMatches(@Req() req: any) {
+    // req.user._id would come from a real authentication guard
+    return this.matchesService.getPreferredMatches(req.user._id);
   }
 
   @Get('new')
@@ -42,8 +45,8 @@ export class MatchesController {
     description: 'List of new profiles',
     type: [ProfileDto],
   })
-  async getNewMatches(@Req() req) {
-    return this.matchesService.getNewMatches(req.user.id);
+  async getNewMatches(@Req() req: any) {
+    return this.matchesService.getNewMatches(req.user._id);
   }
 
   @Get('shortlist')
@@ -53,8 +56,8 @@ export class MatchesController {
     description: 'List of shortlisted profiles',
     type: [ProfileDto],
   })
-  async getShortlistedProfiles(@Req() req) {
-    return this.matchesService.getShortlistedProfiles(req.user.id);
+  async getShortlistedProfiles(@Req() req: any) {
+    return this.matchesService.getShortlistedProfiles(req.user._id);
   }
 
   @Post('shortlist/:profileId')
@@ -67,8 +70,8 @@ export class MatchesController {
     status: 201,
     description: 'Profile successfully added to shortlist',
   })
-  async addShortlist(@Req() req, @Param('profileId') profileId: string) {
-    return this.matchesService.updateShortlist(req.user.id, profileId, 'add');
+  async addShortlist(@Req() req: any, @Param('profileId') profileId: string) {
+    return this.matchesService.updateShortlist(req.user._id, profileId, 'add');
   }
 
   @Delete('shortlist/:profileId')
@@ -81,9 +84,12 @@ export class MatchesController {
     status: 200,
     description: 'Profile successfully removed from shortlist',
   })
-  async removeShortlist(@Req() req, @Param('profileId') profileId: string) {
+  async removeShortlist(
+    @Req() req: any,
+    @Param('profileId') profileId: string,
+  ) {
     return this.matchesService.updateShortlist(
-      req.user.id,
+      req.user._id,
       profileId,
       'remove',
     );
@@ -96,8 +102,8 @@ export class MatchesController {
     description: 'The ID of the profile to decline',
   })
   @ApiResponse({ status: 201, description: 'Profile successfully declined' })
-  async declineProfile(@Req() req, @Param('profileId') profileId: string) {
-    return this.matchesService.declineProfile(req.user.id, profileId);
+  async declineProfile(@Req() req: any, @Param('profileId') profileId: string) {
+    return this.matchesService.declineProfile(req.user._id, profileId);
   }
 
   @Get('declined')
@@ -107,7 +113,7 @@ export class MatchesController {
     description: 'List of declined profiles',
     type: [ProfileDto],
   })
-  async getDeclinedProfiles(@Req() req) {
-    return this.matchesService.getDeclinedProfiles(req.user.id);
+  async getDeclinedProfiles(@Req() req: any) {
+    return this.matchesService.getDeclinedProfiles(req.user._id);
   }
 }
