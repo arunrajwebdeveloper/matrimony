@@ -1,15 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Ellipsis } from "lucide-react";
 
-// Define the component using React.FC for type checking
 const MoreDropdown: React.FC = () => {
   // State to track if the menu is open or closed, explicitly typed as boolean
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // State to determine if the menu should be positioned to open upwards, explicitly typed as boolean
   const [isTopPosition, setIsTopPosition] = useState<boolean>(false);
 
-  // Refs to get a reference to the menu and the button elements,
-  // specifying the HTML element type for each ref
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -74,7 +71,9 @@ const MoreDropdown: React.FC = () => {
       <button
         ref={buttonRef}
         type="button"
-        className="inline-flex cursor-pointer justify-center items-center gap-2 w-9 h-9 rounded-full border border-slate-200 shadow-sm  bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+        className={`${
+          isOpen ? "!bg-gray-50" : ""
+        } inline-flex cursor-pointer justify-center items-center gap-2 w-9 h-9 rounded-full border border-slate-200 shadow-sm  bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none`}
         onClick={toggleMenu}
       >
         <Ellipsis size={18} color="gray" />

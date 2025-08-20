@@ -44,7 +44,7 @@ function ProfileUserCard({
           alt=""
         />
         {isCurrentUser && (
-          <button className="absolute group-hover:opacity-100 opacity-0 transition-opacity duration-300 flex items-center gap-1 z-20 top-2 right-2 bg-slate-300 text-slate-600 font-medium text-xs px-2 py-1 cursor-pointer rounded-sm">
+          <button className="absolute group-hover:opacity-100 opacity-0 transition-opacity duration-300 flex items-center gap-1 z-20 top-2 right-2 bg-slate-50 text-slate-600 font-medium text-xs px-2 py-1 cursor-pointer rounded-sm">
             <ImagePlus size={16} />
             <span>Update Cover</span>
           </button>
