@@ -112,6 +112,7 @@ function ProfileUserCard({
             <Settings2 size={18} color="#45556c" />
             <span>Settings</span>
           </button>
+          <MoreDropdown />
         </div>
       )}
     </div>
