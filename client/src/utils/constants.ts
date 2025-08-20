@@ -2,13 +2,18 @@ export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050";
 
 export const API_ENDPOINTS = {
+  // AUTH
   LOGIN: "/api/auth/login",
   REGISTER: "/api/auth/register",
   REFRESH: "/api/auth/refresh",
+  LOGOUT: "/api/auth/logout",
+
+  // PROFILE
   ME: "/api/users/me",
   PROFILE: "/api/profiles/my-profile",
   USER_BY_PROFILE_ID: "/api/profiles",
-  LOGOUT: "/api/auth/logout",
+  PREFERRED_MATCHES_LIST: "/api/matches/preferred",
+  NEW_MATCHES_LIST: "/api/matches/new",
 } as const;
 
 export const TOKEN_KEYS = {

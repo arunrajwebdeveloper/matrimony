@@ -25,7 +25,6 @@ import { useParams } from "next/navigation";
 import ProfileUserCard from "@/components/profile/ProfileUserCard";
 import SidebarCard from "@/components/cards/SidebarCard";
 import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
-import { users } from "../../page";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -408,13 +407,13 @@ const ProfilePage: React.FC = () => {
                 profileCompletionInfo={profileCompletionInfo}
               />
             </div>
-            <SidebarCard title="Similar Profiles" link="/" className="mb-3">
+            {/* <SidebarCard title="Similar Profiles" link="/" className="mb-3">
               <div className=" space-y-1">
                 {users?.map((user) => {
                   return <UserCardSidebarItem key={user.name} {...user} />;
                 })}
               </div>
-            </SidebarCard>
+            </SidebarCard> */}
           </div>
         </div>
       </div>

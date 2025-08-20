@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import api from "@/lib/api";
-import { UserProfile } from "@/types";
+import { UserCardType, UserProfile } from "@/types";
 import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
 import {
   User,
@@ -27,9 +27,71 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import avatarSource from "@/utils/avatarSource";
 import ProfileUserCard from "@/components/profile/ProfileUserCard";
 import SidebarCard from "@/components/cards/SidebarCard";
-import { users } from "../page";
 import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
 import VerificationLabelBadge from "@/components/profile/VerificationLabelBadge";
+
+// export const users: UserCardType[] = [
+//   {
+//     firstName: "John Doe",
+//     profileId: "MW-23456789",
+//     height: "5'9\"",
+//     age: 35,
+//     profession: "Software Engineer",
+//     location: "New York, USA",
+//     motherTongue: "English",
+//     isOnline: true,
+//     profileImage:
+//       "https://images.unsplash.com/photo-1543123820-ac4a5f77da38?q=80&w=500",
+//   },
+//   {
+//     firstName: "Emma Watson",
+//     profileId: "MW-23456790",
+//     height: "5'6\"",
+//     age: 32,
+//     profession: "Graphic Designer",
+//     location: "London, UK",
+//     motherTongue: "English",
+//     isOnline: false,
+//     profileImage:
+//       "https://images.unsplash.com/photo-1603072007571-7295a309e45f?q=80&w=500",
+//   },
+//   {
+//     firstName: "Michael Smith",
+//     profileId: "MW-23456791",
+//     height: "6'0\"",
+//     age: 38,
+//     profession: "Photographer",
+//     location: "Miami, USA",
+//     motherTongue: "English",
+//     isOnline: true,
+//     profileImage:
+//       "https://images.unsplash.com/photo-1689464090276-50bed9a6798f?q=80&w=500",
+//   },
+//   {
+//     firstName: "Sophia Brown",
+//     profileId: "MW-23456792",
+//     height: "5'5\"",
+//     age: 29,
+//     profession: "Marketing Manager",
+//     location: "Los Angeles, USA",
+//     motherTongue: "English",
+//     isOnline: false,
+//     profileImage:
+//       "https://images.unsplash.com/photo-1538472123780-aaf4aca79a16?q=80&w=500",
+//   },
+//   {
+//     firstName: "Liam Johnson",
+//     profileId: "MW-23456793",
+//     height: "5'10\"",
+//     age: 33,
+//     profession: "Data Analyst",
+//     location: "Toronto, Canada",
+//     motherTongue: "English",
+//     isOnline: true,
+//     profileImage:
+//       "https://images.unsplash.com/photo-1683921902999-d52fa6d6ec54?q=80&w=500",
+//   },
+// ];
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -47,19 +109,19 @@ const ProfilePage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchProfile = async (): Promise<void> => {
-      try {
-        const response = await api.get<UserProfile>(API_ENDPOINTS.PROFILE);
-        setProfileData(response.data);
-      } catch (err: any) {
-        setError("Failed to load profile data");
-        console.error("Profile fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProfile = async (): Promise<void> => {
+    try {
+      const response = await api.get<UserProfile>(API_ENDPOINTS.PROFILE);
+      setProfileData(response.data);
+    } catch (err: any) {
+      setError("Failed to load profile data");
+      console.error("Profile fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProfile();
   }, []);
 
@@ -118,7 +180,7 @@ const ProfilePage: React.FC = () => {
         <div className="w-[50%] px-2">
           <div className="mt-5">
             {error && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              <div className="p-3 text-sm bg-red-100 border border-red-400 text-red-700 rounded">
                 {error}
               </div>
             )}
@@ -417,13 +479,13 @@ const ProfilePage: React.FC = () => {
               />
             </div>
 
-            <SidebarCard title="Online Users" link="/" className="mb-3">
+            {/* <SidebarCard title="Online Users" link="/" className="mb-3">
               <div className=" space-y-1">
                 {users?.map((user) => {
                   return <UserCardSidebarItem key={user.name} {...user} />;
                 })}
               </div>
-            </SidebarCard>
+            </SidebarCard> */}
           </div>
         </div>
       </div>

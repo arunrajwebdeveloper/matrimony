@@ -74,15 +74,18 @@ export interface SidebarCardProps {
 }
 
 export interface UserCardType {
-  name: string;
+  _id?: string;
+  firstName: string;
+  lastName: string;
   profileId: string;
   height: string;
-  age: number;
-  profession: string;
-  location: string;
+  dateOfBirth: string;
+  occupation: string;
+  city: string;
+  state: string;
   motherTongue: string;
-  isOnline: boolean;
-  profileImage: string;
+  isOnline?: boolean;
+  profilePicture: string;
 }
 
 export interface UserCardSidebarItemType {
