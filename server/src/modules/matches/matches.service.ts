@@ -62,7 +62,6 @@ export class MatchesService {
       query.city = { $in: preferences.city };
     }
     // You can add more preference filters here following the same pattern
-
     return this.profileModel.find(query).exec();
   }
 
@@ -80,27 +79,23 @@ export class MatchesService {
       throw new NotFoundException('User profile not found.');
     }
 
+    // Handle the case where user interactions might not exist yet
     const userInteractions = await this.userInteractionModel
       .findOne({ user: userId })
       .exec();
 
-    if (!userInteractions) {
-      throw new NotFoundException('User interactions not found.');
-    }
-
-    const interactedIds = new Set([
-      userProfile?._id?.toString(),
-      ...(userInteractions.shortlisted || []).map((id) => id.toString()),
-      ...(userInteractions.declined || []).map((id) => id.toString()),
-      ...(userInteractions.blocked || []).map((id) => id.toString()),
-    ]);
+    // Directly create the array of ObjectIds to exclude
+    const excludedIds = [
+      userProfile._id,
+      ...(userInteractions?.shortlisted || []),
+      ...(userInteractions?.declined || []),
+      ...(userInteractions?.blocked || []),
+    ];
 
     const newMatches = await this.profileModel
       .find({
-        _id: {
-          $nin: Array.from(interactedIds).map((id) => new Types.ObjectId(id)),
-        },
-        gender: { $ne: userProfile.gender }, // Only show the opposite gender
+        _id: { $nin: excludedIds },
+        gender: { $ne: userProfile.gender },
       })
       .exec();
 
