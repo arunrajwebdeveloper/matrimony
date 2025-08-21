@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, SchemaTypes, Types } from 'mongoose';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 
-export type MatchRequestDocument = MatchRequest & Document;
+export type MatchRequestDocument = HydratedDocument<MatchRequest>;
 
 @Schema({ timestamps: true })
 export class MatchRequest {

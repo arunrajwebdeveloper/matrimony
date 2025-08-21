@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types, Schema as MongooseSchema } from 'mongoose';
-import { Profile } from '../../../modules/profiles/schemas/profile.schema';
+import { Types, Schema as MongooseSchema, HydratedDocument } from 'mongoose';
+import { Profile } from '../../profiles/schemas/profile.schema';
 
-export type UserDocument = User & Document;
+export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true }) // createdAt, updatedAt
 export class User {
