@@ -6,14 +6,23 @@ export type UserDocument = User & Document;
 
 @Schema({ timestamps: true }) // createdAt, updatedAt
 export class User {
+  @Prop({ required: true })
+  firstName: string;
+
+  @Prop()
+  lastName?: string;
+
   @Prop({ required: true, unique: true, index: true })
   email: string;
+
+  @Prop({ required: true, unique: true })
+  phoneNumber: string;
 
   @Prop({ required: true, select: false }) // Password should not be returned by default
   passwordHash: string;
 
-  @Prop({ unique: true, sparse: true }) // Optional, for direct user links
-  username?: string;
+  @Prop({ unique: true, sparse: true })
+  profileId?: string;
 
   @Prop({ default: 'pending' }) // 'pending', 'active', 'suspended', 'deactivated'
   status: string;
@@ -33,9 +42,6 @@ export class User {
 
   @Prop({ required: true })
   dateOfBirth: Date;
-
-  @Prop({ required: true })
-  fullName: string;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Profile' })
   profile: Types.ObjectId | Profile;

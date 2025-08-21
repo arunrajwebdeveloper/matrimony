@@ -1,6 +1,7 @@
 "use client";
 
-import useFancybox from "@/lib/useFancybox";
+import useFancybox from "@/hooks/useFancybox";
+import { Image } from "lucide-react";
 
 const ProfileImagesGrid = ({ mediaItems = [] }: { mediaItems?: string[] }) => {
   const [fancyboxRef] = useFancybox({
@@ -34,6 +35,10 @@ const ProfileImagesGrid = ({ mediaItems = [] }: { mediaItems?: string[] }) => {
 
   return (
     <div ref={fancyboxRef} className="relative w-full px-6 py-4">
+      <h3 className="flex items-center font-semibold text-black text-md mb-6">
+        <Image size={20} className="mr-2 text-black" />
+        User Images
+      </h3>
       <div className="w-full overflow-hidden rounded md:h-[360px]">
         {/* === One media === */}
         {gridItems.length === 1 && (

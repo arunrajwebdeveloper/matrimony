@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import { LoginCredentials } from "@/types";
+import Link from "next/link";
 
 const LoginForm: React.FC = () => {
   const [formData, setFormData] = useState<LoginCredentials>({
@@ -103,6 +104,9 @@ const LoginForm: React.FC = () => {
           {isLoading ? "Signing in..." : "Sign In"}
         </button>
       </form>
+      <div className="mt-4 text-center">
+        <Link href="/register">Register</Link>
+      </div>
     </div>
   );
 };

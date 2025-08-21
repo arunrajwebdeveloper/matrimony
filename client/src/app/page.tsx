@@ -25,7 +25,7 @@ const HomePage: React.FC = () => {
         {isAuthenticated ? (
           <div>
             <p className="text-xl mb-6">
-              Hello, {user?.fullName || user?.email}!
+              Hello, {user?.firstName || user?.email}!
             </p>
             <div className="space-x-4">
               <Link

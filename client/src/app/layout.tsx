@@ -38,7 +38,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
             template={`<div class="fixed top-0 left-0 h-[3px] w-full z-[9999] bg-gradient-to-r from-indigo-600 to-pink-500 animate-gradientMove" role="bar"></div>`}
           />
           <Header />
-          <div className="mt-[70px]">{children}</div>
+          <div className="mt-[70px] mb-10">{children}</div>
         </AuthProviderWrapper>
       </body>
     </html>

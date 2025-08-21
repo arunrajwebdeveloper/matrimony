@@ -11,7 +11,7 @@ export class Profile {
     required: true,
     unique: true,
   })
-  user?: Types.ObjectId; // Reference back to the User
+  user: Types.ObjectId; // Reference back to the User
 
   // --- Personal Details ---
   @Prop({ required: true })
@@ -25,9 +25,6 @@ export class Profile {
 
   @Prop()
   lastName: string;
-
-  @Prop()
-  middleName?: string;
 
   @Prop({
     enum: [
@@ -88,11 +85,17 @@ export class Profile {
   disabilityStatus: string;
 
   @Prop()
-  aboutMe: string; // Free text description
+  aboutMe: string;
+
+  @Prop()
+  profileId: string;
 
   // --- Contact Details ---
   @Prop()
   phoneNumber: string;
+
+  @Prop()
+  email: string;
 
   @Prop()
   whatsappNumber?: string;
@@ -243,8 +246,8 @@ export class Profile {
   @Prop({ type: [String], default: [] }) // URLs to images stored in a cloud storage (S3, GCS)
   profilePhotos: string[];
 
-  @Prop()
-  profilePicture: string; // Main profile picture URL
+  @Prop({ type: String, default: null })
+  profilePicture: string | null;
 
   @Prop({ default: 'public' }) // 'public', 'private', 'hidden' - controls visibility
   visibility: string;

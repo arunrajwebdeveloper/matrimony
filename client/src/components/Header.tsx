@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   Bell,
+  Crown,
+  CrownIcon,
   LayoutDashboard,
   LogOut,
-  LucideIcon,
   Mail,
   Settings2,
   UserRound,
@@ -18,7 +19,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import UserDropdown from "./dropdowns/UserDropdown";
 import { UserDropdownMenuType } from "@/types/menu";
-import PremiumIcon from "./ui/PremiumIcon";
+import avatarSource from "@/utils/avatarSource";
 
 function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -52,8 +53,13 @@ function Header() {
     },
   ];
 
+  const imageUrl = avatarSource({
+    avatar: user?.profile?.profilePicture,
+    gender: user?.gender,
+  });
+
   return (
-    <header className="fixed bg-white top-0 left-0 z-[200] w-full border-b-[1px] border-gray-200">
+    <header className="fixed bg-white/90 top-0 left-0 z-[200] w-full border-b-[1px] border-gray-200">
       <div className="px-4 flex justify-between items-center h-[60px]">
         <div className="matrimony-logo">
           <Link
@@ -68,7 +74,7 @@ function Header() {
           <div className="flex items-center gap-4">
             {user?.profile?.isPremium ? (
               <div className="flex items-center gap-2 border-1 border-amber-500 px-2.5 py-1.5 rounded-full font-medium select-none">
-                <PremiumIcon size={16} color="#fe9a00" />
+                <CrownIcon size={16} color="#fe9a00" fill="#fe9a00" />
                 <p className="text-xs text-amber-500">Premium</p>
               </div>
             ) : (
@@ -100,8 +106,8 @@ function Header() {
             <div className="ms-4">
               <UserDropdown
                 menu={navItems}
-                avatar={user?.profile?.profilePicture}
-                username={user?.fullName || ""}
+                avatar={imageUrl}
+                username={`${user?.firstName} ${user?.lastName || ""}`}
                 email={user?.email || ""}
               />
             </div>

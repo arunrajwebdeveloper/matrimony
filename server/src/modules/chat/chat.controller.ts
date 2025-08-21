@@ -38,7 +38,7 @@ export class ChatController {
     description: 'Invalid participant ID.',
   })
   async createOrGetConversation(
-    @Request() req,
+    @Request() req: any,
     @Param('participant2Id') participant2Id: string,
   ) {
     // Ensure participant2Id is a valid ObjectId
@@ -57,7 +57,7 @@ export class ChatController {
     status: HttpStatus.OK,
     description: 'Conversations retrieved successfully.',
   })
-  async getMyConversations(@Request() req) {
+  async getMyConversations(@Request() req: any) {
     return this.chatService.getConversations(req.user._id);
   }
 
@@ -72,7 +72,7 @@ export class ChatController {
     description: 'Conversation not found or access denied.',
   })
   async getMessages(
-    @Request() req,
+    @Request() req: any,
     @Param('conversationId') conversationId: string,
   ) {
     return this.chatService.getMessagesInConversation(
@@ -94,7 +94,7 @@ export class ChatController {
   @ApiBody({ type: CreateMessageDto })
   async sendMessage(
     @Param('conversationId') conversationId: string,
-    @Request() req,
+    @Request() req: any,
     @Body() createMessageDto: CreateMessageDto,
   ) {
     return this.chatService.sendMessage(
@@ -121,7 +121,7 @@ export class ChatController {
   })
   async markMessageAsRead(
     @Param('messageId') messageId: string,
-    @Request() req,
+    @Request() req: any,
   ) {
     return this.chatService.markMessageAsRead(messageId, req.user._id);
   }

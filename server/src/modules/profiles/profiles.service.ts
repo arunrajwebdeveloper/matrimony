@@ -30,6 +30,10 @@ export class ProfilesService {
     return this.profileModel.findById(profileId).exec();
   }
 
+  async findByprofileId(profileId: string): Promise<ProfileDocument | null> {
+    return this.profileModel.findOne({ profileId }).exec();
+  }
+
   async update(
     userId: string | Types.ObjectId,
     updateProfileDto: UpdateProfileDto,

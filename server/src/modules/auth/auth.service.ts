@@ -31,10 +31,38 @@ export class AuthService {
     private refreshTokenService: RefreshTokenService,
   ) {}
 
+  // GENERATE USERNAME AND PROFILEID
+
+  private async generateUniqueIds(): Promise<{ profileId: string }> {
+    let isUnique = false;
+    let profileId = '';
+
+    while (!isUnique) {
+      const randomNum = Math.floor(100000 + Math.random() * 900000);
+      profileId = `MW-${randomNum}`;
+
+      const existing = await this.usersService.findByProfileId(profileId);
+
+      if (!existing) {
+        isUnique = true;
+      }
+    }
+
+    return { profileId };
+  }
+
   async register(
     registerUserDto: RegisterUserDto,
-  ): Promise<{ user: UserDocument }> {
-    const { email, password, fullName, gender, dateOfBirth } = registerUserDto;
+  ): Promise<{ message: string }> {
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      gender,
+      dateOfBirth,
+      phoneNumber,
+    } = registerUserDto;
 
     const existingUser = await this.usersService.findByEmail(email);
     if (existingUser) {
@@ -43,12 +71,21 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
+    const { profileId } = await this.generateUniqueIds();
+
+    if (!profileId) {
+      throw new Error('Failed to generate unique IDs');
+    }
+
     const newUser = await this.usersService.create({
       email,
       passwordHash,
-      fullName,
+      firstName,
+      lastName,
       gender,
+      profileId,
       dateOfBirth: new Date(dateOfBirth),
+      phoneNumber,
     });
 
     // Check if the newUser object has a valid _id before proceeding.
@@ -59,11 +96,14 @@ export class AuthService {
     }
 
     const newProfile = await this.profilesService.create({
-      user: newUser._id as Types.ObjectId,
-      firstName: fullName.split(' ')[0] || '',
-      lastName: fullName.split(' ').slice(1).join(' ') || '',
-      gender: newUser.gender,
-      dateOfBirth: newUser.dateOfBirth,
+      user: newUser?._id as Types.ObjectId,
+      firstName,
+      lastName,
+      profileId: newUser?.profileId,
+      gender: newUser?.gender,
+      dateOfBirth: newUser?.dateOfBirth,
+      phoneNumber: newUser?.phoneNumber,
+      email: newUser?.email,
       religion: 'Not Specified',
       motherTongue: 'Not Specified',
       height: 0,
@@ -72,7 +112,6 @@ export class AuthService {
       bodyType: 'Average',
       disabilityStatus: 'No Disability',
       aboutMe: 'A new member looking for a partner.',
-      phoneNumber: '',
       country: 'Not Specified',
       state: 'Not Specified',
       city: 'Not Specified',
@@ -95,7 +134,7 @@ export class AuthService {
       drinkingHabit: 'No',
       maritalStatus: 'Never Married',
       profilePhotos: [],
-      profilePicture: '',
+      profilePicture: null,
       partnerPreferences: {},
       verification: {
         phone: false,
@@ -105,17 +144,17 @@ export class AuthService {
       },
     });
 
-    newUser.profile = newProfile._id as Types.ObjectId;
+    newUser.profile = newProfile?._id as Types.ObjectId;
     await newUser.save();
 
     this.eventEmitter.emit('user.created', {
-      userId: newUser._id,
-      email: newUser.email,
-      fullName: newUser.fullName,
+      userId: newUser?._id,
+      email: newUser?.email,
+      firstName: newUser?.firstName,
     });
 
     return {
-      user: newUser,
+      message: 'User registered successfully',
     };
   }
 
@@ -127,8 +166,9 @@ export class AuthService {
     const { email, password } = loginUserDto;
 
     const user = await this.usersService.findByEmailWithPassword(email);
+
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new NotFoundException(`User with email "${email}" not found`);
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);

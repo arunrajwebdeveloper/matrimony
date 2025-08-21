@@ -12,12 +12,19 @@ export default function Navigation() {
     <div>
       {navItems.map(
         ({ label, icon: Icon, count, href }: NavigationItemType) => {
-          const isActive = pathname === href;
+          // const isActive = pathname === href;
+
+          const isActive =
+            pathname === href ||
+            (href.startsWith("/dashboard/settings") &&
+              pathname.startsWith("/dashboard/settings"));
 
           return (
             <Link
               className={`flex items-center justify-between py-2 text-sm my-2 font-medium transition ${
-                isActive ? "text-blue-600" : "text-gray-500 hover:text-gray-900"
+                isActive
+                  ? "text-blue-600"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
               key={label}
               href={href}

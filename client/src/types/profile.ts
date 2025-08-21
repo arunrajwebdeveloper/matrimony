@@ -1,6 +1,10 @@
+import { LucideIcon } from "lucide-react";
+
 export interface UserProfile {
   _id?: string;
   user?: string;
+  username?: string;
+  profileId?: string;
   firstName?: string;
   lastName?: string;
   gender?: "Male" | "Female" | "Other";
@@ -14,6 +18,7 @@ export interface UserProfile {
   disabilityStatus?: string;
   aboutMe?: string;
   phoneNumber?: string;
+  // email?: string;
   alternateEmails?: string[];
   country?: string;
   state?: string;
@@ -40,7 +45,7 @@ export interface UserProfile {
   maritalStatus?: string;
   children?: number;
   profilePhotos?: string[];
-  profilePicture?: string;
+  profilePicture?: string | null;
   visibility?: "public" | "private";
   isPremium?: boolean;
   verification?: {
@@ -69,15 +74,18 @@ export interface SidebarCardProps {
 }
 
 export interface UserCardType {
-  name: string;
+  _id?: string;
+  firstName: string;
+  lastName: string;
   profileId: string;
   height: string;
-  age: number;
-  profession: string;
-  location: string;
+  dateOfBirth: string;
+  occupation: string;
+  city: string;
+  state: string;
   motherTongue: string;
-  isOnline: boolean;
-  profileImage: string;
+  isOnline?: boolean;
+  profilePicture: string;
 }
 
 export interface UserCardSidebarItemType {

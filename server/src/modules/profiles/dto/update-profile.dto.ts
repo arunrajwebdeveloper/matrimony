@@ -148,6 +148,14 @@ export class UpdateProfileDto {
   @IsString()
   aboutMe?: string;
 
+  @ApiPropertyOptional({
+    example: 'MW-234569',
+    description: 'profile ID',
+  })
+  @IsOptional()
+  @IsString()
+  profileId: string;
+
   @ApiPropertyOptional({ example: 'Hindu' })
   @IsOptional()
   @IsEnum([
@@ -365,8 +373,8 @@ export class UpdateProfileDto {
 
   @ApiPropertyOptional({ example: 'url_to_main_profile_picture.jpg' })
   @IsOptional()
-  @IsString()
-  profilePicture?: string;
+  @IsString({ message: 'Profile picture must be a string' })
+  profilePicture?: string | null;
 
   @ApiPropertyOptional({
     example: 'public',
