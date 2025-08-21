@@ -25,7 +25,8 @@ export const ROUTES = {
   LOGIN: "/login",
   LOGOUT: "/logout",
   DASHBOARD: "/dashboard",
-  PROFILE: "/dashboard/profile/me",
+  PROFILE: "/dashboard/profile",
+  PROFILE_ME: "/dashboard/profile/me",
   PROFILE_SETTINGS: {
     IMAGE_UPLOADS: "image-uploads",
     PERSONAL_DETAILS: "personal-details",

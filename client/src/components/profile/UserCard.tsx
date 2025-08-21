@@ -3,6 +3,8 @@ import Link from "next/link";
 import { UserCardType } from "@/types";
 import OnlineStatusDot from "./OnlineStatusDot";
 import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
+import { ROUTES } from "@/utils/constants";
+import { Ban, Bookmark, Eye } from "lucide-react";
 
 function UserCard({
   firstName,
@@ -20,22 +22,19 @@ function UserCard({
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
 
   return (
-    <Link
-      href="/profile"
-      className="flex rounded-md shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100"
-    >
-      <div className="w-[100px] relative flex-none">
+    <div className="flex rounded-md shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100">
+      <div className="w-[140px] relative flex-none">
         <img
-          className="w-[100px] h-[100px] object-cover"
+          className="w-[134px] min-h-[126px] object-cover"
           src={profilePicture}
           alt={profileId}
         />
       </div>
-      <div className="py-4 px-5 flex-auto">
+      <div className="py-3 px-5 flex-auto">
         <div className="flex items-center justify-between mb-1">
           <div className="flex gap-2 items-center">
             <h3 className="text-md font-medium text-black">{fullName}</h3>
-            <span className="text-sm text-gray-700">{profileId}</span>
+            <span className="text-xs text-gray-700">{profileId}</span>
           </div>
           <div className="flex gap-0.5 items-center">
             <OnlineStatusDot isOnline={isOnline!} />
@@ -45,13 +44,31 @@ function UserCard({
           </div>
         </div>
         <p className="text-xs text-gray-600">{`${height} cm, ${dateOfBirthFormat(
-          dateOfBirth
+          dateOfBirth,
+          "DD MMM YYYY"
         )}, ${motherTongue}`}</p>
         <p className="text-xs text-gray-600">{`${
           occupation ?? ""
         }, ${city}, ${state}`}</p>
+        <div className="flex items-center gap-2 mt-3">
+          <Link
+            href={`${ROUTES.PROFILE}/${profileId}`}
+            className="flex items-center text-xs cursor-pointer py-1 px-2 bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors duration-300 rounded-sm gap-1"
+          >
+            <Eye size={14} />
+            <span>View</span>
+          </Link>
+          <button className="flex items-center text-xs cursor-pointer py-1 px-2 bg-yellow-100 text-yellow-600 hover:bg-yellow-200 transition-colors duration-300 rounded-sm gap-1">
+            <Bookmark size={14} />
+            <span>Add to Shortlist</span>
+          </button>
+          <button className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-300 rounded-sm gap-1">
+            <Ban size={14} />
+            <span>Remove</span>
+          </button>
+        </div>
       </div>
-    </Link>
+    </div>
   );
 }
 

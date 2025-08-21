@@ -7,7 +7,8 @@ import moment from "moment";
  * @returns {string} The formatted date and age (e.g., "09-October-1990 (34 Years)").
  */
 export const dateOfBirthFormat = (
-  dateString: string | undefined | null
+  dateString: string | undefined | null,
+  format: string = "DD MMMM YYYY"
 ): string => {
   // Check if the date string is null, undefined, or empty.
   if (!dateString) {
@@ -24,7 +25,7 @@ export const dateOfBirthFormat = (
     }
 
     // Format the date as 'DD-Month-YYYY'
-    const formattedDate = birthDate.format("DD MMMM YYYY");
+    const formattedDate = birthDate.format(format);
 
     // Calculate the age in years from the current date
     const age = moment().diff(birthDate, "years");
