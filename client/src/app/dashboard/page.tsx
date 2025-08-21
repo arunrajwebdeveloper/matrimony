@@ -49,8 +49,6 @@ const DashboardPage: React.FC = () => {
     error: null,
   });
 
-  console.log("preferredMatches :>> ", preferredMatches);
-
   const fetchPreferredMatches = async (): Promise<void> => {
     try {
       const response = await api.get<UserCardType>(
