@@ -23,7 +23,7 @@ export class ActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
   @Post('log')
-  async logProfileView(@Body() body: LogActivityDto, @Request() req: any) {
+  async logActivity(@Body() body: LogActivityDto, @Request() req: any) {
     const viewedId = body.targetId;
     const actorId = req.user._id;
 
