@@ -1,6 +1,6 @@
 "use client";
 
-import useFancybox from "@/lib/useFancybox";
+import useFancybox from "@/hooks/useFancybox";
 import { Image } from "lucide-react";
 
 const ProfileImagesGrid = ({ mediaItems = [] }: { mediaItems?: string[] }) => {
