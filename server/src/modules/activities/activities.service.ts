@@ -106,7 +106,7 @@ export class ActivitiesService {
         .find({ targetId: new Types.ObjectId(userId) })
         .sort({ timestamp: -1 })
         // .limit(10)
-        .populate('actorId', 'firstName lastName profileId') // Populates the 'actor' field with name and photo
+        .populate('actorId', 'firstName lastName profileId')
         .exec()
     );
   }
