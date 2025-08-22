@@ -20,6 +20,10 @@ export const API_ENDPOINTS = {
   ACTIVITY_LOG: "/api/activities/log",
   ACTIVITY_RECENT_GET: "/api/activities/recent",
   ACTIVITY_ALL_GET: "/api/activities/all",
+
+  // TIME
+
+  GET_TIME: "/api/time/current-datetime",
 } as const;
 
 export const TOKEN_KEYS = {
