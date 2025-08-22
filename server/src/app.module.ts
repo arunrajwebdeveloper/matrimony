@@ -12,6 +12,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { EmailModule } from './modules/email/email.module';
 import { MatchesModule } from './modules/matches/matches.module';
 import { ActivitiesModule } from './modules/activities/activities.module';
+import { TimeModule } from './modules/time/time.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ActivitiesModule } from './modules/activities/activities.module';
     EmailModule,
     MatchesModule,
     ActivitiesModule,
+    TimeModule,
   ],
   controllers: [],
   providers: [],

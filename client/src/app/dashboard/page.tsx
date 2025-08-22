@@ -125,28 +125,24 @@ const DashboardPage: React.FC = () => {
                   title="Profile Views"
                   label="This Week"
                   users={statUsers}
-                  color="blue"
                 />
                 <StatisticsCard
                   value={7}
                   title="New Messages"
                   label="Unread"
                   users={statUsers}
-                  color="orange"
                 />
                 <StatisticsCard
                   value={13}
                   title="Shortlisted"
                   label="By You"
                   users={statUsers}
-                  color="green"
                 />
                 <StatisticsCard
                   value={36}
                   title="Matches"
                   label="Available"
                   users={statUsers}
-                  color="violet"
                 />
               </div>
             </div>
