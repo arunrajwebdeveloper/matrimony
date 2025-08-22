@@ -23,12 +23,19 @@ function UserCard({
 
   return (
     <div className="flex rounded-md shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100">
-      <div className="w-[140px] relative flex-none">
+      <div className="w-[134px] relative flex-none group">
         <img
           className="w-[134px] min-h-[126px] object-cover"
           src={profilePicture}
           alt={profileId}
         />
+        <Link
+          href={`${ROUTES.PROFILE}/${profileId}`}
+          className="absolute inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          <Eye size={16} />
+          <span>View</span>
+        </Link>
       </div>
       <div className="py-3 px-5 flex-auto">
         <div className="flex items-center justify-between mb-1">
