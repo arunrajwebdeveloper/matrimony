@@ -18,7 +18,7 @@ import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import MatchList from "@/components/dashboard/MatchList";
 import { UserCardType, UserProfile } from "@/types";
 import api from "@/lib/api";
-import GreetingCard from "@/components/dashboard/GreetingCard";
+import Greeting from "@/components/dashboard/Greeting";
 
 const statUsers = [
   "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
@@ -113,9 +113,12 @@ const DashboardPage: React.FC = () => {
         </div>
         <div className="w-[50%] px-2">
           <div className="mt-5">
+            <div className="py-1 px-6">
+              <Greeting username={user?.firstName || ""} />
+            </div>
+
             {/* BASIC STAT INFOS */}
             <div className="py-4 px-6">
-              <GreetingCard username={user?.firstName || ""} />
               <div className="mb-6 flex items-center justify-between">
                 <h2 className="font-semibold text-black text-md">
                   Basic Statistics

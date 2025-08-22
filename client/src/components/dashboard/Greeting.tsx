@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-function GreetingCard({ username }: { username: string }) {
+function Greeting({ username }: { username: string }) {
   const [greetingMessage, setGreetingMessage] = useState("");
 
   useEffect(() => {
@@ -28,4 +28,4 @@ function GreetingCard({ username }: { username: string }) {
   );
 }
 
-export default GreetingCard;
+export default Greeting;
