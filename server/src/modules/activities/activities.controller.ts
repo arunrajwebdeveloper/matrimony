@@ -42,6 +42,7 @@ export class ActivitiesController {
   @Get('recent')
   async getRecentActivities(@Request() req: any) {
     const userId = req.user._id;
+
     return this.activitiesService.getRecentActivitiesForUser(userId);
   }
 

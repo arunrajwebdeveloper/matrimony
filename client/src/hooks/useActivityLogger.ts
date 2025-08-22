@@ -11,7 +11,6 @@ const useActivityLogger = () => {
           verb,
           targetId,
         });
-        console.log(`Activity logged: ${verb} on ${targetId}`);
       } catch (error) {
         console.error(`Failed to log activity (${verb}):`, error);
       }

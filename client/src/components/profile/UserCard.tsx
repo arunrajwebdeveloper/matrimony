@@ -5,6 +5,7 @@ import OnlineStatusDot from "./OnlineStatusDot";
 import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
 import { ROUTES } from "@/utils/constants";
 import { Ban, Bookmark, Eye } from "lucide-react";
+import avatarSource from "@/utils/avatarSource";
 
 function UserCard({
   firstName,
@@ -18,15 +19,21 @@ function UserCard({
   motherTongue,
   isOnline,
   profilePicture,
+  gender,
 }: UserCardType) {
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
 
+  const imageUrl = avatarSource({
+    avatar: profilePicture,
+    gender: gender,
+  });
+
   return (
     <div className="flex rounded-md shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100">
-      <div className="w-[134px] relative flex-none group">
+      <div className="w-[130px] relative flex-none group">
         <img
-          className="w-[134px] min-h-[126px] object-cover"
-          src={profilePicture}
+          className="w-[130px] h-[130px] object-cover"
+          src={imageUrl}
           alt={profileId}
         />
         <Link
@@ -37,7 +44,7 @@ function UserCard({
           <span>View</span>
         </Link>
       </div>
-      <div className="py-3 px-5 flex-auto">
+      <div className="py-3 px-5 flex-auto flex flex-col justify-center">
         <div className="flex items-center justify-between mb-1">
           <div className="flex gap-2 items-center">
             <h3 className="text-md font-medium text-black">{fullName}</h3>

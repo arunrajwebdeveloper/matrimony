@@ -94,7 +94,7 @@ export class ActivitiesService {
       })
       .sort({ timestamp: -1 }) // Sort by the auto-generated timestamp
       .limit(10)
-      .populate('actorId', 'firstName lastName profilePicture')
+      .populate('actorId', 'firstName lastName profileId')
       .exec();
 
     return activities;
@@ -106,7 +106,7 @@ export class ActivitiesService {
         .find({ targetId: new Types.ObjectId(userId) })
         .sort({ timestamp: -1 })
         // .limit(10)
-        .populate('actorId', 'firstName lastName profilePicture') // Populates the 'actor' field with name and photo
+        .populate('actorId', 'firstName lastName profileId') // Populates the 'actor' field with name and photo
         .exec()
     );
   }

@@ -69,7 +69,7 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     if (profileData) {
-      logActivity(ActivityVerb.VIEWED_PROFILE, profileData?._id as string);
+      logActivity(ActivityVerb.VIEWED_PROFILE, profileData?.user as string);
     }
   }, [profileData, logActivity]);
 
