@@ -39,52 +39,60 @@ const ProfileImagesGrid = ({ mediaItems = [] }: { mediaItems?: string[] }) => {
         <Image size={20} className="mr-2 text-black" />
         User Images
       </h3>
-      <div className="w-full overflow-hidden rounded md:h-[360px]">
-        {/* === One media === */}
-        {gridItems.length === 1 && (
-          <div className="h-full w-full">{renderMedia(gridItems[0], 0)}</div>
-        )}
+      {mediaItems?.length !== 0 ? (
+        <div className="w-full overflow-hidden rounded md:h-[360px]">
+          {/* === One media === */}
+          {gridItems.length === 1 && (
+            <div className="h-full w-full">{renderMedia(gridItems[0], 0)}</div>
+          )}
 
-        {/* === Two media items === */}
-        {gridItems.length === 2 && (
-          <div className="flex h-full gap-1">
-            {gridItems.map((item: string, i: number) => (
-              <div key={i} className="h-full w-1/2">
-                {renderMedia(item, i)}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* === Three or four media items === */}
-        {gridItems.length >= 3 && (
-          <div className="flex h-full flex-col gap-1 md:flex-row">
-            {/* Column 1: First item full height */}
-            <div className="flex-1">{renderMedia(gridItems[0], 0)}</div>
-
-            {/* Column 2: two stacked items (1 or 2 items) */}
-            <div className="flex flex-1 flex-row gap-1 md:flex-col">
-              {gridItems[1] && (
-                <div className="flex-1 md:h-1/2">
-                  {renderMedia(gridItems[1], 1)}
+          {/* === Two media items === */}
+          {gridItems.length === 2 && (
+            <div className="flex h-full gap-1">
+              {gridItems.map((item: string, i: number) => (
+                <div key={i} className="h-full w-1/2">
+                  {renderMedia(item, i)}
                 </div>
-              )}
-              {gridItems[2] && (
-                <div className="flex-1 md:h-1/2 relative">
-                  {renderMedia(gridItems[2], 2)}
-                  {remainingImages > 0 && (
-                    <div className="absolute py-1 px-2 bottom-1 right-1 select-none rounded bg-black/50 text-xs font-normal text-white z-20">
-                      {`${remainingImages} more ${
-                        remainingImages > 1 ? `images` : `image`
-                      }`}
-                    </div>
-                  )}
-                </div>
-              )}
+              ))}
             </div>
-          </div>
-        )}
-      </div>
+          )}
+
+          {/* === Three or four media items === */}
+          {gridItems.length >= 3 && (
+            <div className="flex h-full flex-col gap-1 md:flex-row">
+              {/* Column 1: First item full height */}
+              <div className="flex-1">{renderMedia(gridItems[0], 0)}</div>
+
+              {/* Column 2: two stacked items (1 or 2 items) */}
+              <div className="flex flex-1 flex-row gap-1 md:flex-col">
+                {gridItems[1] && (
+                  <div className="flex-1 md:h-1/2">
+                    {renderMedia(gridItems[1], 1)}
+                  </div>
+                )}
+                {gridItems[2] && (
+                  <div className="flex-1 md:h-1/2 relative">
+                    {renderMedia(gridItems[2], 2)}
+                    {remainingImages > 0 && (
+                      <div className="absolute py-1 px-2 bottom-1 right-1 select-none rounded bg-black/50 text-xs font-normal text-white z-20">
+                        {`${remainingImages} more ${
+                          remainingImages > 1 ? `images` : `image`
+                        }`}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div>
+          <p className="m-0 text-sm font-normal text-gray-600 ">
+            Profile images not uploaded yet.
+          </p>
+        </div>
+      )}
 
       {/* Hidden Lightbox Anchors for all images */}
       <div className="hidden">
