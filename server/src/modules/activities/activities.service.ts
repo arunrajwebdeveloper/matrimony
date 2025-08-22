@@ -3,13 +3,23 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Activity, ActivityDocument } from './schemas/activity.schema';
 import { ActivityVerb } from './enums/activity-verb.enum';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ActivitiesService {
   private readonly logger = new Logger(ActivitiesService.name);
 
+  // Define a list of verbs for which only one log should be created per period.
+  // Add any other verbs you want to have unique logging here.
+  private readonly UNIQUE_VERBS = [
+    ActivityVerb.VIEWED_PROFILE,
+    ActivityVerb.SHORTLISTED_PROFILE,
+    // Add more here, e.g., 'sent_photo_request'
+  ];
+
   constructor(
     @InjectModel(Activity.name) private activityModel: Model<ActivityDocument>,
+    private usersService: UsersService,
   ) {}
 
   async logActivity(
@@ -19,7 +29,7 @@ export class ActivitiesService {
   ): Promise<void> {
     try {
       // For 'viewed_profile' activities, check for a recent duplicate.
-      if (verb === ActivityVerb.VIEWED_PROFILE) {
+      if (this.UNIQUE_VERBS.includes(verb)) {
         const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
         // Find a recent log with the same actor, target, and verb.
@@ -28,7 +38,7 @@ export class ActivitiesService {
             actorId: new Types.ObjectId(actorId),
             targetId: new Types.ObjectId(targetId),
             verb: ActivityVerb.VIEWED_PROFILE,
-            createdAt: { $gte: twentyFourHoursAgo },
+            timestamp: { $gte: twentyFourHoursAgo },
           })
           .exec();
 
@@ -59,13 +69,35 @@ export class ActivitiesService {
     }
   }
 
-  async getRecentActivitiesForUser(userId: string): Promise<any[]> {
-    return this.activityModel
-      .find({ targetId: new Types.ObjectId(userId) })
-      .sort({ timestamp: -1 })
+  /**
+   * Retrieves a list of recent activities for a specific user, filtering out
+   * activities related to users on their blocked list.
+   *
+   * @param userId The ID of the user to get activities for.
+   * @returns An array of populated activity documents.
+   */
+  async getRecentActivitiesForUser(
+    userId: string,
+  ): Promise<ActivityDocument[]> {
+    // 1. Get the list of IDs for users that the current user has blocked.
+    // We assume the UsersService has a method to get this list.
+    const blockedUserIds = await this.usersService.getBlockedUserIds(userId);
+    const blockedObjectIds = blockedUserIds.map((id) => new Types.ObjectId(id));
+
+    // 2. Build the query to find activities where:
+    //    a) The target of the activity is the current user.
+    //    b) The actor of the activity is NOT in the blocked list.
+    const activities = await this.activityModel
+      .find({
+        targetId: new Types.ObjectId(userId),
+        actorId: { $nin: blockedObjectIds },
+      })
+      .sort({ timestamp: -1 }) // Sort by the auto-generated timestamp
       .limit(10)
-      .populate('actorId', 'firstName lastName profilePicture') // Populates the 'actor' field with name and photo
+      .populate('actorId', 'firstName lastName profilePicture')
       .exec();
+
+    return activities;
   }
 
   async getActivitiesForUser(userId: string): Promise<any[]> {

@@ -48,6 +48,9 @@ export class User {
 
   @Prop({ default: 'user', enum: ['user', 'admin'] })
   role: 'user' | 'admin'; // Add this line for role-based access control
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  blockedUsers: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
