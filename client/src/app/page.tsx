@@ -44,7 +44,7 @@ const HomePage: React.FC = () => {
           </div>
         ) : (
           <div>
-            <p className="text-xl mb-6">Please log in to access your account</p>
+            <p className="text-xl mb-6">Please log in to your account</p>
             <Link
               href={ROUTES.LOGIN}
               className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 inline-block"
