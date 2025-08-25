@@ -39,7 +39,9 @@ function StatisticsCard({
       href={href}
       className="border hover:bg-slate-50 rounded-md p-6 border-slate-200 hover:shadow-sm transition duration-300"
     >
-      <p className={`text-6xl mb-3 font-medium ${textColorMap[color]}`}>
+      <p
+        className={`text-6xl mb-3 font-mono font-light ${textColorMap[color]}`}
+      >
         {value}
       </p>
       <p className="text-sm font-medium text-slate-600">{title}</p>
