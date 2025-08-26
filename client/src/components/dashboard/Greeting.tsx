@@ -23,7 +23,7 @@ function Greeting({ username }: { username: string }) {
 
   return (
     <p className="font-medium text-2xl text-gray-900">
-      {greetingMessage || `Hello, ${username}`}
+      {greetingMessage || `Welcome Back, ${username}!`}
     </p>
   );
 }
