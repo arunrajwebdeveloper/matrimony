@@ -17,7 +17,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import Navigation from "@/components/navigation/Navigation";
-import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
+import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";

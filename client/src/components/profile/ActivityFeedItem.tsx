@@ -1,5 +1,6 @@
 import { Activity } from "@/types/activity";
 import { ROUTES } from "@/utils/constants";
+import { formatRelativeTime } from "@/utils/formatRelativeTime";
 import Link from "next/link";
 import React from "react";
 
@@ -92,10 +93,12 @@ const ActivityFeedItem: React.FC<{ activity: Activity }> = ({ activity }) => {
     </p>
   );
 
-  const timeAgo = new Date(timestamp).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
+  // const timeAgo = new Date(timestamp).toLocaleDateString("en-US", {
+  //   month: "short",
+  //   day: "numeric",
+  // });
+
+  const timeAgo = formatRelativeTime(timestamp);
 
   return (
     <div className="flex items-center justify-between py-2">

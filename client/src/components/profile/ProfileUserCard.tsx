@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
 import { User, UserProfile } from "@/types";
-import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
+import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import avatarSource from "@/utils/avatarSource";
 import MoreDropdown from "../dropdowns/MoreDropdown";
 

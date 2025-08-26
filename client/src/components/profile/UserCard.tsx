@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { UserCardType } from "@/types";
 import OnlineStatusDot from "./OnlineStatusDot";
-import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
+import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import { ROUTES } from "@/utils/constants";
 import { Ban, Bookmark, Eye } from "lucide-react";
 import avatarSource from "@/utils/avatarSource";
