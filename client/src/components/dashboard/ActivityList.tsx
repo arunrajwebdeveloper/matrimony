@@ -3,6 +3,7 @@ import ActivityFeedItem from "../profile/ActivityFeedItem";
 import api from "@/lib/api";
 import { API_ENDPOINTS } from "@/utils/constants";
 import { Activity } from "@/types/activity";
+import ActivityListSkeleton from "../skeleton/ActivityListSkeleton";
 
 function ActivityList() {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -40,7 +41,13 @@ function ActivityList() {
   return (
     <div>
       {loading && (
-        <div className="text-sm text-slate-500 m-0">Loading activities...</div>
+        <div className="space-y-3">
+          <ActivityListSkeleton />
+          <ActivityListSkeleton />
+          <ActivityListSkeleton />
+          <ActivityListSkeleton />
+          <ActivityListSkeleton />
+        </div>
       )}
 
       {error && <div className="text-center text-red-500">{error}</div>}
@@ -51,11 +58,13 @@ function ActivityList() {
         </div>
       )}
 
-      {!loading &&
-        !error &&
-        activities?.map((activity) => (
-          <ActivityFeedItem key={activity._id} activity={activity} />
-        ))}
+      {!loading && !error && (
+        <div className="space-y-3">
+          {activities?.map((activity) => (
+            <ActivityFeedItem key={activity._id} activity={activity} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

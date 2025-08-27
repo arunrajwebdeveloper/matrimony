@@ -3,7 +3,7 @@ import React from "react";
 
 function UpgradePremiumCard() {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-8 w-full transition-all duration-300">
+    <div className="bg-amber-100 rounded-2xl border border-gray-100 p-8 w-full transition-all duration-300">
       <div className="flex justify-center mb-4">
         <Crown size={80} color="orange" fill="orange" />
       </div>

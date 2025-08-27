@@ -15,7 +15,15 @@ function MatchList({
   error = null,
 }: MatchListProps) {
   if (isLoading) {
-    return <UserListSkeleton />;
+    return (
+      <div className="space-y-3">
+        <UserListSkeleton />
+        <UserListSkeleton />
+        <UserListSkeleton />
+        <UserListSkeleton />
+        <UserListSkeleton />
+      </div>
+    );
   }
 
   if (error) {
@@ -27,7 +35,7 @@ function MatchList({
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="space-y-3">
       {!isLoading && users?.length !== 0 ? (
         users?.map((user) => {
           return <UserCard key={user.profileId} {...user} />;
