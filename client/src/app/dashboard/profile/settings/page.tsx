@@ -10,7 +10,6 @@ import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
 import Navigation from "@/components/navigation/Navigation";
 import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import avatarSource from "@/utils/avatarSource";
 import UploadSinglePage from "@/components/media/UploadSingle";
 import UploadMultiplePage from "@/components/media/UploadMultiple";
 
@@ -316,11 +315,6 @@ const Page: React.FC = () => {
     );
   }
 
-  const imageUrl = avatarSource({
-    avatar: profileData?.profilePicture,
-    gender: profileData?.gender,
-  });
-
   return (
     <div className="main-container">
       {/* Breadcrumb */}
@@ -334,8 +328,9 @@ const Page: React.FC = () => {
             <div className="py-4">
               <div className="mb-8">
                 <UserSummaryDisplay
-                  avatar={imageUrl}
-                  username={`${user?.firstName} ${user?.lastName || ""}`}
+                  avatar={profileData?.profilePicture!}
+                  firstname={`${user?.firstName || ""}`}
+                  lastname={`${user?.lastName || ""}`}
                   email={user?.email || ""}
                 />
               </div>

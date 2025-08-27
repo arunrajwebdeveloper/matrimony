@@ -3,6 +3,7 @@ import { ROUTES } from "@/utils/constants";
 import { formatRelativeTime } from "@/utils/formatRelativeTime";
 import Link from "next/link";
 import React from "react";
+import Avatar from "./Avatar";
 
 // Define the activity verbs directly in the component as a constant object.
 // This resolves the import error by keeping the enum definition self-contained.
@@ -107,12 +108,13 @@ const ActivityFeedItem: React.FC<{ activity: Activity }> = ({ activity }) => {
       <div className="flex items-center gap-2">
         <Link
           href={`${ROUTES.PROFILE}/${actorId?.profileId}`}
-          className="w-6.5 h-6.5 block"
+          className="w-6.5 h-6.5 block no-underline"
         >
-          <img
-            className="w-6.5 h-6.5 rounded-full bg-slate-400"
-            src={profilePicture ?? ""}
-            alt="user avatar"
+          <Avatar
+            src={profilePicture!}
+            firstname={`${actorId?.firstName || ""}`}
+            lastname={`${actorId?.lastName || ""}`}
+            size={26}
           />
         </Link>
         {sentence}
