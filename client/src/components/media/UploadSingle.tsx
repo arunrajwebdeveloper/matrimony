@@ -117,11 +117,11 @@ export default function UploadSinglePage({
     <main className="space-y-4">
       <div className="space-y-2">
         {image?.processedUrl ? (
-          <div className="relative w-40 h-40 overflow-hidden rounded group">
+          <div className="relative w-50 h-50 overflow-hidden rounded group">
             <img
               src={image.processedUrl}
               alt="preview"
-              className="w-40 h-40 object-cover rounded"
+              className="w-50 h-50 object-cover rounded"
             />
             {/* Remove button */}
             <button
@@ -145,7 +145,7 @@ export default function UploadSinglePage({
             )}
           </div>
         ) : (
-          <label className="w-40 h-40 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
+          <label className="w-50 h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
             <input
               type="file"
               accept="image/*"

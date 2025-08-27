@@ -381,7 +381,7 @@ const Page: React.FC = () => {
                         <p className="font-normal text-gray-500 text-sm mb-0">
                           This image will be used as your main profile picture.
                         </p>
-                        <p className="font-normal text-gray-500 text-sm mb-4">
+                        <p className="font-normal text-gray-500 text-sm mb-5">
                           Use Atleast 800x800 pixel jpg, jpeg or png image.
                         </p>
                         <UploadSinglePage
@@ -395,7 +395,7 @@ const Page: React.FC = () => {
                         <p className="font-normal text-gray-500 text-sm mb-0">
                           Add up to 5 photos to showcase your profile better.
                         </p>
-                        <p className="font-normal text-gray-500 text-sm mb-4">
+                        <p className="font-normal text-gray-500 text-sm mb-5">
                           Use Atleast 1000x1000 pixel jpg, jpeg or png images.
                         </p>
                         <UploadMultiplePage
