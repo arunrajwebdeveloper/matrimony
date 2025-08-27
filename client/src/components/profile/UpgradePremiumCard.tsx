@@ -8,7 +8,7 @@ function UpgradePremiumCard() {
         <Crown size={260} />
       </div>
       <div className=" relative z-10">
-        <h2 className="text-sm font-medium text-gray-800 mb-4">
+        <h2 className="text-sm font-medium text-amber-700 mb-4">
           Upgrade to Premium
         </h2>
         <div className="space-y-1">
