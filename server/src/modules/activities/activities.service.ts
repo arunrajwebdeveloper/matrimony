@@ -94,7 +94,15 @@ export class ActivitiesService {
       })
       .sort({ timestamp: -1 }) // Sort by the auto-generated timestamp
       .limit(10)
-      .populate('actorId', 'firstName lastName profileId')
+      // .populate('actorId', 'firstName lastName profileId')
+      .populate({
+        path: 'actorId',
+        select: 'firstName lastName profileId profile',
+        populate: {
+          path: 'profile',
+          select: 'profilePicture -_id',
+        },
+      })
       .exec();
 
     return activities;
@@ -106,7 +114,14 @@ export class ActivitiesService {
         .find({ targetId: new Types.ObjectId(userId) })
         .sort({ timestamp: -1 })
         // .limit(10)
-        .populate('actorId', 'firstName lastName profileId')
+        .populate({
+          path: 'actorId',
+          select: 'firstName lastName profileId profile',
+          populate: {
+            path: 'profile',
+            select: 'profilePicture -_id',
+          },
+        })
         .exec()
     );
   }

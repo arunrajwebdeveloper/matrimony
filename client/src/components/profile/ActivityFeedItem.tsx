@@ -100,9 +100,23 @@ const ActivityFeedItem: React.FC<{ activity: Activity }> = ({ activity }) => {
 
   const timeAgo = formatRelativeTime(timestamp);
 
+  const profilePicture = actorId?.profile?.profilePicture;
+
   return (
     <div className="flex items-center justify-between py-2">
-      <div>{sentence}</div>
+      <div className="flex items-center gap-2">
+        <Link
+          href={`${ROUTES.PROFILE}/${actorId?.profileId}`}
+          className="w-6.5 h-6.5 block"
+        >
+          <img
+            className="w-6.5 h-6.5 rounded-full bg-slate-400"
+            src={profilePicture ?? ""}
+            alt="user avatar"
+          />
+        </Link>
+        {sentence}
+      </div>
       <p className="text-slate-500 font-normal text-xs m-0">{timeAgo}</p>
     </div>
   );
