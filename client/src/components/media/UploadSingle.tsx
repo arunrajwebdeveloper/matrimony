@@ -6,6 +6,8 @@ import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
 import { Crop, ImagePlus, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
+import api from "@/lib/api";
+import { API_ENDPOINTS } from "@/utils/constants";
 
 type ImageItem = {
   id: string;
@@ -87,12 +89,13 @@ export default function UploadSinglePage({
     const fd = new FormData();
     fd.append("file", file);
 
-    await fetch(`${API_BASE}/upload/single`, {
-      method: "POST",
-      body: fd,
+    const res = await api.post(API_ENDPOINTS.UPLOAD.PROFILE_PICTURE, fd, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
 
-    alert("Uploaded!");
+    console.log("response :>> ", res.data);
   };
 
   const handleRemoveImage = () => {

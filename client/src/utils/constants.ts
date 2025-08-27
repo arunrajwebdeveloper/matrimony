@@ -20,6 +20,13 @@ export const API_ENDPOINTS = {
   ACTIVITY_LOG: "/api/activities/log",
   ACTIVITY_RECENT_GET: "/api/activities/recent",
   ACTIVITY_ALL_GET: "/api/activities/all",
+
+  // FILE UPLOAD
+
+  UPLOAD: {
+    PROFILE_PICTURE: "/api/upload/profile-picture",
+    PROFILE_IMAGES: "/api/upload/profile-images",
+  },
 } as const;
 
 export const TOKEN_KEYS = {
