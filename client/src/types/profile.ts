@@ -86,7 +86,6 @@ export interface UserCardType {
   motherTongue: string;
   isOnline?: boolean;
   profilePicture: string;
-  gender: string;
 }
 
 export interface UserCardSidebarItemType {

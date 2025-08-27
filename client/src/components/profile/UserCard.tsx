@@ -5,6 +5,7 @@ import OnlineStatusDot from "./OnlineStatusDot";
 import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import { ROUTES } from "@/utils/constants";
 import { Ban, Bookmark, Eye } from "lucide-react";
+import Avatar from "./Avatar";
 
 function UserCard({
   firstName,
@@ -18,17 +19,24 @@ function UserCard({
   motherTongue,
   isOnline,
   profilePicture,
-  gender,
 }: UserCardType) {
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
 
   return (
     <div className="flex rounded-md shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100">
       <div className="w-[130px] relative flex-none group">
-        <img
+        {/* <img
           className="w-[130px] h-[130px] object-cover"
           src={profilePicture}
           alt={profileId}
+        /> */}
+        <Avatar
+          src={profilePicture!}
+          firstname={`${firstName || ""}`}
+          lastname={`${lastName || ""}`}
+          size={130}
+          isCircle={false}
+          hasBorder={false}
         />
         <Link
           href={`${ROUTES.PROFILE}/${profileId}`}

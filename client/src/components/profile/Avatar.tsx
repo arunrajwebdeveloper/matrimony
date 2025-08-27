@@ -5,25 +5,29 @@ function Avatar({
   firstname = "",
   lastname = "",
   size = 50,
+  isCircle = true,
+  hasBorder = true,
 }: {
   src: string | undefined;
   firstname: string;
   lastname: string;
-  size: number;
+  size?: number;
+  isCircle?: boolean;
+  hasBorder?: boolean;
 }) {
   const colors = [
-    "bg-green-600",
-    "bg-fuchsia-600",
-    "bg-emerald-600",
-    "bg-lime-600",
-    "bg-amber-600",
-    "bg-teal-600",
-    "bg-cyan-600",
-    "bg-violet-600",
-    "bg-blue-600",
-    "bg-sky-600",
-    "bg-orange-600",
-    "bg-red-600",
+    "bg-green-500",
+    "bg-fuchsia-500",
+    "bg-emerald-500",
+    "bg-lime-500",
+    "bg-amber-500",
+    "bg-teal-500",
+    "bg-cyan-500",
+    "bg-violet-500",
+    "bg-blue-500",
+    "bg-sky-500",
+    "bg-orange-500",
+    "bg-red-500",
   ];
 
   const getInitials = () => {
@@ -42,16 +46,19 @@ function Avatar({
     return colors[index];
   };
 
+  const border = hasBorder ? "border-2 border-slate-50" : "";
+
   if (src) {
     return (
       <img
         src={src}
         alt=""
-        className="object-cover flex-none rounded-full overflow-hidden select-none border-2 border-slate-50 bg-slate-400"
+        className={`${border} object-cover flex-none overflow-hidden select-none bg-slate-400`}
         loading="lazy"
         style={{
           width: size,
           height: size,
+          borderRadius: isCircle ? "50%" : "0",
         }}
       />
     );
@@ -59,11 +66,12 @@ function Avatar({
 
   return (
     <div
-      className={`${getBackgroundColor()} rounded-full text-white flex items-center justify-center flex-none font-normal border-2 border-slate-50`}
+      className={`${getBackgroundColor()} ${border} text-white flex items-center justify-center flex-none font-normal`}
       style={{
         width: size,
         height: size,
         fontSize: size * 0.4,
+        borderRadius: isCircle ? "50%" : "0",
       }}
     >
       {getInitials()}
