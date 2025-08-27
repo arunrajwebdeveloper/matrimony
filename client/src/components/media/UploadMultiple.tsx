@@ -218,6 +218,7 @@ export default function UploadMultiplePage({
           onCropComplete={setCropPixels}
           onComplete={buildAndPreview}
           onCancel={handleCancelCrop}
+          aspect={4 / 3}
         />
       )}
     </main>

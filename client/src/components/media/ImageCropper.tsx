@@ -10,11 +10,13 @@ export default function ImageCropper({
   onCropComplete,
   initialZoom = 1,
   className,
+  aspect = 1,
 }: {
   imageSrc: string;
   onCropComplete: (area: Pixels) => void;
   initialZoom?: number;
   className?: string;
+  aspect?: number;
 }) {
   const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(initialZoom);
@@ -30,7 +32,7 @@ export default function ImageCropper({
         image={imageSrc}
         crop={crop}
         zoom={zoom}
-        aspect={1} // square
+        aspect={aspect} // square
         cropShape="rect" // can be "round" if needed
         onCropChange={setCrop}
         onZoomChange={setZoom}

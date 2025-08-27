@@ -7,6 +7,7 @@ interface CropModalProps {
   onCropComplete: React.Dispatch<React.SetStateAction<Pixels | null>>;
   onComplete: () => void;
   onCancel: () => void;
+  aspect?: number;
 }
 
 function ImageCropModal({
@@ -14,12 +15,17 @@ function ImageCropModal({
   src,
   onCropComplete,
   onComplete,
+  aspect,
 }: CropModalProps) {
   return (
     <div className="fixed inset-0 h-full w-full bg-transparent z-[600]">
       <div className="fixed inset-0 bg-gray-900/50" onClick={onCancel}></div>
       <div className="max-w-[600px] w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[605] bg-white rounded-md overflow-hidden">
-        <ImageCropper imageSrc={src} onCropComplete={onCropComplete} />
+        <ImageCropper
+          imageSrc={src}
+          onCropComplete={onCropComplete}
+          aspect={aspect}
+        />
         <div className="flex gap-2 p-4 justify-center items-center">
           <button
             type="button"
