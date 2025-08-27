@@ -90,7 +90,7 @@ const MoreDropdown: React.FC = () => {
         >
           <div className="py-1" role="none">
             <a
-              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
+              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
               onClick={() => {
                 setIsOpen(false);
               }}
@@ -98,7 +98,7 @@ const MoreDropdown: React.FC = () => {
               Copy profile link
             </a>
             <a
-              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
+              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
               onClick={() => {
                 setIsOpen(false);
               }}
@@ -106,7 +106,7 @@ const MoreDropdown: React.FC = () => {
               Block
             </a>
             <a
-              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
+              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
               onClick={() => {
                 setIsOpen(false);
               }}
@@ -114,7 +114,7 @@ const MoreDropdown: React.FC = () => {
               Report
             </a>
             <a
-              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
+              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
               onClick={() => {
                 setIsOpen(false);
               }}

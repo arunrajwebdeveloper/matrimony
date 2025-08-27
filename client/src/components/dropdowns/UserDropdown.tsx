@@ -106,7 +106,7 @@ const UserDropdown: FC<UserDropdownProps> = ({
                   key={label}
                   href={action}
                   onClick={toggleDropdown}
-                  className="text-slate-600 bg-white block py-3 px-4 cursor-pointer text-sm hover:bg-slate-50 transition-colors font-medium"
+                  className="text-slate-600 bg-white block py-3 px-4 cursor-pointer text-sm hover:bg-slate-50 transition-colors duration-300 font-medium"
                 >
                   <div className="flex items-center gap-3">
                     <Icon size={18} />
@@ -117,7 +117,7 @@ const UserDropdown: FC<UserDropdownProps> = ({
                 <a
                   key={label}
                   onClick={() => handleAction(action)}
-                  className="text-gray-700 block py-3 px-4 cursor-pointer text-sm hover:bg-gray-100 transition-colors"
+                  className="text-gray-700 block py-3 px-4 cursor-pointer text-sm hover:bg-gray-100 transition-colors duration-300"
                 >
                   <div className="flex items-center gap-3">
                     <Icon size={18} />
