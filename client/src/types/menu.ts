@@ -9,7 +9,8 @@ export interface UserDropdownMenuType {
 export interface UserDropdownProps {
   avatar?: string | undefined;
   menu: UserDropdownMenuType[];
-  username: string;
+  firstname: string;
+  lastname: string;
   email: string;
 }
 

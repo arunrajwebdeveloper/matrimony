@@ -17,7 +17,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import Navigation from "@/components/navigation/Navigation";
-import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
+import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -25,6 +25,8 @@ import { useParams } from "next/navigation";
 import ProfileUserCard from "@/components/profile/ProfileUserCard";
 import SidebarCard from "@/components/cards/SidebarCard";
 import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
+import useActivityLogger from "@/hooks/useActivityLogger";
+import { ActivityVerb } from "@/utils/activity.enum";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -37,6 +39,9 @@ const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
 );
 
 const ProfilePage: React.FC = () => {
+  // THIS NOT NEEDED - ITS FOR AVOID TWICE API CALL
+
+  const logActivity = useActivityLogger();
   const { profileId } = useParams<{ profileId: string }>();
 
   const { user } = useAuth();
@@ -61,6 +66,12 @@ const ProfilePage: React.FC = () => {
 
     fetchProfile();
   }, []);
+
+  useEffect(() => {
+    if (profileData) {
+      logActivity(ActivityVerb.VIEWED_PROFILE, profileData?.user as string);
+    }
+  }, [profileData, logActivity]);
 
   const profileCompletionInfo = {
     firstName: profileData?.firstName,

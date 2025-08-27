@@ -39,6 +39,7 @@ export class UsersService {
     return this.userModel
       .findById(id)
       .populate('profile', 'profilePicture visibility isPremium')
+      .select('-blockedUsers')
       .exec();
   }
 
@@ -50,5 +51,26 @@ export class UsersService {
         { new: true },
       )
       .exec();
+  }
+
+  /**
+   * Retrieves the list of user IDs that the specified user has blocked.
+   *
+   * @param userId The ID of the user.
+   * @returns An array of string IDs of blocked users.
+   */
+  async getBlockedUserIds(userId: string): Promise<string[]> {
+    const user = await this.userModel
+      .findById(new Types.ObjectId(userId))
+      .select('blockedUsers') // Only fetch the blockedUsers field
+      .exec();
+
+    if (!user) {
+      // Handle case where user is not found
+      return [];
+    }
+
+    // Convert the array of ObjectIds to strings
+    return user.blockedUsers.map((id) => id.toString());
   }
 }

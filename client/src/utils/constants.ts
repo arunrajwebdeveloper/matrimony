@@ -14,6 +14,12 @@ export const API_ENDPOINTS = {
   USER_BY_PROFILE_ID: "/api/profiles",
   PREFERRED_MATCHES_LIST: "/api/matches/preferred",
   NEW_MATCHES_LIST: "/api/matches/new",
+
+  // ACTIVITIES
+
+  ACTIVITY_LOG: "/api/activities/log",
+  ACTIVITY_RECENT_GET: "/api/activities/recent",
+  ACTIVITY_ALL_GET: "/api/activities/all",
 } as const;
 
 export const TOKEN_KEYS = {
@@ -24,6 +30,7 @@ export const TOKEN_KEYS = {
 export const ROUTES = {
   LOGIN: "/login",
   LOGOUT: "/logout",
+  HOME: "/",
   DASHBOARD: "/dashboard",
   PROFILE: "/dashboard/profile",
   PROFILE_ME: "/dashboard/profile/me",
@@ -38,7 +45,6 @@ export const ROUTES = {
     PARTNER_PREFERENCES: "partner-preferences",
     PROFILE_PRIVACY: "profile-privacy",
   },
-  HOME: "/",
   SETTINGS: {
     DEFAULT: "/dashboard/settings/security",
     SECURITY: "/dashboard/settings/security",

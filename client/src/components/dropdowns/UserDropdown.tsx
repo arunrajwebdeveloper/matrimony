@@ -4,11 +4,13 @@ import Link from "next/link";
 import UserSummaryDisplay from "../profile/UserSummaryDisplay";
 import { UserDropdownProps } from "@/types/menu";
 import OnlineStatusDot from "../profile/OnlineStatusDot";
+import Avatar from "../profile/Avatar";
 
 const UserDropdown: FC<UserDropdownProps> = ({
   avatar,
   menu,
-  username,
+  firstname,
+  lastname,
   email,
 }) => {
   const router = useRouter();
@@ -61,14 +63,14 @@ const UserDropdown: FC<UserDropdownProps> = ({
     // The ref is attached here.
     <div className="relative" ref={dropdownRef}>
       <div
-        aria-expanded={isOpen}
         onClick={toggleDropdown}
-        className="rounded-[50%] w-[34px] h-[34px] cursor-pointer relative"
+        className="rounded-full w-[34px] h-[34px] cursor-pointer relative"
       >
-        <img
+        <Avatar
           src={avatar}
-          alt=""
-          className="object-cover w-[34px] h-[34px] overflow-hidden rounded-[50%]"
+          firstname={`${firstname || ""}`}
+          lastname={`${lastname || ""}`}
+          size={34}
         />
         <div className="absolute bottom-0 right-0 z-10 w-[10px] h-[10px]">
           <OnlineStatusDot isOnline={true} />
@@ -84,7 +86,8 @@ const UserDropdown: FC<UserDropdownProps> = ({
             <div className="p-4">
               <UserSummaryDisplay
                 avatar={avatar}
-                username={username}
+                firstname={`${firstname || ""}`}
+                lastname={`${lastname || ""}`}
                 email={email}
                 callback={toggleDropdown}
               />
@@ -103,7 +106,7 @@ const UserDropdown: FC<UserDropdownProps> = ({
                   key={label}
                   href={action}
                   onClick={toggleDropdown}
-                  className="text-slate-600 bg-white block py-3 px-4 cursor-pointer text-sm hover:bg-slate-50 transition-colors font-medium"
+                  className="text-slate-600 bg-white block py-3 px-4 cursor-pointer text-sm hover:bg-slate-50 transition-colors duration-300 font-medium"
                 >
                   <div className="flex items-center gap-3">
                     <Icon size={18} />
@@ -114,7 +117,7 @@ const UserDropdown: FC<UserDropdownProps> = ({
                 <a
                   key={label}
                   onClick={() => handleAction(action)}
-                  className="text-gray-700 block py-3 px-4 cursor-pointer text-sm hover:bg-gray-100 transition-colors"
+                  className="text-gray-700 block py-3 px-4 cursor-pointer text-sm hover:bg-gray-100 transition-colors duration-300"
                 >
                   <div className="flex items-center gap-3">
                     <Icon size={18} />

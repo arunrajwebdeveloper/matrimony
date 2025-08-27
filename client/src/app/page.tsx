@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-6">Welcome to MyApp</h1>
+        <h1 className="text-4xl font-bold mb-6">Welcome to Matrimony</h1>
 
         {isAuthenticated ? (
           <div>
@@ -44,7 +44,7 @@ const HomePage: React.FC = () => {
           </div>
         ) : (
           <div>
-            <p className="text-xl mb-6">Please log in to access your account</p>
+            <p className="text-xl mb-6">Please log in to your account</p>
             <Link
               href={ROUTES.LOGIN}
               className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 inline-block"

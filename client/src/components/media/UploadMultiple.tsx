@@ -127,17 +127,17 @@ export default function UploadMultiplePage({
   return (
     <main className="space-y-4">
       {/* Upload area (dynamic slots) */}
-      <div className="flex gap-4 flex-wrap">
+      <div className="flex gap-6 flex-wrap">
         {/* Show previews */}
         {processedImages?.map((img) => (
           <div
             key={img.id}
-            className="relative w-40 h-40 overflow-hidden rounded group "
+            className="relative aspect-[4/3] h-50 overflow-hidden rounded group "
           >
             <img
               src={img.processedUrl}
               alt="preview"
-              className="w-40 h-40 object-cover rounded"
+              className="aspect-[4/3] h-50 object-cover rounded"
             />
             {/* Delete always available */}
             <button
@@ -165,7 +165,7 @@ export default function UploadMultiplePage({
         ))}
 
         {processedImages?.length !== MAX_SLOTS && (
-          <label className="w-40 h-40 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
+          <label className="aspect-[4/3] h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
             <input
               type="file"
               accept="image/*"
@@ -218,6 +218,7 @@ export default function UploadMultiplePage({
           onCropComplete={setCropPixels}
           onComplete={buildAndPreview}
           onCancel={handleCancelCrop}
+          aspect={4 / 3}
         />
       )}
     </main>

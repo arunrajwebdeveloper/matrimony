@@ -15,9 +15,9 @@ import {
 } from "lucide-react";
 import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
 import { User, UserProfile } from "@/types";
-import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
-import avatarSource from "@/utils/avatarSource";
+import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import MoreDropdown from "../dropdowns/MoreDropdown";
+import Avatar from "./Avatar";
 
 function ProfileUserCard({
   profileData,
@@ -28,16 +28,11 @@ function ProfileUserCard({
   cover: string;
   currentUser: User | null;
 }) {
-  const imageUrl = avatarSource({
-    avatar: profileData?.profilePicture,
-    gender: profileData?.gender,
-  });
-
   const isCurrentUser = currentUser?.profileId === profileData?.profileId;
 
   return (
     <div>
-      <div className="w-full h-[240px] overflow-hidden relative group">
+      <div className="w-full h-[240px] overflow-hidden relative group bg-slate-500 rounded-2xl">
         <img
           className="w-full h-[240px] object-cover rounded-2xl"
           src={cover}
@@ -51,12 +46,14 @@ function ProfileUserCard({
         )}
       </div>
       <div className="-mt-20">
-        <div className="w-[160px] h-[160px] rounded-[50%] relative mx-auto">
-          <img
-            className="w-[160px] h-[160px] object-cover rounded-[50%] overflow-hidden border-2 border-white"
-            src={imageUrl}
-            alt=""
+        <div className="w-[160px] h-[160px] rounded-full relative mx-auto bg-slate-500  ">
+          <Avatar
+            src={profileData?.profilePicture!}
+            firstname={`${profileData?.firstName || ""}`}
+            lastname={`${profileData?.lastName || ""}`}
+            size={160}
           />
+
           <div className="absolute bottom-4.5 right-4.5 z-10">
             <OnlineStatusDot isOnline={true} size="md" />
           </div>

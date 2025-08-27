@@ -10,7 +10,6 @@ import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
 import Navigation from "@/components/navigation/Navigation";
 import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import avatarSource from "@/utils/avatarSource";
 import UploadSinglePage from "@/components/media/UploadSingle";
 import UploadMultiplePage from "@/components/media/UploadMultiple";
 
@@ -316,11 +315,6 @@ const Page: React.FC = () => {
     );
   }
 
-  const imageUrl = avatarSource({
-    avatar: profileData?.profilePicture,
-    gender: profileData?.gender,
-  });
-
   return (
     <div className="main-container">
       {/* Breadcrumb */}
@@ -334,8 +328,9 @@ const Page: React.FC = () => {
             <div className="py-4">
               <div className="mb-8">
                 <UserSummaryDisplay
-                  avatar={imageUrl}
-                  username={`${user?.firstName} ${user?.lastName || ""}`}
+                  avatar={profileData?.profilePicture!}
+                  firstname={`${user?.firstName || ""}`}
+                  lastname={`${user?.lastName || ""}`}
                   email={user?.email || ""}
                 />
               </div>
@@ -383,8 +378,11 @@ const Page: React.FC = () => {
                         <h2 className="font-semibold text-black text-md mb-4">
                           Upload profile image
                         </h2>
-                        <p className="font-normal text-gray-500 text-sm mb-4">
+                        <p className="font-normal text-gray-500 text-sm mb-0">
                           This image will be used as your main profile picture.
+                        </p>
+                        <p className="font-normal text-gray-500 text-sm mb-5">
+                          Use Atleast 800x800 pixel jpg, jpeg or png image.
                         </p>
                         <UploadSinglePage
                           sourceImage={profileData?.profilePicture}
@@ -394,8 +392,11 @@ const Page: React.FC = () => {
                         <h2 className="font-semibold text-black text-md mb-4">
                           Upload profile photos
                         </h2>
-                        <p className="font-normal text-gray-500 text-sm mb-4">
+                        <p className="font-normal text-gray-500 text-sm mb-0">
                           Add up to 5 photos to showcase your profile better.
+                        </p>
+                        <p className="font-normal text-gray-500 text-sm mb-5">
+                          Use Atleast 1000x1000 pixel jpg, jpeg or png images.
                         </p>
                         <UploadMultiplePage
                           sourceImages={profileData?.profilePhotos}

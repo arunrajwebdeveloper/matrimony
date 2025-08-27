@@ -20,11 +20,10 @@ import {
 } from "lucide-react";
 import Navigation from "@/components/navigation/Navigation";
 import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
-import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
+import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import avatarSource from "@/utils/avatarSource";
 import ProfileUserCard from "@/components/profile/ProfileUserCard";
 import SidebarCard from "@/components/cards/SidebarCard";
 import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
@@ -133,11 +132,6 @@ const ProfilePage: React.FC = () => {
     );
   }
 
-  const imageUrl = avatarSource({
-    avatar: user?.profile?.profilePicture,
-    gender: user?.gender,
-  });
-
   const profileCompletionInfo = {
     firstName: profileData?.firstName,
     dateOfBirth: profileData?.dateOfBirth,
@@ -168,8 +162,9 @@ const ProfilePage: React.FC = () => {
               {/* <h3 className="font-semibold text-black text-md mb-6">Profile</h3> */}
               <div className="mb-8">
                 <UserSummaryDisplay
-                  avatar={imageUrl}
-                  username={`${user?.firstName} ${user?.lastName || ""}`}
+                  avatar={user?.profile?.profilePicture!}
+                  firstname={`${user?.firstName || ""}`}
+                  lastname={`${user?.lastName || ""}`}
                   email={user?.email || ""}
                 />
               </div>

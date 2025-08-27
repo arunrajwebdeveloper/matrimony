@@ -18,6 +18,9 @@ import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import MatchList from "@/components/dashboard/MatchList";
 import { UserCardType, UserProfile } from "@/types";
 import api from "@/lib/api";
+import Greeting from "@/components/dashboard/Greeting";
+import ActivityItem from "@/components/profile/ActivityFeedItem";
+import ActivityList from "@/components/dashboard/ActivityList";
 
 const statUsers = [
   "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
@@ -112,6 +115,10 @@ const DashboardPage: React.FC = () => {
         </div>
         <div className="w-[50%] px-2">
           <div className="mt-5">
+            <div className="py-1 px-6">
+              <Greeting username={user?.firstName || ""} />
+            </div>
+
             {/* BASIC STAT INFOS */}
             <div className="py-4 px-6">
               <div className="mb-6 flex items-center justify-between">
@@ -125,28 +132,24 @@ const DashboardPage: React.FC = () => {
                   title="Profile Views"
                   label="This Week"
                   users={statUsers}
-                  color="blue"
                 />
                 <StatisticsCard
                   value={7}
                   title="New Messages"
                   label="Unread"
                   users={statUsers}
-                  color="orange"
                 />
                 <StatisticsCard
                   value={13}
                   title="Shortlisted"
                   label="By You"
                   users={statUsers}
-                  color="green"
                 />
                 <StatisticsCard
                   value={36}
                   title="Matches"
                   label="Available"
                   users={statUsers}
-                  color="violet"
                 />
               </div>
             </div>
@@ -174,50 +177,9 @@ const DashboardPage: React.FC = () => {
               />
             </ProfileCard>
 
-            <div className="py-4 px-6">
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="font-semibold text-black text-md">
-                  Recent Activity
-                </h2>
-                <Link className="font-normal text-blue-500 text-xs" href={""}>
-                  View all
-                </Link>
-              </div>
-              <div>
-                <div className="flex items-center justify-between py-2">
-                  <p className="text-slate-600 font-normal text-sm m-0">
-                    Sneha K. viewed your profile
-                  </p>
-                  <p className="text-slate-500 font-normal text-xs m-0">
-                    2 hours ago
-                  </p>
-                </div>
-                <div className="flex items-center justify-between py-2">
-                  <p className="text-slate-600 font-normal text-sm m-0">
-                    New message from Amit
-                  </p>
-                  <p className="text-slate-500 font-normal text-xs m-0">
-                    5 hours ago
-                  </p>
-                </div>
-                <div className="flex items-center justify-between py-2">
-                  <p className="text-slate-600 font-normal text-sm m-0">
-                    Kavya R. shortlisted your profile
-                  </p>
-                  <p className="text-slate-500 font-normal text-xs m-0">
-                    1 day ago
-                  </p>
-                </div>
-                <div className="flex items-center justify-between py-2">
-                  <p className="text-slate-600 font-normal text-sm m-0">
-                    Meera sent interest
-                  </p>
-                  <p className="text-slate-500 font-normal text-xs m-0">
-                    2 days ago
-                  </p>
-                </div>
-              </div>
-            </div>
+            <ProfileCard title=" Recent Activity" link="/" className="mb-5">
+              <ActivityList />
+            </ProfileCard>
           </div>
         </div>
         <div className="w-[25%] px-2">

@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, SchemaTypes, Types } from 'mongoose';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 
-export type UserInteractionDocument = UserInteraction & Document;
+export type UserInteractionDocument = HydratedDocument<UserInteraction>;
 
 /**
  * A dedicated schema to store user interactions, keeping the main Profile schema clean.

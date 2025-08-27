@@ -19,12 +19,11 @@ import {
 } from "lucide-react";
 import Navigation from "@/components/navigation/Navigation";
 import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
-import { dateOfBirthFormat } from "@/lib/dateOfBirthFormat";
+import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import Link from "next/link";
-import avatarSource from "@/utils/avatarSource";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -74,11 +73,6 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
     );
   }
 
-  const imageUrl = avatarSource({
-    avatar: user?.profile?.profilePicture,
-    gender: user?.gender,
-  });
-
   return (
     <div className="main-container">
       {/* Breadcrumb */}
@@ -92,8 +86,9 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
             <div className="py-4">
               <div className="mb-8">
                 <UserSummaryDisplay
-                  avatar={imageUrl}
-                  username={`${user?.firstName} ${user?.lastName || ""}`}
+                  avatar={user?.profile?.profilePicture!}
+                  firstname={`${user?.firstName || ""}`}
+                  lastname={`${user?.lastName || ""}`}
                   email={user?.email || ""}
                 />
               </div>
