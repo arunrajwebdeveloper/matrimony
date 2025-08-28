@@ -24,14 +24,14 @@ export class SignedUrlInterceptor implements NestInterceptor {
   private async addSignedUrls(entity: any, userId: string) {
     if (!entity) return entity;
 
-    // Handle arrays
+    // Handle arrays recursively
     if (Array.isArray(entity)) {
       return Promise.all(
         entity.map((item) => this.addSignedUrls(item, userId)),
       );
     }
 
-    // Convert mongoose doc to plain object if needed
+    // Convert Mongoose doc to plain object
     if (entity.toObject) {
       entity = entity.toObject();
     }
@@ -72,6 +72,15 @@ export class SignedUrlInterceptor implements NestInterceptor {
       );
     }
 
+    // Activity list: actorId.profile.profilePicture
+    if (entity?.actorId?.profile?.profilePicture) {
+      entity.actorId.profile.profilePicture = await this.sign(
+        entity.actorId.profile.profilePicture,
+        userId,
+        'profile-pictures',
+      );
+    }
+
     return entity;
   }
 
@@ -84,3 +93,13 @@ export class SignedUrlInterceptor implements NestInterceptor {
     return signedUrl;
   }
 }
+
+// NOTE: entity if condition
+
+// const user1 = { profile: { profilePicture: "image.jpg" } };
+// const user2 = { profile: {} };
+// const user3 = {};
+
+// console.log(!!(user1?.profile?.profilePicture)); // true
+// console.log(!!(user2?.profile?.profilePicture)); // false
+// console.log(!!(user3?.profile?.profilePicture)); // false
