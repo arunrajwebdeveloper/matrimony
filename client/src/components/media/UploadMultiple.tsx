@@ -105,22 +105,41 @@ export default function UploadMultiplePage({
     setImages((prev) => prev.filter((img) => img.id !== id));
   };
 
-  const onSubmit = async () => {
-    const fd = new FormData();
-    images.forEach((img) => {
+  async function uploadFiles(files: ImageItem[], type: "profile-photos") {
+    const formData = new FormData();
+    files?.forEach((img) => {
       if (img.processedFile) {
-        // ✅ only upload newly processed images
-        fd.append("files", img.processedFile);
+        formData.append("files", img.processedFile);
       }
     });
 
-    // const res = await api.post(API_ENDPOINTS.UPLOAD.PROFILE_IMAGES, fd, {
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // });
+    const res = await api.post(API_ENDPOINTS.UPLOAD.MULTIPLE, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-    // console.log("response :>> ", res.data);
+    return res.data;
+  }
+
+  const onSubmit = async () => {
+    try {
+      if (!images || images.length === 0) {
+        alert("Choose images to upload.");
+        return;
+      }
+
+      const { files } = await uploadFiles(images, "profile-photos");
+      const filenames = files?.map((file: any) => file?.filename);
+      const res = await api.patch(API_ENDPOINTS.PROFILE_IMAGES_UPLOAD, {
+        filenames,
+      });
+
+      console.log("Profile images updated:", res.data);
+    } catch (err) {
+      console.error("❌ Error uploading profile images:", err);
+      alert("Failed to upload profile images. Please try again.");
+    }
   };
 
   const MAX_SLOTS = 6;

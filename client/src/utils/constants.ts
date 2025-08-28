@@ -17,7 +17,7 @@ export const API_ENDPOINTS = {
 
   PROFILE_PICTURE_UPLOAD: "/api/users/profile-picture",
   PROFILE_COVER_UPLOAD: "/api/users/profile-picture",
-  PROFILE_IMAGES_UPLOAD: "/api/users/profile-picture",
+  PROFILE_IMAGES_UPLOAD: "/api/users/profile-photos",
 
   // ACTIVITIES
 
@@ -29,7 +29,7 @@ export const API_ENDPOINTS = {
 
   UPLOAD: {
     SINGLE: "/api/upload/profile-picture",
-    MULTIPLE: "/api/upload/profile-images",
+    MULTIPLE: "/api/upload/profile-photos",
   },
 } as const;
 

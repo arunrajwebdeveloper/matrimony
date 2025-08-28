@@ -63,11 +63,11 @@ export class SignedUrlInterceptor implements NestInterceptor {
       );
     }
 
-    // Profile images (array of files)
-    if (entity?.profileImages && Array.isArray(entity.profileImages)) {
-      entity.profileImages = await Promise.all(
-        entity.profileImages.map((img: string) =>
-          this.sign(img, userId, 'profile-images'),
+    //  profile Photos (array of files)
+    if (entity?.profilePhotos && Array.isArray(entity.profilePhotos)) {
+      entity.profilePhotos = await Promise.all(
+        entity.profilePhotos.map((img: string) =>
+          this.sign(img, userId, 'profile-photos'),
         ),
       );
     }

@@ -74,4 +74,34 @@ export class UsersController {
     }
     return { message: 'Profile picture updated successfully' };
   }
+
+  @Patch('profile-photos')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update user profile images',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Profile images updated successfully.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  async updateProfileImages(
+    @Request() req: any,
+    @Body('filenames') filenames: string[],
+  ) {
+    if (!filenames || filenames.length === 0)
+      return { message: 'Files not found.' };
+
+    const user = await this.usersService.updateProfileImages(
+      req.user._id,
+      filenames,
+    );
+    if (!user) {
+      return { message: 'User not found.' };
+    }
+    return { message: 'Profile images updated successfully' };
+  }
 }

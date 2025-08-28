@@ -106,13 +106,14 @@ export class UsersService {
   }
 
   /** Update multiple profile images */
+
   async updateProfileImages(userId: string, filenames: string[]) {
     const profile = await this.profileModel.findOne({ user: userId });
     if (!profile) return null;
 
     if (profile?.profilePhotos?.length > 0) {
-      profile.profilePhotos.forEach((f) =>
-        this.removeFile('profile-images', f),
+      profile.profilePhotos.forEach((file) =>
+        this.removeFile('profile-photos', file),
       );
     }
 
@@ -143,7 +144,7 @@ export class UsersService {
     profile.profilePhotos = profile.profilePhotos.filter(
       (img) => img !== filename,
     );
-    this.removeFile('profile-images', filename);
+    this.removeFile('profile-photos', filename);
 
     return profile.save();
   }
@@ -161,7 +162,7 @@ export class UsersService {
 
     if (profile?.profilePhotos?.length) {
       profile.profilePhotos.forEach((f) =>
-        this.removeFile('profile-images', f),
+        this.removeFile('profile-photos', f),
       );
     }
 
@@ -176,7 +177,7 @@ export class UsersService {
   }
 
   private removeFile(
-    folder: 'profile-pictures' | 'profile-images' | 'cover-images',
+    folder: 'profile-pictures' | 'profile-photos' | 'cover-images',
     filename: string,
   ) {
     // Use project root as base

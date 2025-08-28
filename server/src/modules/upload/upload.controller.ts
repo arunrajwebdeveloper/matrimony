@@ -46,14 +46,14 @@ export class UploadController {
   }
 
   @UseGuards(JwtAuthGuard) // require authentication
-  @Post('profile-images')
-  @UseInterceptors(FilesInterceptor('files', 6, multerConfig('profile-images')))
+  @Post('profile-photos')
+  @UseInterceptors(FilesInterceptor('files', 6, multerConfig('profile-photos')))
   async uploadProfileImages(@UploadedFiles() files: Express.Multer.File[]) {
     return {
       success: true,
       files: files.map((file) => ({
         filename: file.filename,
-        path: `uploads/profile-images/${file.filename}`,
+        path: `uploads/profile-photos/${file.filename}`,
       })),
     };
   }
