@@ -46,29 +46,17 @@ export class UsersService {
   async findByIdWithProfile(id: string | Types.ObjectId): Promise<any> {
     const user = await this.userModel
       .findById(id)
-      .populate('profile', 'profilePicture visibility isPremium')
-      .select('-blockedUsers')
+      .populate({
+        path: 'profile',
+        select: 'profilePicture visibility isPremium',
+      })
+      .select('-blockedUsers') // only removes this, all others stay
+      // .lean() // make it plain JS object (no mongoose doc overhead)
       .exec();
 
     if (!user) return null;
 
-    const profileDoc = user.profile as ProfileDocument;
-
-    if (profileDoc.profilePicture) {
-      const { signedUrl } = await this.uploadService.generateSignedUrl(
-        user._id.toString(),
-        profileDoc.profilePicture,
-        'profile-pictures',
-      );
-
-      return {
-        ...user.toObject(),
-        profile: {
-          ...profileDoc.toObject(),
-          profilePicture: signedUrl,
-        },
-      };
-    }
+    return user.toObject();
   }
 
   async softDelete(id: string | Types.ObjectId): Promise<UserDocument | null> {

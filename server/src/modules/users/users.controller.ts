@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Patch,
   Body,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -15,6 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { SignedUrlInterceptor } from 'src/common/interceptors/signed-url.interceptor';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('Users')
@@ -22,6 +24,7 @@ import {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseInterceptors(SignedUrlInterceptor)
   @Get('me')
   @ApiBearerAuth()
   @ApiOperation({
@@ -36,10 +39,9 @@ export class UsersController {
     description: 'Unauthorized.',
   })
   async getMe(@Request() req: any) {
-    // req.user is populated by JwtStrategy
     const user = await this.usersService.findByIdWithProfile(req.user._id);
     if (!user) {
-      return { message: 'User not found.' }; // Should not happen if guard passed
+      return { message: 'User not found.' };
     }
     return user;
   }
