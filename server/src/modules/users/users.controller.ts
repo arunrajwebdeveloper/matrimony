@@ -88,20 +88,20 @@ export class UsersController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized.',
   })
-  async updateProfileImages(
+  async updateProfilePhotos(
     @Request() req: any,
     @Body('filenames') filenames: string[],
   ) {
     if (!filenames || filenames.length === 0)
       return { message: 'Files not found.' };
 
-    const user = await this.usersService.updateProfileImages(
+    const user = await this.usersService.updateProfilePhotos(
       req.user._id,
       filenames,
     );
     if (!user) {
       return { message: 'User not found.' };
     }
-    return { message: 'Profile images updated successfully' };
+    return { message: 'Profile photos updated successfully' };
   }
 }

@@ -122,6 +122,8 @@ export default function UploadMultiplePage({
     return res.data;
   }
 
+  console.log("images :>> ", images);
+
   const onSubmit = async () => {
     try {
       if (!images || images.length === 0) {

@@ -105,19 +105,29 @@ export class UsersService {
     return profile.save();
   }
 
-  /** Update multiple profile images */
+  /** Update multiple profile photos */
 
-  async updateProfileImages(userId: string, filenames: string[]) {
+  async updateProfilePhotos(userId: string, newFiles: string[]) {
     const profile = await this.profileModel.findOne({ user: userId });
     if (!profile) return null;
 
-    if (profile?.profilePhotos?.length > 0) {
-      profile.profilePhotos.forEach((file) =>
-        this.removeFile('profile-photos', file),
-      );
+    // Initialize array if empty
+    if (!profile.profilePhotos) profile.profilePhotos = [];
+
+    // Maximum allowed files
+    const MAX_FILES = 6;
+
+    // Merge existing and new files
+    const updatedFiles = [...profile.profilePhotos, ...newFiles];
+
+    // If exceeds max, trim oldest files and remove them from folder
+    if (updatedFiles.length > MAX_FILES) {
+      const excess = updatedFiles.length - MAX_FILES;
+      const filesToRemove = updatedFiles.splice(0, excess); // remove from start (oldest)
+      filesToRemove.forEach((file) => this.removeFile('profile-photos', file));
     }
 
-    profile.profilePhotos = filenames;
+    profile.profilePhotos = updatedFiles;
     return profile.save();
   }
 
