@@ -7,6 +7,7 @@ import {
   Req,
   Body,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { MatchesService } from './matches.service';
 import {
@@ -18,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { ProfileDto } from './dto/profile.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { SignedUrlInterceptor } from 'src/common/interceptors/signed-url.interceptor';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('Matches')
@@ -26,6 +28,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class MatchesController {
   constructor(private readonly matchesService: MatchesService) {}
 
+  @UseInterceptors(SignedUrlInterceptor)
   @Get('preferred')
   @ApiOperation({ summary: 'Get preferred matches based on user preferences' })
   @ApiResponse({
