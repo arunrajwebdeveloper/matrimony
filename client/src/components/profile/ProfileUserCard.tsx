@@ -89,12 +89,12 @@ function ProfileUserCard({
       </div>
       {!isCurrentUser && (
         <div className="flex items-center justify-center gap-3 mt-6">
-          <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-pink-100 text-pink-600 cursor-pointer transition-colors hover:bg-pink-200">
-            <HeartIcon size={18} color="#e60076" />
+          <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-rose-600 text-white cursor-pointer transition-colors hover:bg-rose-500">
+            <HeartIcon size={18} />
             <span>Send Interest</span>
           </button>
-          <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-green-100 text-green-600 cursor-pointer transition-colors hover:bg-green-200">
-            <Mail size={18} color="#00a63e" />
+          <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-emerald-600 text-white cursor-pointer transition-colors hover:bg-emerald-500">
+            <Mail size={18} />
             <span>Send Message</span>
           </button>
           <MoreDropdown />
@@ -102,12 +102,12 @@ function ProfileUserCard({
       )}
       {isCurrentUser && (
         <div className="flex items-center justify-center gap-3 mt-6">
-          <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-blue-100 text-blue-600 cursor-pointer transition-colors hover:bg-blue-200">
-            <Edit size={18} color="#155dfc" />
+          <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-blue-600 text-white cursor-pointer transition-colors hover:bg-blue-500">
+            <Edit size={18} />
             <span>Edit profile</span>
           </button>
           <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-slate-100 text-slate-600 cursor-pointer transition-colors hover:bg-slate-200">
-            <Settings2 size={18} color="#45556c" />
+            <Settings2 size={18} />
             <span>Settings</span>
           </button>
           <MoreDropdown />
