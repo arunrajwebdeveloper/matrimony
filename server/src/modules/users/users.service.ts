@@ -9,8 +9,9 @@ import { Profile, ProfileDocument } from '../profiles/schemas/profile.schema';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(Profile.name) private profileModel: Model<ProfileDocument>,
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @InjectModel(Profile.name)
+    private readonly profileModel: Model<ProfileDocument>,
   ) {}
 
   async create(user: Partial<User>): Promise<UserDocument> {
@@ -82,54 +83,97 @@ export class UsersService {
 
   // FILE UPLOADS
 
+  /** Update single profile picture */
   async updateProfilePicture(userId: string, filename: string) {
-    const profile = await this.profileModel.findById(userId);
+    const profile = await this.profileModel.findOne({ user: userId });
     if (!profile) return null;
 
-    if (profile.profilePicture) this.removeFile(profile.profilePicture);
+    if (profile.profilePicture) {
+      this.removeFile('profile-pictures', profile.profilePicture);
+    }
+
     profile.profilePicture = filename;
     return profile.save();
   }
 
+  /** Update multiple profile images */
   async updateProfileImages(userId: string, filenames: string[]) {
-    const profile = await this.profileModel.findById(userId);
+    const profile = await this.profileModel.findOne({ user: userId });
     if (!profile) return null;
 
     if (profile?.profilePhotos?.length > 0) {
-      profile.profilePhotos.forEach((f) => this.removeFile(f));
+      profile.profilePhotos.forEach((f) =>
+        this.removeFile('profile-images', f),
+      );
     }
 
     profile.profilePhotos = filenames;
     return profile.save();
   }
 
+  /** Update multiple cover images */
+  // async updateCoverImages(userId: string, filenames: string[]) {
+  //   const profile = await this.profileModel.findOne({ user: userId });
+  //   if (!profile) return null;
+
+  //   if (profile?.coverPhotos?.length > 0) {
+  //     profile.coverPhotos.forEach((f) =>
+  //       this.removeFile('cover-images', f),
+  //     );
+  //   }
+
+  //   profile.coverPhotos = filenames;
+  //   return profile.save();
+  // }
+
+  /** Delete a single profile image */
   async deleteProfileImage(userId: string, filename: string) {
-    const profile = await this.profileModel.findById(userId);
+    const profile = await this.profileModel.findOne({ user: userId });
     if (!profile) return null;
 
     profile.profilePhotos = profile.profilePhotos.filter(
       (img) => img !== filename,
     );
-    this.removeFile(filename);
+    this.removeFile('profile-images', filename);
 
     return profile.save();
   }
 
+  /** Delete entire user and their files */
   async deleteUser(userId: string) {
     const user = await this.userModel.findById(userId);
     if (!user) return null;
-    const profile = await this.profileModel.findById(userId);
 
-    if (profile?.profilePicture) this.removeFile(profile?.profilePicture);
-    if (profile?.profilePhotos)
-      profile?.profilePhotos.forEach((f) => this.removeFile(f));
+    const profile = await this.profileModel.findOne({ user: userId });
+
+    if (profile?.profilePicture) {
+      this.removeFile('profile-pictures', profile.profilePicture);
+    }
+
+    if (profile?.profilePhotos?.length) {
+      profile.profilePhotos.forEach((f) =>
+        this.removeFile('profile-images', f),
+      );
+    }
+
+    // if (profile?.coverPhotos?.length) {
+    //   profile.coverPhotos.forEach((f) =>
+    //     this.removeFile('cover-images', f),
+    //   );
+    // }
 
     await this.userModel.findByIdAndDelete(userId);
     return { success: true };
   }
 
-  private removeFile(filename: string) {
-    const filePath = join(__dirname, '..', '..', 'uploads', filename);
-    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+  /** Remove file from a specific category */
+  private removeFile(
+    category: 'profile-pictures' | 'profile-images' | 'cover-images',
+    filename: string,
+  ) {
+    const filePath = join(__dirname, '..', '..', 'uploads', category, filename);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
   }
 }

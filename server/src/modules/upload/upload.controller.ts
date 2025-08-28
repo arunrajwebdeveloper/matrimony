@@ -26,33 +26,23 @@ export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
   @Post('profile-picture')
-  @UseInterceptors(FileInterceptor('file', multerConfig('profile-picture')))
-  async uploadProfilePicture(
-    @Req() req: any,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.uploadService.generateSignedUrl(
-      req.user._id,
-      file.filename,
-      'profile-picture',
-    );
+  @UseInterceptors(FileInterceptor('file', multerConfig('profile-pictures')))
+  async uploadProfilePicture(@UploadedFile() file: Express.Multer.File) {
+    return {
+      success: true,
+      filename: file.filename,
+      path: `uploads/profile-pictures/${file.filename}`,
+    };
   }
 
-  @Post('cover-images')
-  @UseInterceptors(FilesInterceptor('files', 3, multerConfig('cover-images')))
-  async uploadCoverImages(
-    @Req() req: any,
-    @UploadedFiles() files: Express.Multer.File[],
-  ) {
-    return Promise.all(
-      files.map((file) =>
-        this.uploadService.generateSignedUrl(
-          req.user._id,
-          file.filename,
-          'cover-images',
-        ),
-      ),
-    );
+  @Post('cover-image')
+  @UseInterceptors(FileInterceptor('file', multerConfig('cover-images')))
+  async uploadCoverImages(@UploadedFiles() file: Express.Multer.File) {
+    return {
+      success: true,
+      filename: file.filename,
+      path: `uploads/cover-images/${file.filename}`,
+    };
   }
 
   @Post('profile-images')
@@ -61,15 +51,13 @@ export class UploadController {
     @Req() req: any,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
-    return Promise.all(
-      files.map((file) =>
-        this.uploadService.generateSignedUrl(
-          req.user._id,
-          file.filename,
-          'profile-images',
-        ),
-      ),
-    );
+    return {
+      success: true,
+      files: files.map((file) => ({
+        filename: file.filename,
+        path: `uploads/profile-images/${file.filename}`,
+      })),
+    };
   }
 
   @Get('signed/:folder/:filename')

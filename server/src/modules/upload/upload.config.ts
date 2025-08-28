@@ -3,7 +3,7 @@ import { extname, join } from 'path';
 import * as fs from 'fs';
 
 export const multerConfig = (
-  folder: 'profile-picture' | 'profile-images' | 'cover-images',
+  folder: 'profile-pictures' | 'profile-images' | 'cover-images',
 ) => ({
   storage: diskStorage({
     destination: (req, file, cb) => {

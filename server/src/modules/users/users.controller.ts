@@ -4,6 +4,8 @@ import {
   UseGuards,
   Request,
   HttpStatus,
+  Patch,
+  Body,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -14,12 +16,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+@UseGuards(JwtAuthGuard)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get('me')
   @ApiBearerAuth()
   @ApiOperation({
@@ -40,5 +42,34 @@ export class UsersController {
       return { message: 'User not found.' }; // Should not happen if guard passed
     }
     return user;
+  }
+
+  @Patch('profile-picture')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update user profile picture',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Profile picture updated successfully.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  async updateProfilePicture(
+    @Request() req: any,
+    @Body('filename') filename: string,
+  ) {
+    if (!filename) return { message: 'File not found.' };
+
+    const user = await this.usersService.updateProfilePicture(
+      req.user._id,
+      filename,
+    );
+    if (!user) {
+      return { message: 'User not found.' };
+    }
+    return { message: 'Profile picture updated successfully' };
   }
 }

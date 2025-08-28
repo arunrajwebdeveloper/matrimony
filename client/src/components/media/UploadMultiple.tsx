@@ -6,6 +6,8 @@ import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import ImageCropper from "./ImageCropper";
 import { Crop, ImagePlus, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
+import { API_ENDPOINTS } from "@/utils/constants";
+import api from "@/lib/api";
 
 type ImageItem = {
   id: string;
@@ -112,12 +114,13 @@ export default function UploadMultiplePage({
       }
     });
 
-    await fetch(`${API_BASE}/upload/multiple`, {
-      method: "POST",
-      body: fd,
-    });
+    // const res = await api.post(API_ENDPOINTS.UPLOAD.PROFILE_IMAGES, fd, {
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // });
 
-    alert("Uploaded!");
+    // console.log("response :>> ", res.data);
   };
 
   const MAX_SLOTS = 6;

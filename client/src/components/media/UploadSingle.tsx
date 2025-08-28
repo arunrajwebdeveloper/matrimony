@@ -42,6 +42,7 @@ export default function UploadSinglePage({
 
   const onFileChange = (file?: File) => {
     if (!file) return;
+
     const url = fileToObjectURL(file);
     setImage({
       id: Date.now().toString(),
@@ -78,24 +79,44 @@ export default function UploadSinglePage({
     return processed;
   };
 
-  const onSubmit = async () => {
-    if (!image || image.source) {
-      alert("Source image already exists on backend, no need to upload.");
-      return;
-    }
-    const file = image.processedFile ?? (await buildAndPreview());
-    if (!file) return;
+  async function uploadFile(
+    file: File,
+    type: "profile-pictures" | "cover-images"
+  ) {
+    const formData = new FormData();
+    formData.append("file", file);
 
-    const fd = new FormData();
-    fd.append("file", file);
-
-    const res = await api.post(API_ENDPOINTS.UPLOAD.PROFILE_PICTURE, fd, {
+    const res = await api.post(API_ENDPOINTS.UPLOAD.SINGLE, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
 
-    console.log("response :>> ", res.data);
+    return res.data;
+  }
+
+  const onSubmit = async () => {
+    try {
+      if (!image || image.source) {
+        alert("Source image already exists on backend, no need to upload.");
+        return;
+      }
+      const file = image.processedFile ?? (await buildAndPreview());
+      if (!file) {
+        alert("No valid file to upload.");
+        return;
+      }
+
+      const { filename } = await uploadFile(file, "profile-pictures");
+      const res = await api.patch(API_ENDPOINTS.PROFILE_PICTURE_UPLOAD, {
+        filename,
+      });
+
+      console.log("Profile image updated:", res.data);
+    } catch (err) {
+      console.error("❌ Error uploading profile image:", err);
+      alert("Failed to upload profile image. Please try again.");
+    }
   };
 
   const handleRemoveImage = () => {
