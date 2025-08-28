@@ -80,6 +80,7 @@ export class ProfilesController {
     return this.profilesService.update(req.user._id, updateProfileDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':profileId')
   @ApiOperation({ summary: 'Get a public profile by profileId' })
   @ApiResponse({
@@ -90,8 +91,14 @@ export class ProfilesController {
     status: HttpStatus.NOT_FOUND,
     description: 'Profile not found or not public.',
   })
-  async getProfileByprofileId(@Param('profileId') profileId: string) {
-    const profile = await this.profilesService.findByprofileId(profileId);
+  async getProfileByprofileId(
+    @Request() req: any,
+    @Param('profileId') profileId: string,
+  ) {
+    const profile = await this.profilesService.findUserProfile(
+      profileId.toString(),
+      req.user._id,
+    );
     if (!profile || profile.visibility !== 'public' || profile.deletedAt) {
       throw new NotFoundException('Profile not found or not accessible.');
     }
