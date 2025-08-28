@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { join } from 'path';
-import * as fs from 'fs';
 
 @Injectable()
 export class UploadService {
@@ -14,7 +13,7 @@ export class UploadService {
     );
 
     return {
-      signedUrl: `/upload/file/${folder}/${filename}?token=${token}`,
+      signedUrl: `${process.env.BASE_URL!}/api/upload/file/${folder}/${filename}?token=${token}`,
       expiresIn: 2 * 60 * 60, // 2 hours in seconds
     };
   }

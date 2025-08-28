@@ -19,12 +19,11 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UploadService } from './upload.service';
 import { Response } from 'express';
 import * as fs from 'fs';
-
 @Controller('upload')
-@UseGuards(JwtAuthGuard) // require authentication
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
+  @UseGuards(JwtAuthGuard) // require authentication
   @Post('profile-picture')
   @UseInterceptors(FileInterceptor('file', multerConfig('profile-pictures')))
   async uploadProfilePicture(@UploadedFile() file: Express.Multer.File) {
@@ -35,6 +34,7 @@ export class UploadController {
     };
   }
 
+  @UseGuards(JwtAuthGuard) // require authentication
   @Post('cover-image')
   @UseInterceptors(FileInterceptor('file', multerConfig('cover-images')))
   async uploadCoverImages(@UploadedFiles() file: Express.Multer.File) {
@@ -45,12 +45,10 @@ export class UploadController {
     };
   }
 
+  @UseGuards(JwtAuthGuard) // require authentication
   @Post('profile-images')
   @UseInterceptors(FilesInterceptor('files', 6, multerConfig('profile-images')))
-  async uploadProfileImages(
-    @Req() req: any,
-    @UploadedFiles() files: Express.Multer.File[],
-  ) {
+  async uploadProfileImages(@UploadedFiles() files: Express.Multer.File[]) {
     return {
       success: true,
       files: files.map((file) => ({
@@ -60,6 +58,7 @@ export class UploadController {
     };
   }
 
+  @UseGuards(JwtAuthGuard) // require authentication
   @Get('signed/:folder/:filename')
   async getSignedUrl(
     @Req() req: any,

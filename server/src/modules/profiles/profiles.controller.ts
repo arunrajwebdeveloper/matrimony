@@ -46,7 +46,10 @@ export class ProfilesController {
   })
   async getMyProfile(@Request() req: any) {
     // req.user.profileId is set by JwtStrategy
-    const profile = await this.profilesService.findById(req.user.profile);
+    const profile = await this.profilesService.findUserProfile(
+      req.user.profileId,
+      req.user._id,
+    );
     if (!profile) {
       return { message: 'Profile not found.' }; // This should ideally not happen after successful registration
     }
@@ -71,7 +74,7 @@ export class ProfilesController {
   })
   @ApiBody({ type: UpdateProfileDto })
   async updateMyProfile(
-    @Request() req,
+    @Request() req: any,
     @Body() updateProfileDto: UpdateProfileDto,
   ) {
     return this.profilesService.update(req.user._id, updateProfileDto);
