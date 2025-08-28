@@ -36,26 +36,10 @@ export class ProfilesService {
     return this.profileModel.findOne({ profileId }).exec();
   }
 
-  async findUserProfile(
-    profileId: string | Types.ObjectId,
-    userId: string,
-  ): Promise<any> {
+  async findUserProfile(profileId: string | Types.ObjectId): Promise<any> {
     const profile = await this.profileModel.findOne({ profileId }).exec();
-
     if (!profile) return null;
-
-    if (profile?.profilePicture) {
-      const { signedUrl } = await this.uploadService.generateSignedUrl(
-        userId.toString(),
-        profile.profilePicture,
-        'profile-pictures',
-      );
-
-      return {
-        ...profile.toObject(),
-        profilePicture: signedUrl,
-      };
-    }
+    return profile.toObject();
   }
 
   async update(

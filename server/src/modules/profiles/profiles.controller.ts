@@ -9,6 +9,7 @@ import {
   UseGuards,
   HttpStatus,
   NotFoundException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -22,6 +23,7 @@ import {
   ApiBody,
   ApiQuery,
 } from '@nestjs/swagger';
+import { SignedUrlInterceptor } from 'src/common/interceptors/signed-url.interceptor';
 
 @ApiTags('Profiles')
 @Controller('profiles')
@@ -29,6 +31,7 @@ export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(SignedUrlInterceptor) // Auto generate signed url
   @Get('my-profile')
   @ApiBearerAuth()
   @ApiOperation({ summary: "Get the authenticated user's own profile" })
@@ -47,8 +50,8 @@ export class ProfilesController {
   async getMyProfile(@Request() req: any) {
     // req.user.profileId is set by JwtStrategy
     const profile = await this.profilesService.findUserProfile(
-      req.user.profileId,
-      req.user._id,
+      req.user.profileId?.toString(),
+      // req.user._id,
     );
     if (!profile) {
       return { message: 'Profile not found.' }; // This should ideally not happen after successful registration
@@ -81,6 +84,7 @@ export class ProfilesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(SignedUrlInterceptor)
   @Get(':profileId')
   @ApiOperation({ summary: 'Get a public profile by profileId' })
   @ApiResponse({
@@ -97,7 +101,7 @@ export class ProfilesController {
   ) {
     const profile = await this.profilesService.findUserProfile(
       profileId.toString(),
-      req.user._id,
+      // req.user._id,
     );
     if (!profile || profile.visibility !== 'public' || profile.deletedAt) {
       throw new NotFoundException('Profile not found or not accessible.');
