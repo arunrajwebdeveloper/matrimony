@@ -60,7 +60,7 @@ export default function UploadSinglePage({
         watermark: {
           text: "© Matrimony",
           position: "bottom-right",
-          opacity: 0.5,
+          opacity: 0.3,
         },
       }
     );

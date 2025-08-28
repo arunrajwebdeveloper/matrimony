@@ -65,7 +65,7 @@ export default function UploadMultiplePage({
         watermark: {
           text: "© Matrimony",
           position: "bottom-right",
-          opacity: 0.5,
+          opacity: 0.3,
         },
       }
     );
