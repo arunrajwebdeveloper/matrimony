@@ -7,7 +7,7 @@ import * as fs from 'fs';
 export class UploadService {
   constructor(private readonly jwtService: JwtService) {}
 
-  generateSignedUrl(userId: string, filename: string, folder: string) {
+  async generateSignedUrl(userId: string, filename: string, folder: string) {
     const token = this.jwtService.sign(
       { userId, filename, folder },
       { expiresIn: '2h' }, // valid for 2 hours
@@ -19,7 +19,7 @@ export class UploadService {
     };
   }
 
-  validateSignedUrl(token: string) {
+  async validateSignedUrl(token: string) {
     try {
       return this.jwtService.verify(token);
     } catch (e) {

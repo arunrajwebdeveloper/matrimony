@@ -76,7 +76,7 @@ export class UploadController {
     @Query('token') token: string,
     @Res() res: Response,
   ) {
-    const payload = this.uploadService.validateSignedUrl(token);
+    const payload = await this.uploadService.validateSignedUrl(token);
 
     if (payload.folder !== folder || payload.filename !== filename) {
       throw new UnauthorizedException('Invalid signed URL payload');

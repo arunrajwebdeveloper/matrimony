@@ -1,10 +1,11 @@
 import * as fs from 'fs';
 import { join } from 'path';
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { Profile, ProfileDocument } from '../profiles/schemas/profile.schema';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class UsersService {
@@ -12,6 +13,8 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     @InjectModel(Profile.name)
     private readonly profileModel: Model<ProfileDocument>,
+    @Inject(forwardRef(() => UploadService)) // 👈 needed for circular dep
+    private readonly uploadService: UploadService,
   ) {}
 
   async create(user: Partial<User>): Promise<UserDocument> {
@@ -40,14 +43,32 @@ export class UsersService {
     return this.userModel.findById(id).exec();
   }
 
-  async findByIdWithProfile(
-    id: string | Types.ObjectId,
-  ): Promise<UserDocument | null> {
-    return this.userModel
+  async findByIdWithProfile(id: string | Types.ObjectId): Promise<any> {
+    const user = await this.userModel
       .findById(id)
       .populate('profile', 'profilePicture visibility isPremium')
       .select('-blockedUsers')
       .exec();
+
+    if (!user) return null;
+
+    const profileDoc = user.profile as ProfileDocument;
+
+    if (profileDoc.profilePicture) {
+      const { signedUrl } = await this.uploadService.generateSignedUrl(
+        user._id.toString(),
+        profileDoc.profilePicture,
+        'profile-pictures',
+      );
+
+      return {
+        ...user.toObject(),
+        profile: {
+          ...profileDoc.toObject(),
+          profilePicture: signedUrl,
+        },
+      };
+    }
   }
 
   async softDelete(id: string | Types.ObjectId): Promise<UserDocument | null> {
