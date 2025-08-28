@@ -19,41 +19,48 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UploadService } from './upload.service';
 import { Response } from 'express';
 import * as fs from 'fs';
+import { FOLDER_TYPES } from 'src/common/constants/folder.type';
 @Controller('upload')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
   @UseGuards(JwtAuthGuard) // require authentication
   @Post('profile-picture')
-  @UseInterceptors(FileInterceptor('file', multerConfig('profile-pictures')))
+  @UseInterceptors(
+    FileInterceptor('file', multerConfig(FOLDER_TYPES.PROFILE_PICTURES)),
+  )
   async uploadProfilePicture(@UploadedFile() file: Express.Multer.File) {
     return {
       success: true,
       filename: file.filename,
-      path: `uploads/profile-pictures/${file.filename}`,
+      path: `uploads/${FOLDER_TYPES.PROFILE_PICTURES}/${file.filename}`,
     };
   }
 
   @UseGuards(JwtAuthGuard) // require authentication
   @Post('cover-image')
-  @UseInterceptors(FileInterceptor('file', multerConfig('cover-images')))
+  @UseInterceptors(
+    FileInterceptor('file', multerConfig(FOLDER_TYPES.COVER_IMAGES)),
+  )
   async uploadCoverImages(@UploadedFiles() file: Express.Multer.File) {
     return {
       success: true,
       filename: file.filename,
-      path: `uploads/cover-images/${file.filename}`,
+      path: `uploads/${FOLDER_TYPES.COVER_IMAGES}/${file.filename}`,
     };
   }
 
   @UseGuards(JwtAuthGuard) // require authentication
   @Post('profile-photos')
-  @UseInterceptors(FilesInterceptor('files', 6, multerConfig('profile-photos')))
+  @UseInterceptors(
+    FilesInterceptor('files', 6, multerConfig(FOLDER_TYPES.PROFILE_PHOTOS)),
+  )
   async uploadProfileImages(@UploadedFiles() files: Express.Multer.File[]) {
     return {
       success: true,
       files: files.map((file) => ({
         filename: file.filename,
-        path: `uploads/profile-photos/${file.filename}`,
+        path: `uploads/${FOLDER_TYPES.PROFILE_PHOTOS}/${file.filename}`,
       })),
     };
   }

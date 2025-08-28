@@ -7,6 +7,7 @@ import {
 import { Observable, from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { UploadService } from 'src/modules/upload/upload.service';
+import { FOLDER_TYPES } from '../constants/folder.type';
 
 @Injectable()
 export class SignedUrlInterceptor implements NestInterceptor {
@@ -41,7 +42,7 @@ export class SignedUrlInterceptor implements NestInterceptor {
       entity.profile.profilePicture = await this.sign(
         entity.profile.profilePicture,
         userId,
-        'profile-pictures',
+        FOLDER_TYPES.PROFILE_PICTURES,
       );
     }
 
@@ -50,7 +51,7 @@ export class SignedUrlInterceptor implements NestInterceptor {
       entity.profilePicture = await this.sign(
         entity.profilePicture,
         userId,
-        'profile-pictures',
+        FOLDER_TYPES.PROFILE_PICTURES,
       );
     }
 
@@ -59,7 +60,7 @@ export class SignedUrlInterceptor implements NestInterceptor {
       entity.coverImage = await this.sign(
         entity.coverImage,
         userId,
-        'cover-images',
+        FOLDER_TYPES.COVER_IMAGES,
       );
     }
 
@@ -67,7 +68,7 @@ export class SignedUrlInterceptor implements NestInterceptor {
     if (entity?.profilePhotos && Array.isArray(entity.profilePhotos)) {
       entity.profilePhotos = await Promise.all(
         entity.profilePhotos.map((img: string) =>
-          this.sign(img, userId, 'profile-photos'),
+          this.sign(img, userId, FOLDER_TYPES.PROFILE_PHOTOS),
         ),
       );
     }
@@ -77,7 +78,7 @@ export class SignedUrlInterceptor implements NestInterceptor {
       entity.actorId.profile.profilePicture = await this.sign(
         entity.actorId.profile.profilePicture,
         userId,
-        'profile-pictures',
+        FOLDER_TYPES.PROFILE_PICTURES,
       );
     }
 

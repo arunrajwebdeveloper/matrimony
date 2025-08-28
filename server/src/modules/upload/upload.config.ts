@@ -1,10 +1,9 @@
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import * as fs from 'fs';
+import { FolderType } from 'src/common/constants/folder.type';
 
-export const multerConfig = (
-  folder: 'profile-pictures' | 'profile-photos' | 'cover-images',
-) => ({
+export const multerConfig = (folder: FolderType) => ({
   storage: diskStorage({
     destination: (req, file, cb) => {
       const uploadPath = join(process.cwd(), 'uploads', folder);
