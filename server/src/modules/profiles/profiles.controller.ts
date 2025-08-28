@@ -51,7 +51,6 @@ export class ProfilesController {
     // req.user.profileId is set by JwtStrategy
     const profile = await this.profilesService.findUserProfile(
       req.user.profileId?.toString(),
-      // req.user._id,
     );
     if (!profile) {
       return { message: 'Profile not found.' }; // This should ideally not happen after successful registration

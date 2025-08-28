@@ -175,14 +175,17 @@ export class UsersService {
     return { success: true };
   }
 
-  /** Remove file from a specific category */
   private removeFile(
-    category: 'profile-pictures' | 'profile-images' | 'cover-images',
+    folder: 'profile-pictures' | 'profile-images' | 'cover-images',
     filename: string,
   ) {
-    const filePath = join(__dirname, '..', '..', 'uploads', category, filename);
+    // Use project root as base
+    const filePath = join(process.cwd(), 'uploads', folder, filename);
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
+      console.log('File deleted:', filePath);
+    } else {
+      console.log('File not found:', filePath);
     }
   }
 }
