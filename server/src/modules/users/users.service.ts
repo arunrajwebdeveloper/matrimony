@@ -106,6 +106,19 @@ export class UsersService {
     return profile.save();
   }
 
+  /** Update single profile cover */
+  async updateProfileCover(userId: string, filename: string) {
+    const profile = await this.profileModel.findOne({ user: userId });
+    if (!profile) return null;
+
+    if (profile.coverImage) {
+      this.removeFile(FOLDER_TYPES.COVER_IMAGES, profile.coverImage);
+    }
+
+    profile.coverImage = filename;
+    return profile.save();
+  }
+
   /** Update multiple profile photos */
 
   async updateProfilePhotos(userId: string, newFiles: string[]) {

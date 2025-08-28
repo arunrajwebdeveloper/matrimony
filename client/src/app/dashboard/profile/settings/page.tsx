@@ -12,6 +12,7 @@ import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import UploadSinglePage from "@/components/media/UploadSingle";
 import UploadMultiplePage from "@/components/media/UploadMultiple";
+import CoverImageUploader from "@/components/media/CoverImageUploader";
 
 // --- DTO Interfaces (Copied from user's DTOs for a self-contained component) ---
 interface PartnerPreferencesDto {
@@ -76,6 +77,7 @@ interface UpdateProfileDto {
   partnerPreferences?: PartnerPreferencesDto;
   profilePhotos?: string[];
   profilePicture?: string;
+  coverImage?: string;
   visibility?: string;
   star?: string;
   rasi?: string;
@@ -118,8 +120,9 @@ const sampleProfileData: UpdateProfileDto = {
   drinkingHabit: "No",
   hobbies: ["traveling", "reading", "hiking"],
   interests: ["movies", "music"],
-  profilePhotos: ["url_to_photo1.jpg"],
-  profilePicture: "url_to_main_profile_picture.jpg",
+  profilePhotos: [""],
+  profilePicture: "",
+  coverImage: "",
   visibility: "public",
   star: "Karthika",
   rasi: "Vrishabha",
@@ -386,6 +389,20 @@ const Page: React.FC = () => {
                         </p>
                         <UploadSinglePage
                           sourceImage={profileData?.profilePicture}
+                        />
+                      </div>
+                      <div>
+                        <h2 className="font-semibold text-black text-md mb-4">
+                          Upload cover photo
+                        </h2>
+                        <p className="font-normal text-gray-500 text-sm mb-0">
+                          This image will be used as your main cover picture.
+                        </p>
+                        <p className="font-normal text-gray-500 text-sm mb-5">
+                          Use Atleast 1000x800 pixel jpg, jpeg or png images.
+                        </p>
+                        <CoverImageUploader
+                          sourceImage={profileData?.coverImage}
                         />
                       </div>
                       <div>

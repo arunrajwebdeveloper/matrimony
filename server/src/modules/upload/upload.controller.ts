@@ -42,7 +42,7 @@ export class UploadController {
   @UseInterceptors(
     FileInterceptor('file', multerConfig(FOLDER_TYPES.COVER_IMAGES)),
   )
-  async uploadCoverImages(@UploadedFiles() file: Express.Multer.File) {
+  async uploadCoverImages(@UploadedFile() file: Express.Multer.File) {
     return {
       success: true,
       filename: file.filename,

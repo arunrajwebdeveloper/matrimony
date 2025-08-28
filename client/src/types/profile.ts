@@ -46,6 +46,7 @@ export interface UserProfile {
   children?: number;
   profilePhotos?: string[];
   profilePicture?: string | null;
+  coverImage?: string | null;
   visibility?: "public" | "private";
   isPremium?: boolean;
   verification?: {

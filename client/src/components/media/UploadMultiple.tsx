@@ -59,7 +59,7 @@ export default function UploadMultiplePage({
     const processed = await processImagePipeline(
       activeImage.originalUrl!,
       cropPixels,
-      `profile-${Date.now().toString()}.jpg`,
+      `image-${Date.now().toString()}.jpg`,
       {
         compress: { maxSizeMB: 0.8, maxWidthOrHeight: 800 },
         watermark: {

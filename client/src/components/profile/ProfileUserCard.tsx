@@ -35,7 +35,8 @@ function ProfileUserCard({
       <div className="w-full h-[240px] overflow-hidden relative group bg-slate-500 rounded-2xl">
         <img
           className="w-full h-[240px] object-cover rounded-2xl"
-          src={cover}
+          // src={cover}
+          src={profileData?.coverImage ?? cover ?? ""}
           alt=""
         />
         {isCurrentUser && (

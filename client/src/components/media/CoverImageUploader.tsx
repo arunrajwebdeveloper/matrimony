@@ -16,7 +16,7 @@ type ImageItem = {
   source?: boolean; // flag for backend images
 };
 
-export default function UploadSinglePage({
+export default function CoverImageUploader({
   sourceImage = null,
 }: {
   sourceImage?: string | null;
@@ -75,14 +75,11 @@ export default function UploadSinglePage({
     return processed;
   };
 
-  async function uploadFile(
-    file: File,
-    type: "profile-pictures" | "cover-images"
-  ) {
+  async function uploadFile(file: File, type: "cover-images") {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await api.post(API_ENDPOINTS.UPLOAD.SINGLE, formData, {
+    const res = await api.post(API_ENDPOINTS.UPLOAD.COVER, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -103,15 +100,15 @@ export default function UploadSinglePage({
         return;
       }
 
-      const { filename } = await uploadFile(file, "profile-pictures");
-      const res = await api.patch(API_ENDPOINTS.PROFILE_PICTURE_UPLOAD, {
+      const { filename } = await uploadFile(file, "cover-images");
+      const res = await api.patch(API_ENDPOINTS.PROFILE_COVER_UPLOAD, {
         filename,
       });
 
-      console.log("Profile image updated:", res.data);
+      console.log("Profile cover updated:", res.data);
     } catch (err) {
-      console.error("❌ Error uploading profile image:", err);
-      alert("Failed to upload profile image. Please try again.");
+      console.error("❌ Error uploading profile cover:", err);
+      alert("Failed to upload profile cover. Please try again.");
     }
   };
 
@@ -137,11 +134,11 @@ export default function UploadSinglePage({
     <main className="space-y-4">
       <div className="space-y-2">
         {image?.processedUrl ? (
-          <div className="relative w-50 h-50 overflow-hidden rounded group">
+          <div className="relative aspect-[16/9] h-50 overflow-hidden rounded group">
             <img
               src={image.processedUrl}
               alt="preview"
-              className="w-50 h-50 object-cover rounded"
+              className="aspect-[16/9] h-50 object-cover rounded"
             />
             {/* Remove button */}
             <button
@@ -165,7 +162,7 @@ export default function UploadSinglePage({
             )}
           </div>
         ) : (
-          <label className="w-50 h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
+          <label className="aspect-[16/9] h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
             <input
               type="file"
               accept="image/*"
@@ -197,6 +194,7 @@ export default function UploadSinglePage({
           onCropComplete={setCropPixels}
           onComplete={buildAndPreview}
           onCancel={handleCancelCrop}
+          aspect={16 / 9}
         />
       )}
     </main>

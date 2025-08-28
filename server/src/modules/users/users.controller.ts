@@ -75,6 +75,35 @@ export class UsersController {
     return { message: 'Profile picture updated successfully' };
   }
 
+  @Patch('profile-cover')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update user profile cover',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Profile cover updated successfully.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  async updateProfileCover(
+    @Request() req: any,
+    @Body('filename') filename: string,
+  ) {
+    if (!filename) return { message: 'File not found.' };
+
+    const user = await this.usersService.updateProfileCover(
+      req.user._id,
+      filename,
+    );
+    if (!user) {
+      return { message: 'User not found.' };
+    }
+    return { message: 'Profile cover updated successfully' };
+  }
+
   @Patch('profile-photos')
   @ApiBearerAuth()
   @ApiOperation({

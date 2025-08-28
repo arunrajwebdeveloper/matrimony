@@ -1,5 +1,6 @@
 type UserProfileType = {
   profilePicture: string | null;
+  coverImage: string | null;
   profilePhotos: string[];
   isPremium: boolean;
   visibility: string;
