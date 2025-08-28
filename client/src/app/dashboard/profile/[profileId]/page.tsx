@@ -146,7 +146,7 @@ const ProfilePage: React.FC = () => {
                       </span>
                     </label>
                     <p className="mt-1 text-sm font-semibold text-gray-800 ">
-                      {user?.email}
+                      {profileData?.email}
                     </p>
                   </div>
                   <div className="flex flex-col">
@@ -158,7 +158,7 @@ const ProfilePage: React.FC = () => {
                       </span>
                     </label>
                     <p className="mt-1 text-sm font-semibold text-gray-800 flex gap-1 items-center">
-                      {user?.phoneNumber}
+                      {profileData?.phoneNumber}
                     </p>
                   </div>
                 </div>
