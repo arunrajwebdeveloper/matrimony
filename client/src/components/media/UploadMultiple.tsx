@@ -1,12 +1,10 @@
-// app/upload-multiple/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
-import ImageCropper from "./ImageCropper";
-import { Crop, ImagePlus, Plus, Trash2 } from "lucide-react";
+import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
-import { API_ENDPOINTS } from "@/utils/constants";
+import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 import api from "@/lib/api";
 
 type ImageItem = {
@@ -17,8 +15,6 @@ type ImageItem = {
   processedUrl?: string;
   source?: boolean; // flag for backend images
 };
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:5050";
 
 export default function UploadMultiplePage({
   sourceImages = [],
@@ -121,8 +117,6 @@ export default function UploadMultiplePage({
 
     return res.data;
   }
-
-  console.log("images :>> ", images);
 
   const onSubmit = async () => {
     try {

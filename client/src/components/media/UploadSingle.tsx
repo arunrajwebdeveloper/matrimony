@@ -1,13 +1,11 @@
-// app/upload-single/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
-import ImageCropper from "./ImageCropper";
-import { Crop, ImagePlus, Plus, Trash2 } from "lucide-react";
+import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
 import api from "@/lib/api";
-import { API_ENDPOINTS } from "@/utils/constants";
+import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 
 type ImageItem = {
   id: string;
@@ -17,8 +15,6 @@ type ImageItem = {
   processedUrl?: string;
   source?: boolean; // flag for backend images
 };
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:5050";
 
 export default function UploadSinglePage({
   sourceImage = null,

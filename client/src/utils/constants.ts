@@ -64,6 +64,13 @@ export const ROUTES = {
   },
 } as const;
 
+export const FOLDER_TYPES = {
+  PROFILE_PICTURES: "profile-pictures",
+  PROFILE_PHOTOS: "profile-photos",
+  COVER_IMAGES: "cover-images",
+} as const;
+
+export type FolderType = (typeof FOLDER_TYPES)[keyof typeof FOLDER_TYPES];
 export type ApiEndpoint = (typeof API_ENDPOINTS)[keyof typeof API_ENDPOINTS];
 export type TokenKey = (typeof TOKEN_KEYS)[keyof typeof TOKEN_KEYS];
 export type Route = (typeof ROUTES)[keyof typeof ROUTES];
