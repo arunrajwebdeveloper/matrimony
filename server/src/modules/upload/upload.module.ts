@@ -3,13 +3,24 @@ import { UploadController } from './upload.controller';
 import { UploadService } from './upload.service';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: '3432423rf5r3c3534534534c5345c345345c35345c435',
-      signOptions: { expiresIn: '2h' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('SIGNED_URL_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<string | number>(
+            'UPLOAD_TOKEN_EXPIRES',
+            '2h',
+          ),
+        },
+      }),
     }),
+    ConfigModule,
     forwardRef(() => UsersModule), // 👈 handle circular dep
   ],
   controllers: [UploadController],

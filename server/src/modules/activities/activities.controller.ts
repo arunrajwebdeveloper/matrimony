@@ -7,10 +7,12 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ActivitiesService } from './activities.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ActivityVerb } from './enums/activity-verb.enum';
+import { SignedUrlInterceptor } from '../../common/interceptors/signed-url.interceptor';
 
 interface LogActivityDto {
   verb: ActivityVerb;
@@ -39,13 +41,14 @@ export class ActivitiesController {
     return { success: true, message: 'Activity logged successfully.' };
   }
 
+  @UseInterceptors(SignedUrlInterceptor)
   @Get('recent')
   async getRecentActivities(@Request() req: any) {
     const userId = req.user._id;
-
     return this.activitiesService.getRecentActivitiesForUser(userId);
   }
 
+  @UseInterceptors(SignedUrlInterceptor)
   @Get('all')
   async getActivities(@Request() req: any) {
     const userId = req.user._id;

@@ -23,7 +23,7 @@ import {
   ApiBody,
   ApiQuery,
 } from '@nestjs/swagger';
-import { SignedUrlInterceptor } from 'src/common/interceptors/signed-url.interceptor';
+import { SignedUrlInterceptor } from '../../common/interceptors/signed-url.interceptor';
 
 @ApiTags('Profiles')
 @Controller('profiles')
