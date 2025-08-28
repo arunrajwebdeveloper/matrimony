@@ -64,7 +64,7 @@ export class AuthController {
     @Body() loginUserDto: LoginUserDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { user, accessToken, refreshToken } =
+    const { accessToken, refreshToken } =
       await this.authService.login(loginUserDto);
 
     const refreshTokenExpiresIn = parseInt(
@@ -85,7 +85,7 @@ export class AuthController {
       maxAge: refreshTokenExpiresIn * 1000,
     });
 
-    return { accessToken, user };
+    return { accessToken };
   }
 
   @Post('refresh')

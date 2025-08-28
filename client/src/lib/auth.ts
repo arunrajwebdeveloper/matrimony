@@ -21,19 +21,15 @@ export const authService = {
         credentials
       );
 
-      const { accessToken, user } = response.data;
+      const { accessToken } = response.data;
 
       if (!accessToken) {
         throw new Error("No access token received");
       }
 
-      if (!user) {
-        throw new Error("No user data received");
-      }
-
       Storage.setItem(TOKEN_KEYS.ACCESS_TOKEN, accessToken);
 
-      return { user, accessToken };
+      return { accessToken };
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error("Login error:", {

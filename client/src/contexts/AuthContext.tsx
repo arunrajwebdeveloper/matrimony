@@ -152,7 +152,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     dispatch({ type: AuthActionType.LOGIN_START });
 
     try {
-      const { user } = await authService.login(credentials);
+      await authService.login(credentials);
+      const user = await authService.getMe();
+
+      if (!user) {
+        throw new Error("No user data received");
+      }
+
       dispatch({ type: AuthActionType.LOGIN_SUCCESS, payload: { user } });
       return { success: true };
     } catch (error: any) {

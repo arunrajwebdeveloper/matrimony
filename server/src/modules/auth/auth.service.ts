@@ -159,7 +159,6 @@ export class AuthService {
   }
 
   async login(loginUserDto: LoginUserDto): Promise<{
-    user: UserDocument;
     accessToken: string;
     refreshToken: string;
   }> {
@@ -198,7 +197,7 @@ export class AuthService {
     );
 
     this.logger.log(`User ${user._id} logged in. Tokens generated.`);
-    return { user, accessToken, refreshToken };
+    return { accessToken, refreshToken };
   }
 
   async createRefreshToken(userId: string, expiresIn: number): Promise<string> {
