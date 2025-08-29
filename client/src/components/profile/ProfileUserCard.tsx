@@ -75,15 +75,19 @@ function ProfileUserCard({
               <span>{profileData?.occupation}</span>
             </p>
           )}
-          {profileData?.city && profileData?.state && profileData?.country && (
-            <p className="flex items-center justify-center gap-2 text-sm text-slate-600">
+          {(profileData?.city ||
+            profileData?.state ||
+            profileData?.country) && (
+            <div className="flex items-center justify-center gap-2 text-slate-600">
               <MapPin size={16} />
-              {profileData?.city && <span>{`${profileData?.city}`}</span>}
-              {profileData?.state && <span>{`, ${profileData?.state}`}</span>}
-              {profileData?.country && (
-                <span>{`, ${profileData?.country}`}</span>
-              )}
-            </p>
+              <p className="text-sm text-slate-600">
+                {profileData?.city && <span>{`${profileData?.city}`}</span>}
+                {profileData?.state && <span>{`, ${profileData?.state}`}</span>}
+                {profileData?.country && (
+                  <span>{`, ${profileData?.country}`}</span>
+                )}
+              </p>
+            </div>
           )}
         </div>
       </div>
