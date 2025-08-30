@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
@@ -25,6 +25,8 @@ export default function UploadMultiplePage({
   const [activeImage, setActiveImage] = useState<ImageItem | null>(null);
   const [cropPixels, setCropPixels] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
+
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (sourceImages?.length) {
@@ -119,23 +121,25 @@ export default function UploadMultiplePage({
   }
 
   const onSubmit = async () => {
-    try {
-      if (!images || images.length === 0) {
-        alert("Choose images to upload.");
-        return;
+    startTransition(async () => {
+      try {
+        if (!images || images.length === 0) {
+          alert("Choose images to upload.");
+          return;
+        }
+
+        const { files } = await uploadFiles(images, "profile-photos");
+        const filenames = files?.map((file: any) => file?.filename);
+        const res = await api.patch(API_ENDPOINTS.PROFILE_IMAGES_UPLOAD, {
+          filenames,
+        });
+
+        console.log("Profile images updated:", res.data);
+      } catch (err) {
+        console.error("❌ Error uploading profile images:", err);
+        alert("Failed to upload profile images. Please try again.");
       }
-
-      const { files } = await uploadFiles(images, "profile-photos");
-      const filenames = files?.map((file: any) => file?.filename);
-      const res = await api.patch(API_ENDPOINTS.PROFILE_IMAGES_UPLOAD, {
-        filenames,
-      });
-
-      console.log("Profile images updated:", res.data);
-    } catch (err) {
-      console.error("❌ Error uploading profile images:", err);
-      alert("Failed to upload profile images. Please try again.");
-    }
+    });
   };
 
   const MAX_SLOTS = 6;
@@ -224,9 +228,11 @@ export default function UploadMultiplePage({
       <button
         className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
         onClick={onSubmit}
-        disabled={!images?.some((pic) => !pic?.source && pic?.processedUrl)}
+        disabled={
+          !images?.some((pic) => !pic?.source && pic?.processedUrl) || isPending
+        }
       >
-        Upload
+        {isPending ? "Uploading..." : "Upload"}
       </button>
 
       {/* Modal for Crop */}

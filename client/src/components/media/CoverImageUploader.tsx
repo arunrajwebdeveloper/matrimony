@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
@@ -24,6 +24,8 @@ export default function CoverImageUploader({
   const [image, setImage] = useState<ImageItem | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [cropPixels, setCropPixels] = useState<any>(null);
+
+  const [isPending, startTransition] = useTransition();
 
   // load source image if exists
   useEffect(() => {
@@ -89,27 +91,29 @@ export default function CoverImageUploader({
   }
 
   const onSubmit = async () => {
-    try {
-      if (!image || image.source) {
-        alert("Source image already exists on backend, no need to upload.");
-        return;
-      }
-      const file = image.processedFile ?? (await buildAndPreview());
-      if (!file) {
-        alert("No valid file to upload.");
-        return;
-      }
+    startTransition(async () => {
+      try {
+        if (!image || image.source) {
+          alert("Source image already exists on backend, no need to upload.");
+          return;
+        }
+        const file = image.processedFile ?? (await buildAndPreview());
+        if (!file) {
+          alert("No valid file to upload.");
+          return;
+        }
 
-      const { filename } = await uploadFile(file, "cover-images");
-      const res = await api.patch(API_ENDPOINTS.PROFILE_COVER_UPLOAD, {
-        filename,
-      });
+        const { filename } = await uploadFile(file, "cover-images");
+        const res = await api.patch(API_ENDPOINTS.PROFILE_COVER_UPLOAD, {
+          filename,
+        });
 
-      console.log("Profile cover updated:", res.data);
-    } catch (err) {
-      console.error("❌ Error uploading profile cover:", err);
-      alert("Failed to upload profile cover. Please try again.");
-    }
+        console.log("Profile cover updated:", res.data);
+      } catch (err) {
+        console.error("❌ Error uploading profile cover:", err);
+        alert("Failed to upload profile cover. Please try again.");
+      }
+    });
   };
 
   const handleRemoveImage = () => {
@@ -182,9 +186,9 @@ export default function CoverImageUploader({
       <button
         className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
         onClick={onSubmit}
-        disabled={!image || !image.processedUrl || image.source} // only enable if processed & not source
+        disabled={!image || !image.processedUrl || image.source || isPending} // only enable if processed & not source
       >
-        Upload
+        {isPending ? "Uploading..." : "Upload"}
       </button>
 
       {/* Modal for cropping */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
@@ -24,6 +24,8 @@ export default function UploadSinglePage({
   const [image, setImage] = useState<ImageItem | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [cropPixels, setCropPixels] = useState<any>(null);
+
+  const [isPending, startTransition] = useTransition();
 
   // load source image if exists
   useEffect(() => {
@@ -91,28 +93,34 @@ export default function UploadSinglePage({
     return res.data;
   }
 
-  const onSubmit = async () => {
-    try {
-      if (!image || image.source) {
-        alert("Source image already exists on backend, no need to upload.");
-        return;
-      }
-      const file = image.processedFile ?? (await buildAndPreview());
-      if (!file) {
-        alert("No valid file to upload.");
-        return;
-      }
+  const onSubmit = () => {
+    startTransition(async () => {
+      try {
+        if (!image || image.source) {
+          alert("Source image already exists on backend, no need to upload.");
+          return;
+        }
 
-      const { filename } = await uploadFile(file, "profile-pictures");
-      const res = await api.patch(API_ENDPOINTS.PROFILE_PICTURE_UPLOAD, {
-        filename,
-      });
+        const file = image.processedFile ?? (await buildAndPreview());
+        if (!file) {
+          alert("No valid file to upload.");
+          return;
+        }
 
-      console.log("Profile image updated:", res.data);
-    } catch (err) {
-      console.error("❌ Error uploading profile image:", err);
-      alert("Failed to upload profile image. Please try again.");
-    }
+        // Step 1: upload
+        const { filename } = await uploadFile(file, "profile-pictures");
+
+        // Step 2: update profile
+        const res = await api.patch(API_ENDPOINTS.PROFILE_PICTURE_UPLOAD, {
+          filename,
+        });
+
+        console.log("✅ Profile image updated:", res.data);
+      } catch (err) {
+        console.error("❌ Error uploading profile image:", err);
+        alert("Failed to upload profile image. Please try again.");
+      }
+    });
   };
 
   const handleRemoveImage = () => {
@@ -185,9 +193,9 @@ export default function UploadSinglePage({
       <button
         className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
         onClick={onSubmit}
-        disabled={!image || !image.processedUrl || image.source} // only enable if processed & not source
+        disabled={!image || !image.processedUrl || image.source || isPending} // only enable if processed & not source
       >
-        Upload
+        {isPending ? "Uploading..." : "Upload"}
       </button>
 
       {/* Modal for cropping */}
