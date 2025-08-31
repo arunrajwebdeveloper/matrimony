@@ -38,7 +38,7 @@ export class AuthService {
     let profileId = '';
 
     while (!isUnique) {
-      const randomNum = Math.floor(100000 + Math.random() * 900000);
+      const randomNum = Math.floor(1000000000 + Math.random() * 9000000000);
       profileId = `MW-${randomNum}`;
 
       const existing = await this.usersService.findByProfileId(profileId);
