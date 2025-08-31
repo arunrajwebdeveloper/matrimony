@@ -177,7 +177,7 @@ const DashboardPage: React.FC = () => {
               />
             </ProfileCard>
 
-            <ProfileCard title=" Recent Activity" link="/" className="mb-5">
+            <ProfileCard title=" Recent Activities" link="/" className="mb-5">
               <ActivityList />
             </ProfileCard>
           </div>
