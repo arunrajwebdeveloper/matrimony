@@ -79,7 +79,6 @@ export interface UserCardType {
   firstName: string;
   lastName: string;
   profileId: string;
-  height: string;
   dateOfBirth: string;
   occupation: string;
   city: string;

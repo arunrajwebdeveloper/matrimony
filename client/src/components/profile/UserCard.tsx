@@ -11,7 +11,6 @@ function UserCard({
   firstName,
   lastName,
   profileId,
-  height,
   dateOfBirth,
   occupation,
   city,
@@ -59,7 +58,7 @@ function UserCard({
             </span>
           </div>
         </div>
-        <p className="text-xs text-gray-600">{`${height} cm, ${dateOfBirthFormat(
+        <p className="text-xs text-gray-600">{`${dateOfBirthFormat(
           dateOfBirth,
           "DD MMM YYYY"
         )}, ${motherTongue}`}</p>

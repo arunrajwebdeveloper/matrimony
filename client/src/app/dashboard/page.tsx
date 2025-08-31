@@ -16,7 +16,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import MatchList from "@/components/dashboard/MatchList";
-import { UserCardType, UserProfile } from "@/types";
+import { UserCardType } from "@/types";
 import api from "@/lib/api";
 import Greeting from "@/components/dashboard/Greeting";
 import ActivityItem from "@/components/profile/ActivityFeedItem";
