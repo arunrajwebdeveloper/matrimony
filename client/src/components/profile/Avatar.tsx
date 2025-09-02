@@ -66,7 +66,7 @@ function Avatar({
 
   return (
     <div
-      className={`${getBackgroundColor()} ${border} text-white flex items-center justify-center flex-none font-normal`}
+      className={`${getBackgroundColor()} ${border} text-white select-none flex items-center justify-center flex-none font-normal`}
       style={{
         width: size,
         height: size,
