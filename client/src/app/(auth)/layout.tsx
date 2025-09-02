@@ -10,7 +10,7 @@ export default function AuthLayout({
       <div className="h-dvh w-full relative flex">
         <AuthBanner />
       </div>
-      <div className="h-dvh w-[420px] flex-none overflow-y-auto py-10 px-12">
+      <div className="h-dvh w-[450px] flex-none overflow-y-auto py-10 px-16">
         {children}
       </div>
     </div>

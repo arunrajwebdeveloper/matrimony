@@ -49,7 +49,7 @@ const RegisterForm: React.FC = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+      <h2 className="text-2xl font-bold mb-6 text-left">Register</h2>
 
       {error && (
         <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -214,10 +214,13 @@ const RegisterForm: React.FC = () => {
         </button>
       </form>
 
-      <div className="form__row">
-        <span className="inline-text">
-          Already have an account? <Link href="/login">Login</Link>
-        </span>
+      <div className="space-y-1 mt-5">
+        <p className="text-sm text-slate-700">
+          Already have an account?{" "}
+          <Link className="text-blue-600" href="/login">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );
