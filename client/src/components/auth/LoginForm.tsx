@@ -39,7 +39,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+    <div>
       <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
       {error && (
@@ -104,9 +104,26 @@ const LoginForm: React.FC = () => {
           {isLoading ? "Signing in..." : "Sign In"}
         </button>
       </form>
-      <div className="mt-4 text-center">
-        <Link href="/register">Register</Link>
+      <div className="space-y-1 mt-5">
+        <p className="text-sm text-slate-700">
+          Don’t have an account?{" "}
+          <Link className="text-blue-600" href="/register">
+            Register now
+          </Link>
+        </p>
+        <p className="text-sm text-slate-700">
+          Forgot password?{" "}
+          <Link className="text-blue-600" href="/reset-password">
+            Reset password
+          </Link>
+        </p>
       </div>
+
+      {/* <div className="form__row">
+          <span className="inline-text">
+            Remembered your password? <Link href="/login">Login</Link>
+          </span>
+        </div> */}
     </div>
   );
 };

@@ -48,7 +48,7 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+    <div>
       <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
 
       {error && (
@@ -210,12 +210,14 @@ const RegisterForm: React.FC = () => {
           disabled={isLoading}
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? "Signing in..." : "Sign In"}
+          {isLoading ? "Signing in..." : "Sign Up"}
         </button>
       </form>
 
-      <div className="mt-4 text-center">
-        <Link href="/login">Login</Link>
+      <div className="form__row">
+        <span className="inline-text">
+          Already have an account? <Link href="/login">Login</Link>
+        </span>
       </div>
     </div>
   );
