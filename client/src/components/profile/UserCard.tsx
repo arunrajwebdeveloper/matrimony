@@ -16,47 +16,37 @@ function UserCard({
   city,
   state,
   motherTongue,
-  isOnline,
+  isOnline = false,
   profilePicture,
 }: UserCardType) {
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
 
   return (
-    <div className="flex rounded-md shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100">
-      <div className="w-[130px] relative flex-none group">
-        {/* <img
-          className="w-[130px] h-[130px] object-cover"
-          src={profilePicture}
-          alt={profileId}
-        /> */}
+    <div className="flex overflow-hidden">
+      <div className="w-[130px] relative flex-none group rounded-full">
         <Avatar
           src={profilePicture!}
           firstname={`${firstName || ""}`}
           lastname={`${lastName || ""}`}
           size={130}
-          isCircle={false}
-          hasBorder={false}
+          // isCircle={false}
+          // hasBorder={false}
         />
         <Link
           href={`${ROUTES.PROFILE}/${profileId}`}
-          className="absolute inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute rounded-full inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
         >
           <Eye size={16} />
           <span>View</span>
         </Link>
+        <div className="absolute bottom-3.5 right-3.5 z-20">
+          <OnlineStatusDot isOnline={isOnline} size="md" />
+        </div>
       </div>
       <div className="py-3 px-5 flex-auto flex flex-col justify-center">
-        <div className="flex items-center justify-between mb-1">
-          <div className="flex gap-2 items-center">
-            <h3 className="text-md font-medium text-black">{fullName}</h3>
-            <span className="text-xs text-gray-700">{profileId}</span>
-          </div>
-          <div className="flex gap-0.5 items-center">
-            <OnlineStatusDot isOnline={isOnline!} />
-            <span className="font-normal text-xs text-gray-700">
-              {isOnline ? "Online" : "Offline"}
-            </span>
-          </div>
+        <div className="flex gap-2 items-center mb-1">
+          <h3 className="text-md font-medium text-black">{fullName}</h3>
+          <span className="text-xs text-gray-700">{profileId}</span>
         </div>
         <p className="text-xs text-gray-600">{`${dateOfBirthFormat(
           dateOfBirth,
