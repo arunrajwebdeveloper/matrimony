@@ -6,10 +6,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import { RegisterPayloads } from "@/types";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { Eye, EyeOff } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { Calendar, ChevronDown, Eye, EyeOff } from "lucide-react";
 import CircleSpinner from "../ui/CircleSpinner";
+import moment from "moment";
 import { useToast } from "@/contexts/ToastScope";
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
 
 type PasswordField = "password" | "confirmPassword";
 
@@ -21,6 +24,7 @@ const RegisterForm: React.FC = () => {
     formState: { errors },
     watch,
     reset,
+    control,
   } = useForm<RegisterPayloads>({
     defaultValues: {
       email: "arunrajcvkl@gmail.com",
@@ -29,7 +33,7 @@ const RegisterForm: React.FC = () => {
       firstName: "Arun",
       lastName: "Raj",
       gender: "Male",
-      dateOfBirth: "1990-10-10T00:00:00",
+      dateOfBirth: "1990-10-10",
       phoneNumber: "9888776765",
     },
   });
@@ -102,6 +106,13 @@ const RegisterForm: React.FC = () => {
       reset();
       setTimeout(() => router.push(ROUTES.LOGIN), 1000);
     }
+  };
+
+  // Restrict DOB: at least 18 years old
+  const validDOB = (current: moment.Moment) => {
+    const today = moment();
+    const minAgeDate = today.clone().subtract(18, "years");
+    return current.isBefore(minAgeDate); // allow only dates < 18 years ago
   };
 
   return (
@@ -231,21 +242,28 @@ const RegisterForm: React.FC = () => {
           >
             Gender
           </label>
-          <select
-            className={`w-full p-3 border-1 rounded-md focus:outline-none focus:ring-1 ${
-              errors.gender
-                ? "border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-            }`}
-            id="gender"
-            {...register("gender", {
-              required: "Gender is required",
-            })}
-          >
-            <option value="">-- Select --</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
+          <div className="relative">
+            <select
+              className={`w-full p-3 pr-12 appearance-none border-1 rounded-md focus:outline-none focus:ring-1 ${
+                errors.gender
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              }`}
+              id="gender"
+              {...register("gender", {
+                required: "Gender is required",
+              })}
+            >
+              <option value="">-- Select --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            <ChevronDown
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+              size={20}
+              color="gray"
+            />
+          </div>
 
           {errors.gender && (
             <p className=" text-sm text-red-500 font-normal m-0 mt-1">
@@ -261,19 +279,45 @@ const RegisterForm: React.FC = () => {
           >
             Date of Birth
           </label>
-          <input
-            type="date"
-            id="dateOfBirth"
-            {...register("dateOfBirth", {
-              required: "Date Of Birth is required",
-            })}
-            className={`w-full p-3 border-1 rounded-md focus:outline-none focus:ring-1 ${
-              errors.dateOfBirth
-                ? "border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-            }`}
-            placeholder="Enter your DOB"
-          />
+
+          <div className="relative">
+            <Controller
+              name="dateOfBirth"
+              control={control}
+              rules={{ required: "Date of Birth is required" }}
+              render={({ field }) => (
+                <Datetime
+                  {...field}
+                  value={field.value ? moment(field.value) : undefined}
+                  dateFormat="YYYY-MM-DD"
+                  timeFormat={false}
+                  isValidDate={validDOB}
+                  closeOnSelect={true}
+                  onChange={(date) => {
+                    if (moment.isMoment(date)) {
+                      field.onChange(date.toDate().toISOString());
+                    } else {
+                      field.onChange("");
+                    }
+                  }}
+                  inputProps={{
+                    placeholder: "Select your DOB",
+                    readOnly: true,
+                    className: `w-full p-3 pr-12 border rounded-md focus:outline-none focus:ring-1 ${
+                      errors.dateOfBirth
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                    }`,
+                  }}
+                />
+              )}
+            />
+            <Calendar
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+              size={20}
+              color="gray"
+            />
+          </div>
 
           {errors.dateOfBirth && (
             <p className=" text-sm text-red-500 font-normal m-0 mt-1">
