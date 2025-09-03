@@ -9,15 +9,18 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import CircleSpinner from "../ui/CircleSpinner";
+import { useToast } from "@/contexts/ToastScope";
 
 type PasswordField = "password" | "confirmPassword";
 
 const RegisterForm: React.FC = () => {
+  const { showSuccess } = useToast();
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm<RegisterPayloads>({
     defaultValues: {
       email: "arunrajcvkl@gmail.com",
@@ -95,7 +98,9 @@ const RegisterForm: React.FC = () => {
     const result = await createUser(rest);
 
     if (result.success) {
-      router.push(ROUTES.LOGIN);
+      showSuccess("User created successfully!");
+      reset();
+      setTimeout(() => router.push(ROUTES.LOGIN), 1000);
     }
   };
 

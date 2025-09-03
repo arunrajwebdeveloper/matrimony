@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Lexend_Deca } from "next/font/google";
 import "./globals.css";
 import AuthProviderWrapper from "@/components/auth/AuthProvider";
+import { ToastProvider } from "@/contexts/ToastScope";
 
 export const lexendDeca = Lexend_Deca({
   subsets: ["latin"], // Specify the desired subsets
@@ -22,7 +23,9 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <html lang="en">
       <body className={`${lexendDeca.variable} antialiased`}>
-        <AuthProviderWrapper>{children}</AuthProviderWrapper>
+        <AuthProviderWrapper>
+          <ToastProvider>{children}</ToastProvider>
+        </AuthProviderWrapper>
       </body>
     </html>
   );

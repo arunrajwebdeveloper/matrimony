@@ -9,15 +9,18 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import CircleSpinner from "../ui/CircleSpinner";
 import { Eye, EyeOff } from "lucide-react";
+import { useToast } from "@/contexts/ToastScope";
 
 type PasswordField = "password" | "confirmPassword";
 
 const ResetPasswordForm: React.FC = () => {
+  const { showSuccess } = useToast();
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm<ResetPasswordCredentials>({
     defaultValues: {
       password: "12345678",
@@ -59,7 +62,9 @@ const ResetPasswordForm: React.FC = () => {
     const result = await resetPassword({ ...rest, token });
 
     if (result.success) {
-      router.push(ROUTES.LOGIN);
+      showSuccess("Password reset successfully!");
+      reset();
+      setTimeout(() => router.push(ROUTES.LOGIN), 1000);
     }
   };
 

@@ -8,13 +8,17 @@ import { AuthResult, EmailField } from "@/types";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import CircleSpinner from "../ui/CircleSpinner";
+import { useToast } from "@/contexts/ToastScope";
 
 const ForgotPasswordForm: React.FC = () => {
+  const { showSuccess } = useToast();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm<EmailField>({
     defaultValues: {
       email: "arunrajcvkl@gmail.com",
@@ -35,9 +39,8 @@ const ForgotPasswordForm: React.FC = () => {
   const onSubmit = async (payload: any): Promise<void> => {
     const result = await forgotPassword(payload);
     if (result.success) {
-      console.log("EMAIL LINK SEND :>> ");
-      // show modal or toast
-      // router.push(ROUTES.LOGIN);
+      showSuccess("Password reset link sent to your registered email.");
+      reset();
     }
   };
 
