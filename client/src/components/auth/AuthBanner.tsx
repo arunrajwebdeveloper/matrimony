@@ -24,7 +24,7 @@ function AuthBanner() {
 
   return (
     <>
-      <div className="m-auto relative z-20 px-10 max-w-3xl">
+      <div className="relative z-20 px-10 max-w-3xl">
         <h2 className="text-5xl text-white font-semibold mb-4">{url?.quote}</h2>
         <span className="text-lg text-white font-normal">
           Explore our exclusive collection of premium watches.

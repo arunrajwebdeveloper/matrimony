@@ -7,7 +7,7 @@ export default function AuthLayout({
 }>) {
   return (
     <div className="flex h-dvh">
-      <div className="h-dvh w-full relative flex">
+      <div className="h-dvh w-full relative flex items-center justify-center">
         <AuthBanner />
       </div>
       <div className="h-dvh w-[450px] flex-none overflow-y-auto py-10 px-16">
