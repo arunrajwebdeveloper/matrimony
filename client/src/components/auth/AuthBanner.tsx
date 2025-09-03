@@ -9,15 +9,15 @@ function AuthBanner() {
   const url =
     {
       "/login": {
-        quote: "Welcome back. Let’s make every second count.",
+        quote: "Your journey to forever begins here",
         image: "/auth/image-1.jpg",
       },
       "/register": {
-        quote: "Time starts ticking the moment you begin.",
+        quote: " Let's find your happily ever after",
         image: "/auth/image-2.jpg",
       },
       "/reset-password": {
-        quote: "Mistakes fade, but moments return — reset now.",
+        quote: "Let's get you back on track",
         image: "/auth/image-3.jpg",
       },
     }[path] || {};
@@ -26,9 +26,11 @@ function AuthBanner() {
     <>
       <div className="relative z-20 px-10 max-w-3xl">
         <h2 className="text-5xl text-white font-semibold mb-4">{url?.quote}</h2>
-        <span className="text-lg text-white font-normal">
-          Explore our exclusive collection of premium watches.
-        </span>
+        <p className="text-lg text-white font-normal m-0">
+          Join a vibrant community of individuals who are ready to find their
+          soulmate. Every connection you make here brings you one step closer to
+          your forever.
+        </p>
       </div>
 
       <img

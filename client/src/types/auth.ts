@@ -32,6 +32,7 @@ export interface RegisterPayloads extends LoginCredentials {
   gender: string;
   dateOfBirth: string;
   phoneNumber: string;
+  confirmPassword: string;
 }
 
 export interface AuthTokens {

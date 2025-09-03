@@ -8,6 +8,7 @@ import { LoginCredentials } from "@/types";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
+import CircleSpinner from "../ui/CircleSpinner";
 
 const LoginForm: React.FC = () => {
   const {
@@ -36,7 +37,7 @@ const LoginForm: React.FC = () => {
     }
   }, [emailValue, passwordValue]);
 
-  const onSubmit = async (payload: any) => {
+  const onSubmit = async (payload: any): Promise<void> => {
     const result = await login(payload);
 
     if (result.success) {
@@ -46,7 +47,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6 text-left">Login</h2>
+      <h2 className="text-2xl font-bold mb-8 text-left">Login</h2>
       {error && (
         <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
           {error}
@@ -130,16 +131,16 @@ const LoginForm: React.FC = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-blue-500 text-white py-3 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full cursor-pointer bg-blue-500 text-white py-3 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? "Signing in..." : "Sign In"}
+          {isLoading ? <CircleSpinner /> : "Log In"}
         </button>
       </form>
       <div className="space-y-1 mt-5">
         <p className="text-sm text-slate-700">
           Don’t have an account?{" "}
           <Link className="text-blue-600" href="/register">
-            Register now
+            Create an Account
           </Link>
         </p>
         <p className="text-sm text-slate-700">
