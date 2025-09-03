@@ -1,7 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // reactStrictMode: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "5050",
+        pathname: "/api/upload/file/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
