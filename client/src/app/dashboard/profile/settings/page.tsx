@@ -344,7 +344,7 @@ const Page: React.FC = () => {
         <div className="w-[75%] px-2">
           <div className="mt-5">
             <div className="flex gap-2">
-              <div className="w-[25%]">
+              <div className="w-[30%]">
                 <div className="ps-4">
                   <h3 className="font-semibold text-black text-md mb-6">
                     Profile Settings
@@ -369,7 +369,7 @@ const Page: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-[75%]">
+              <div className="w-[70%]">
                 <div className="ps-4">
                   {/* <h1 className="text-xl font-semibold text-gray-800 mb-6">
                     Image Uploads
