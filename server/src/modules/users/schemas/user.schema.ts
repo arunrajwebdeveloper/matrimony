@@ -51,6 +51,13 @@ export class User {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
   blockedUsers: Types.ObjectId[];
+
+  // Fields for password reset
+  @Prop({ type: String, default: null })
+  resetPasswordToken: string | null;
+
+  @Prop({ type: Date, default: null })
+  resetPasswordExpires: Date | null;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

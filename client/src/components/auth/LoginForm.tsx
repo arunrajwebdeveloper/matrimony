@@ -145,17 +145,11 @@ const LoginForm: React.FC = () => {
         </p>
         <p className="text-sm text-slate-700">
           Forgot password?{" "}
-          <Link className="text-blue-600" href="/reset-password">
+          <Link className="text-blue-600" href="/forgot-password">
             Reset password
           </Link>
         </p>
       </div>
-
-      {/* <div className="form__row">
-          <span className="inline-text">
-            Remembered your password? <Link href="/login">Login</Link>
-          </span>
-        </div> */}
     </div>
   );
 };

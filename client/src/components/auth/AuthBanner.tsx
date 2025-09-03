@@ -16,9 +16,13 @@ function AuthBanner() {
         quote: " Let's find your happily ever after",
         image: "/auth/image-2.jpg",
       },
-      "/reset-password": {
+      "/forgot-password": {
         quote: "Let's get you back on track",
         image: "/auth/image-3.jpg",
+      },
+      "/reset-password": {
+        quote: "Let's get you back on track",
+        image: "/auth/image-4.jpg",
       },
     }[path] || {};
 

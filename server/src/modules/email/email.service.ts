@@ -254,4 +254,51 @@ export class EmailService {
     `;
     await this.sendMail(user.email, subject, html);
   }
+
+  @OnEvent('user.forgotPassword')
+  async handleUserForgotPassword({
+    email,
+    resetUrl,
+  }: {
+    email: string;
+    resetUrl: string;
+  }) {
+    const user = await this.userModel.findOne({ email }).exec();
+
+    if (!user) {
+      this.logger.warn(`User not found for send password rest link: ${email}`);
+      return;
+    }
+
+    const subject = 'Reset Your Matrimony Account Password';
+    const html = `
+  <p>Dear ${user.firstName || user.email},</p>
+  <p>We received a request to reset your password for your Matrimony account.</p>
+  <p>Please click the link below to create a new password:</p>
+  <p><a href="${resetUrl}" target="_blank">${resetUrl}</a></p>
+  <p><strong>Note:</strong> This link will expire in 1 hour for security reasons.</p>
+  <p>If you did not request this change, you can safely ignore this email. Your current password will remain unchanged.</p>
+  <p>Best regards,<br/>The Matrimony Team</p>`;
+    await this.sendMail(user.email, subject, html);
+  }
+
+  @OnEvent('user.resetPassword')
+  async handleUserResetPassword({ email }: { email: string }) {
+    const user = await this.userModel.findOne({ email }).exec();
+
+    if (!user) {
+      this.logger.warn(`User not found for send password rest link: ${email}`);
+      return;
+    }
+
+    const subject =
+      'Your Matrimony Account Password Has Been Reset Successfully';
+    const html = `
+  <p>Dear ${user.firstName || user.email},</p>
+  <p>This is to confirm that your password for your Matrimony account has been successfully <strong>reset</strong>.</p>
+  <p>You can now log in using your new password and continue your journey to find a life partner.</p>
+  <p>If you did not perform this action, please contact our support team immediately.</p>
+  <p>Best regards,<br/>The Matrimony Team</p>`;
+    await this.sendMail(user.email, subject, html);
+  }
 }

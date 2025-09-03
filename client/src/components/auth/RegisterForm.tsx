@@ -368,7 +368,7 @@ const RegisterForm: React.FC = () => {
 
         <div className="mb-6">
           <label
-            htmlFor="password"
+            htmlFor="confirmPassword"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
             Confirm Password
@@ -376,7 +376,7 @@ const RegisterForm: React.FC = () => {
           <div className="relative">
             <input
               type={showPassword.confirmPassword ? "text" : "password"}
-              id="password"
+              id="confirmPassword"
               className={`w-full p-3 pr-12 border-1 rounded-md focus:outline-none focus:ring-1 ${
                 errors.confirmPassword
                   ? "border-red-500 focus:ring-red-500"

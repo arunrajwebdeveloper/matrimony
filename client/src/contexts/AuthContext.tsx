@@ -12,6 +12,8 @@ import {
   AuthResult,
   User,
   RegisterPayloads,
+  EmailField,
+  ResetPasswordCredentials,
 } from "@/types";
 import { TOKEN_KEYS } from "@/utils/constants";
 
@@ -67,6 +69,52 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
       };
 
     case AuthActionType.REGISTER_FAILURE:
+      return {
+        ...state,
+        isAuthenticated: false,
+        isLoading: false,
+        error: action.payload,
+      };
+
+    case AuthActionType.REQUEST_PASSWORD_RESET_LINK_START:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+
+    case AuthActionType.REQUEST_PASSWORD_RESET_LINK_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null,
+      };
+
+    case AuthActionType.REQUEST_PASSWORD_RESET_LINK_FAILURE:
+      return {
+        ...state,
+        isAuthenticated: false,
+        isLoading: false,
+        error: action.payload,
+      };
+
+    case AuthActionType.RESET_PASSWORD_START:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+
+    case AuthActionType.RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null,
+      };
+
+    case AuthActionType.RESET_PASSWORD_FAILURE:
       return {
         ...state,
         isAuthenticated: false,
@@ -250,6 +298,94 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Request password reset link
+  const forgotPassword = async (payload: EmailField): Promise<AuthResult> => {
+    dispatch({ type: AuthActionType.REQUEST_PASSWORD_RESET_LINK_START });
+
+    try {
+      await authService.forgotPassword(payload);
+      dispatch({ type: AuthActionType.REQUEST_PASSWORD_RESET_LINK_SUCCESS });
+      return { success: true };
+    } catch (error: any) {
+      console.error("❌ Reset password link request failed in context:", error);
+
+      let errorMessage = "Reset password link request failed";
+
+      if (error.response) {
+        // Server responded with error status
+        console.error("📡 Server error response:", {
+          status: error.response.status,
+          data: error.response.data,
+          headers: error.response.headers,
+        });
+
+        errorMessage =
+          error.response.data?.message ||
+          error.response.data?.error ||
+          `Server error: ${error.response.status}`;
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error("🌐 Network error - no response:", error.request);
+        errorMessage = "Network error - please check your connection";
+      } else {
+        // Something else happened
+        console.error("⚠️ Other error:", error.message);
+        errorMessage = error.message || "An unexpected error occurred";
+      }
+
+      dispatch({
+        type: AuthActionType.REQUEST_PASSWORD_RESET_LINK_FAILURE,
+        payload: errorMessage,
+      });
+      return { success: false, error: errorMessage };
+    }
+  };
+
+  // Reset password reset link
+  const resetPassword = async (
+    payload: ResetPasswordCredentials
+  ): Promise<AuthResult> => {
+    dispatch({ type: AuthActionType.RESET_PASSWORD_START });
+
+    try {
+      await authService.resetPassword(payload);
+      dispatch({ type: AuthActionType.RESET_PASSWORD_SUCCESS });
+      return { success: true };
+    } catch (error: any) {
+      console.error("❌ Reset password failed in context:", error);
+
+      let errorMessage = "Reset password failed";
+
+      if (error.response) {
+        // Server responded with error status
+        console.error("📡 Server error response:", {
+          status: error.response.status,
+          data: error.response.data,
+          headers: error.response.headers,
+        });
+
+        errorMessage =
+          error.response.data?.message ||
+          error.response.data?.error ||
+          `Server error: ${error.response.status}`;
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error("🌐 Network error - no response:", error.request);
+        errorMessage = "Network error - please check your connection";
+      } else {
+        // Something else happened
+        console.error("⚠️ Other error:", error.message);
+        errorMessage = error.message || "An unexpected error occurred";
+      }
+
+      dispatch({
+        type: AuthActionType.RESET_PASSWORD_FAILURE,
+        payload: errorMessage,
+      });
+      return { success: false, error: errorMessage };
+    }
+  };
+
   // Clear error
   const clearError = (): void => {
     dispatch({ type: AuthActionType.CLEAR_ERROR });
@@ -260,6 +396,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     register,
     logout,
+    forgotPassword,
+    resetPassword,
     clearError,
   };
 

@@ -31,6 +31,15 @@ export class UsersService {
     return this.userModel.findOne({ profileId }).exec();
   }
 
+  async findByResetPasswordToken(token: string): Promise<UserDocument | null> {
+    return this.userModel
+      .findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: new Date() },
+      })
+      .exec();
+  }
+
   async findByEmailWithPassword(email: string): Promise<UserDocument | null> {
     // Select passwordHash explicitly as it's excluded by default
     return this.userModel
@@ -168,20 +177,18 @@ export class UsersService {
     const profile = await this.profileModel.findOne({ user: userId });
 
     if (profile?.profilePicture) {
-      this.removeFile(FOLDER_TYPES.PROFILE_PICTURES, profile.profilePicture);
+      this.removeFile(FOLDER_TYPES.PROFILE_PICTURES, profile?.profilePicture);
     }
 
     if (profile?.profilePhotos?.length) {
-      profile.profilePhotos.forEach((f) =>
+      profile?.profilePhotos.forEach((f) =>
         this.removeFile(FOLDER_TYPES.PROFILE_PHOTOS, f),
       );
     }
 
-    // if (profile?.coverPhotos?.length) {
-    //   profile.coverPhotos.forEach((f) =>
-    //     this.removeFile(FOLDER_TYPES.COVER_IMAGES, f),
-    //   );
-    // }
+    if (profile?.coverImage) {
+      this.removeFile(FOLDER_TYPES.COVER_IMAGES, profile?.coverImage);
+    }
 
     await this.userModel.findByIdAndDelete(userId);
     return { success: true };
