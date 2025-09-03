@@ -115,6 +115,29 @@ const RegisterForm: React.FC = () => {
     return current.isBefore(minAgeDate); // allow only dates < 18 years ago
   };
 
+  // const renderDay = (props: any, currentDate: any) => {
+  //   let { key, ...rest } = props; // remove key from spread
+  //   let classes = rest.className;
+
+  //   // if (currentDate.day() === 0 || currentDate.day() === 6) {
+  //   //   classes += " text-red-600";
+  //   // }
+
+  //   if (currentDate.day() === 0) {
+  //     // Sunday
+  //     classes += " text-red-500";
+  //   } else if (currentDate.day() === 6) {
+  //     // Saturday
+  //     classes += " text-amber-500";
+  //   }
+
+  //   return (
+  //     <td key={key} {...rest} className={classes}>
+  //       {currentDate.date()}
+  //     </td>
+  //   );
+  // };
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-8 text-left">Register</h2>
@@ -300,6 +323,7 @@ const RegisterForm: React.FC = () => {
                       field.onChange("");
                     }
                   }}
+                  // renderDay={renderDay}
                   inputProps={{
                     placeholder: "Select your DOB",
                     readOnly: true,
