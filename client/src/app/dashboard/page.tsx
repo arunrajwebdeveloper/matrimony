@@ -158,7 +158,11 @@ const DashboardPage: React.FC = () => {
 
             {/* Preferred Matches: Highly compatible profiles (85%+ match) based on 
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
-            <ProfileCard title="Preferred Matches" link="/" className="mb-5">
+            <ProfileCard
+              title="Preferred Matches"
+              link="/dashboard/profile/preferred-matches"
+              className="mb-5"
+            >
               <MatchList
                 users={preferredMatches?.data}
                 isLoading={preferredMatches?.isLoading}
@@ -169,7 +173,11 @@ const DashboardPage: React.FC = () => {
             {/* New Matches: Recently joined profiles that meet 
             your basic criteria like age, location, and education. */}
 
-            <ProfileCard title="New Matches" link="/" className="mb-5">
+            <ProfileCard
+              title="New Matches"
+              link="/dashboard/profile/new-matches"
+              className="mb-5"
+            >
               <MatchList
                 users={newMatches?.data}
                 isLoading={newMatches?.isLoading}
