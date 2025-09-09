@@ -65,6 +65,12 @@ export const ROUTES = {
     NOTIFICATION: "/dashboard/settings/notification",
     DELETE_ACCOUNT: "/dashboard/settings/delete-account",
   },
+  ACCEPTED: "/dashboard/accepted-requests",
+  RECENTLY_VIEWED: "/dashboard/recently-viewed",
+  SHORTLISTED: "/dashboard/shortlisted",
+  SENT_REQUESTS: "/dashboard/sent-requests",
+  DECLINED_REQUESTS: "/dashboard/declined-requests",
+  BLOCKED: "/dashboard/blocked",
 } as const;
 
 export const FOLDER_TYPES = {
