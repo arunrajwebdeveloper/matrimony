@@ -160,7 +160,7 @@ const DashboardPage: React.FC = () => {
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
             <ProfileCard
               title="Preferred Matches"
-              link="/dashboard/profile/preferred-matches"
+              link="/dashboard/preferred-matches"
               className="mb-5"
             >
               <MatchList
@@ -175,7 +175,7 @@ const DashboardPage: React.FC = () => {
 
             <ProfileCard
               title="New Matches"
-              link="/dashboard/profile/new-matches"
+              link="/dashboard/new-matches"
               className="mb-5"
             >
               <MatchList
