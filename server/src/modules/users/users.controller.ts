@@ -4,6 +4,9 @@ import {
   UseGuards,
   Request,
   HttpStatus,
+  Patch,
+  Body,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -13,13 +16,15 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { SignedUrlInterceptor } from '../../common/interceptors/signed-url.interceptor';
 
+@UseGuards(JwtAuthGuard)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(SignedUrlInterceptor)
   @Get('me')
   @ApiBearerAuth()
   @ApiOperation({
@@ -34,11 +39,98 @@ export class UsersController {
     description: 'Unauthorized.',
   })
   async getMe(@Request() req: any) {
-    // req.user is populated by JwtStrategy
     const user = await this.usersService.findByIdWithProfile(req.user._id);
     if (!user) {
-      return { message: 'User not found.' }; // Should not happen if guard passed
+      return { message: 'User not found.' };
     }
     return user;
+  }
+
+  @Patch('profile-picture')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update user profile picture',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Profile picture updated successfully.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  async updateProfilePicture(
+    @Request() req: any,
+    @Body('filename') filename: string,
+  ) {
+    if (!filename) return { message: 'File not found.' };
+
+    const user = await this.usersService.updateProfilePicture(
+      req.user._id,
+      filename,
+    );
+    if (!user) {
+      return { message: 'User not found.' };
+    }
+    return { message: 'Profile picture updated successfully' };
+  }
+
+  @Patch('profile-cover')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update user profile cover',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Profile cover updated successfully.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  async updateProfileCover(
+    @Request() req: any,
+    @Body('filename') filename: string,
+  ) {
+    if (!filename) return { message: 'File not found.' };
+
+    const user = await this.usersService.updateProfileCover(
+      req.user._id,
+      filename,
+    );
+    if (!user) {
+      return { message: 'User not found.' };
+    }
+    return { message: 'Profile cover updated successfully' };
+  }
+
+  @Patch('profile-photos')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update user profile images',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Profile images updated successfully.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  async updateProfilePhotos(
+    @Request() req: any,
+    @Body('filenames') filenames: string[],
+  ) {
+    if (!filenames || filenames.length === 0)
+      return { message: 'Files not found.' };
+
+    const user = await this.usersService.updateProfilePhotos(
+      req.user._id,
+      filenames,
+    );
+    if (!user) {
+      return { message: 'User not found.' };
+    }
+    return { message: 'Profile photos updated successfully' };
   }
 }

@@ -18,7 +18,7 @@ export interface UserProfile {
   disabilityStatus?: string;
   aboutMe?: string;
   phoneNumber?: string;
-  // email?: string;
+  email?: string;
   alternateEmails?: string[];
   country?: string;
   state?: string;
@@ -46,6 +46,7 @@ export interface UserProfile {
   children?: number;
   profilePhotos?: string[];
   profilePicture?: string | null;
+  coverImage?: string | null;
   visibility?: "public" | "private";
   isPremium?: boolean;
   verification?: {
@@ -78,7 +79,6 @@ export interface UserCardType {
   firstName: string;
   lastName: string;
   profileId: string;
-  height: string;
   dateOfBirth: string;
   occupation: string;
   city: string;

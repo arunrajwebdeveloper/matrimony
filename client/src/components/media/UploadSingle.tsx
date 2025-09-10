@@ -1,11 +1,11 @@
-// app/upload-single/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
-import ImageCropper from "./ImageCropper";
-import { Crop, ImagePlus, Plus, Trash2 } from "lucide-react";
+import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
+import api from "@/lib/api";
+import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 
 type ImageItem = {
   id: string;
@@ -16,8 +16,6 @@ type ImageItem = {
   source?: boolean; // flag for backend images
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:5050";
-
 export default function UploadSinglePage({
   sourceImage = null,
 }: {
@@ -26,6 +24,8 @@ export default function UploadSinglePage({
   const [image, setImage] = useState<ImageItem | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [cropPixels, setCropPixels] = useState<any>(null);
+
+  const [isPending, startTransition] = useTransition();
 
   // load source image if exists
   useEffect(() => {
@@ -40,6 +40,7 @@ export default function UploadSinglePage({
 
   const onFileChange = (file?: File) => {
     if (!file) return;
+
     const url = fileToObjectURL(file);
     setImage({
       id: Date.now().toString(),
@@ -55,13 +56,13 @@ export default function UploadSinglePage({
     const processed = await processImagePipeline(
       image.originalUrl,
       cropPixels,
-      `profile-${Date.now().toString()}.jpg`,
+      `image-${Date.now().toString()}.jpg`,
       {
         compress: { maxSizeMB: 0.8, maxWidthOrHeight: 800 },
         watermark: {
           text: "© Matrimony",
           position: "bottom-right",
-          opacity: 0.5,
+          opacity: 0.3,
         },
       }
     );
@@ -76,23 +77,50 @@ export default function UploadSinglePage({
     return processed;
   };
 
-  const onSubmit = async () => {
-    if (!image || image.source) {
-      alert("Source image already exists on backend, no need to upload.");
-      return;
-    }
-    const file = image.processedFile ?? (await buildAndPreview());
-    if (!file) return;
+  async function uploadFile(
+    file: File,
+    type: "profile-pictures" | "cover-images"
+  ) {
+    const formData = new FormData();
+    formData.append("file", file);
 
-    const fd = new FormData();
-    fd.append("file", file);
-
-    await fetch(`${API_BASE}/upload/single`, {
-      method: "POST",
-      body: fd,
+    const res = await api.post(API_ENDPOINTS.UPLOAD.SINGLE, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
 
-    alert("Uploaded!");
+    return res.data;
+  }
+
+  const onSubmit = () => {
+    startTransition(async () => {
+      try {
+        if (!image || image.source) {
+          alert("Source image already exists on backend, no need to upload.");
+          return;
+        }
+
+        const file = image.processedFile ?? (await buildAndPreview());
+        if (!file) {
+          alert("No valid file to upload.");
+          return;
+        }
+
+        // Step 1: upload
+        const { filename } = await uploadFile(file, "profile-pictures");
+
+        // Step 2: update profile
+        const res = await api.patch(API_ENDPOINTS.PROFILE_PICTURE_UPLOAD, {
+          filename,
+        });
+
+        console.log("✅ Profile image updated:", res.data);
+      } catch (err) {
+        console.error("❌ Error uploading profile image:", err);
+        alert("Failed to upload profile image. Please try again.");
+      }
+    });
   };
 
   const handleRemoveImage = () => {
@@ -165,9 +193,9 @@ export default function UploadSinglePage({
       <button
         className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
         onClick={onSubmit}
-        disabled={!image || !image.processedUrl || image.source} // only enable if processed & not source
+        disabled={!image || !image.processedUrl || image.source || isPending} // only enable if processed & not source
       >
-        Upload
+        {isPending ? "Uploading..." : "Upload"}
       </button>
 
       {/* Modal for cropping */}

@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import api from "@/lib/api";
-import { UserCardType, UserProfile } from "@/types";
-import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
+import { UserProfile } from "@/types";
+import { API_ENDPOINTS } from "@/utils/constants";
 import {
   User,
   Home,
@@ -28,69 +28,6 @@ import ProfileUserCard from "@/components/profile/ProfileUserCard";
 import SidebarCard from "@/components/cards/SidebarCard";
 import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
 import VerificationLabelBadge from "@/components/profile/VerificationLabelBadge";
-
-// export const users: UserCardType[] = [
-//   {
-//     firstName: "John Doe",
-//     profileId: "MW-23456789",
-//     height: "5'9\"",
-//     age: 35,
-//     profession: "Software Engineer",
-//     location: "New York, USA",
-//     motherTongue: "English",
-//     isOnline: true,
-//     profileImage:
-//       "https://images.unsplash.com/photo-1543123820-ac4a5f77da38?q=80&w=500",
-//   },
-//   {
-//     firstName: "Emma Watson",
-//     profileId: "MW-23456790",
-//     height: "5'6\"",
-//     age: 32,
-//     profession: "Graphic Designer",
-//     location: "London, UK",
-//     motherTongue: "English",
-//     isOnline: false,
-//     profileImage:
-//       "https://images.unsplash.com/photo-1603072007571-7295a309e45f?q=80&w=500",
-//   },
-//   {
-//     firstName: "Michael Smith",
-//     profileId: "MW-23456791",
-//     height: "6'0\"",
-//     age: 38,
-//     profession: "Photographer",
-//     location: "Miami, USA",
-//     motherTongue: "English",
-//     isOnline: true,
-//     profileImage:
-//       "https://images.unsplash.com/photo-1689464090276-50bed9a6798f?q=80&w=500",
-//   },
-//   {
-//     firstName: "Sophia Brown",
-//     profileId: "MW-23456792",
-//     height: "5'5\"",
-//     age: 29,
-//     profession: "Marketing Manager",
-//     location: "Los Angeles, USA",
-//     motherTongue: "English",
-//     isOnline: false,
-//     profileImage:
-//       "https://images.unsplash.com/photo-1538472123780-aaf4aca79a16?q=80&w=500",
-//   },
-//   {
-//     firstName: "Liam Johnson",
-//     profileId: "MW-23456793",
-//     height: "5'10\"",
-//     age: 33,
-//     profession: "Data Analyst",
-//     location: "Toronto, Canada",
-//     motherTongue: "English",
-//     isOnline: true,
-//     profileImage:
-//       "https://images.unsplash.com/photo-1683921902999-d52fa6d6ec54?q=80&w=500",
-//   },
-// ];
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -202,7 +139,7 @@ const ProfilePage: React.FC = () => {
                       />
                     </label>
                     <p className="mt-1 text-sm font-semibold text-gray-800 ">
-                      {user?.email}
+                      {profileData?.email}
                     </p>
                   </div>
                   <div className="flex flex-col">
@@ -213,7 +150,7 @@ const ProfilePage: React.FC = () => {
                       />
                     </label>
                     <p className="mt-1 text-sm font-semibold text-gray-800 flex gap-1 items-center">
-                      {user?.phoneNumber}
+                      {profileData?.phoneNumber}
                     </p>
                   </div>
                 </div>

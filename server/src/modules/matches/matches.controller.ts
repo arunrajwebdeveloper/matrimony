@@ -7,6 +7,7 @@ import {
   Req,
   Body,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { MatchesService } from './matches.service';
 import {
@@ -18,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { ProfileDto } from './dto/profile.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { SignedUrlInterceptor } from '../../common/interceptors/signed-url.interceptor';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('Matches')
@@ -26,6 +28,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class MatchesController {
   constructor(private readonly matchesService: MatchesService) {}
 
+  @UseInterceptors(SignedUrlInterceptor)
   @Get('preferred')
   @ApiOperation({ summary: 'Get preferred matches based on user preferences' })
   @ApiResponse({
@@ -38,6 +41,7 @@ export class MatchesController {
     return this.matchesService.getPreferredMatches(req.user._id);
   }
 
+  @UseInterceptors(SignedUrlInterceptor)
   @Get('new')
   @ApiOperation({ summary: 'Get new matches not yet interacted with' })
   @ApiResponse({
@@ -49,6 +53,7 @@ export class MatchesController {
     return this.matchesService.getNewMatches(req.user._id);
   }
 
+  @UseInterceptors(SignedUrlInterceptor)
   @Get('shortlist')
   @ApiOperation({ summary: 'Get profiles currently in the user’s shortlist' })
   @ApiResponse({
@@ -106,6 +111,7 @@ export class MatchesController {
     return this.matchesService.declineProfile(req.user._id, profileId);
   }
 
+  @UseInterceptors(SignedUrlInterceptor)
   @Get('declined')
   @ApiOperation({ summary: 'Get profiles the user has declined' })
   @ApiResponse({

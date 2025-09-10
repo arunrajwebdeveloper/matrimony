@@ -62,7 +62,12 @@ export class MatchesService {
       query.city = { $in: preferences.city };
     }
     // You can add more preference filters here following the same pattern
-    return this.profileModel.find(query).exec();
+    return this.profileModel
+      .find(query)
+      .select(
+        'firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .exec();
   }
 
   /**
@@ -97,6 +102,9 @@ export class MatchesService {
         _id: { $nin: excludedIds },
         gender: { $ne: userProfile.gender },
       })
+      .select(
+        'firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
       .exec();
 
     return newMatches;

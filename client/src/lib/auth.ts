@@ -8,6 +8,8 @@ import {
   User,
   RefreshTokenResponse,
   RegisterPayloads,
+  EmailField,
+  ResetPasswordCredentials,
 } from "@/types";
 import { TOKEN_KEYS } from "@/utils/constants";
 
@@ -21,19 +23,15 @@ export const authService = {
         credentials
       );
 
-      const { accessToken, user } = response.data;
+      const { accessToken } = response.data;
 
       if (!accessToken) {
         throw new Error("No access token received");
       }
 
-      if (!user) {
-        throw new Error("No user data received");
-      }
-
       Storage.setItem(TOKEN_KEYS.ACCESS_TOKEN, accessToken);
 
-      return { user, accessToken };
+      return { accessToken };
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error("Login error:", {
@@ -54,15 +52,7 @@ export const authService = {
 
   async register(credentials: RegisterPayloads) {
     try {
-      const response = await api.post<AuthResponse>(
-        API_ENDPOINTS.REGISTER,
-        credentials
-      );
-
-      // response.data;
-
-      console.log("response :>> ", response);
-      console.log("response.data :>> ", response.data);
+      await api.post<AuthResponse>(API_ENDPOINTS.REGISTER, credentials);
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error("Register error:", {
@@ -117,6 +107,26 @@ export const authService = {
       return accessToken;
     } catch (error) {
       Storage.clear();
+      const axiosError = error as AxiosError;
+      throw axiosError;
+    }
+  },
+
+  // send password reset link
+  async forgotPassword(payload: EmailField) {
+    try {
+      await api.post<string>(API_ENDPOINTS.FORGOT_PASSWORD, payload);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      throw axiosError;
+    }
+  },
+
+  // reset password
+  async resetPassword(payload: ResetPasswordCredentials) {
+    try {
+      await api.post<string>(API_ENDPOINTS.RESET_PASSWORD, payload);
+    } catch (error) {
       const axiosError = error as AxiosError;
       throw axiosError;
     }

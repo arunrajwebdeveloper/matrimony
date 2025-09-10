@@ -17,6 +17,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ConfigService } from '@nestjs/config';
 import { RefreshTokenService } from './refresh-token.service';
 import { RefreshTokenDocument } from './schemas/refresh-token.schema';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -38,7 +39,7 @@ export class AuthService {
     let profileId = '';
 
     while (!isUnique) {
-      const randomNum = Math.floor(100000 + Math.random() * 900000);
+      const randomNum = Math.floor(1000000000 + Math.random() * 9000000000);
       profileId = `MW-${randomNum}`;
 
       const existing = await this.usersService.findByProfileId(profileId);
@@ -159,7 +160,6 @@ export class AuthService {
   }
 
   async login(loginUserDto: LoginUserDto): Promise<{
-    user: UserDocument;
     accessToken: string;
     refreshToken: string;
   }> {
@@ -198,7 +198,7 @@ export class AuthService {
     );
 
     this.logger.log(`User ${user._id} logged in. Tokens generated.`);
-    return { user, accessToken, refreshToken };
+    return { accessToken, refreshToken };
   }
 
   async createRefreshToken(userId: string, expiresIn: number): Promise<string> {
@@ -265,5 +265,48 @@ export class AuthService {
       userId: user._id,
       email: user.email,
     });
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      // Always return a generic success message to prevent email enumeration
+      return { message: 'If an account exists, a reset link has been sent.' };
+    }
+
+    const resetToken = randomUUID();
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = new Date(Date.now() + 3600000); // Token valid for 1 hour
+    await user.save();
+
+    // Send email containing the reset link:
+    const CLIENT_URL =
+      this.configService.get<string>('CLIENT_URL') || 'http://localhost:3000';
+    const resetUrl = `${CLIENT_URL!}/reset-password?token=${resetToken}`;
+    this.eventEmitter.emit('user.forgotPassword', {
+      email: user.email,
+      resetUrl,
+    });
+
+    return { message: 'Password reset link sent successfully.' };
+  }
+
+  async resetPassword(token: string, password: any) {
+    const user = await this.usersService.findByResetPasswordToken(token);
+    if (!user) {
+      throw new BadRequestException('Invalid or expired token.');
+    }
+
+    // Hash the new password and save
+    user.passwordHash = await bcrypt.hash(password, 10);
+    user.resetPasswordToken = null; // Clear the token
+    user.resetPasswordExpires = null; // Clear expiration time
+    await user.save();
+
+    this.eventEmitter.emit('user.resetPassword', {
+      email: user.email,
+    });
+
+    return { message: 'Password has been reset successfully.' };
   }
 }

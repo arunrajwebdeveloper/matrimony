@@ -24,3 +24,4 @@ server/dist/
 server/.env
 server/.env.local
 server/coverage/
+server/uploads/

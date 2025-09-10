@@ -34,6 +34,12 @@ body {
   }
 }
 
+@media screen and (min-width: 1600px) {
+  .main-container {
+    max-width: 1180px;
+  }
+}
+
 /* SPINNER */
 
 .spinner-loader {
@@ -126,4 +132,23 @@ input[type="range"].range:hover::-webkit-slider-thumb {
 
 input[type="range"].range:hover::-moz-range-thumb {
   box-shadow: 0px 0px 0px 8px rgba(0, 38, 255, 0.16);
+}
+
+/* DATE PICKER */
+
+.rdtPicker {
+  min-width: 100% !important;
+}
+.rdtPicker td,
+.rdtPicker th {
+  height: 38px !important;
+  vertical-align: middle !important;
+}
+.rdtDay.rdtActive {
+  background-color: #00bc7d !important;
+  color: white !important;
+}
+
+.rdtDay:not(.rdtActive):hover {
+  background-color: #e5e7eb !important;
 }

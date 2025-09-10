@@ -5,12 +5,14 @@ import { Profile, ProfileDocument } from './schemas/profile.schema';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { SearchProfilesDto } from './dto/search-profiles.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter'; // Import EventEmitter2
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class ProfilesService {
   constructor(
     @InjectModel(Profile.name) private profileModel: Model<ProfileDocument>,
     private eventEmitter: EventEmitter2, // Inject EventEmitter2
+    private readonly uploadService: UploadService,
   ) {}
 
   async create(profile: Partial<Profile>): Promise<ProfileDocument> {
@@ -32,6 +34,12 @@ export class ProfilesService {
 
   async findByprofileId(profileId: string): Promise<ProfileDocument | null> {
     return this.profileModel.findOne({ profileId }).exec();
+  }
+
+  async findUserProfile(profileId: string | Types.ObjectId): Promise<any> {
+    const profile = await this.profileModel.findOne({ profileId }).exec();
+    if (!profile) return null;
+    return profile.toObject();
   }
 
   async update(

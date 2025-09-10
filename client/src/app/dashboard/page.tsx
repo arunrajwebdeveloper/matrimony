@@ -16,7 +16,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import MatchList from "@/components/dashboard/MatchList";
-import { UserCardType, UserProfile } from "@/types";
+import { UserCardType } from "@/types";
 import api from "@/lib/api";
 import Greeting from "@/components/dashboard/Greeting";
 import ActivityItem from "@/components/profile/ActivityFeedItem";
@@ -158,7 +158,11 @@ const DashboardPage: React.FC = () => {
 
             {/* Preferred Matches: Highly compatible profiles (85%+ match) based on 
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
-            <ProfileCard title="Preferred Matches" link="/" className="mb-5">
+            <ProfileCard
+              title="Preferred Matches"
+              link="/dashboard/preferred-matches"
+              className="mb-5"
+            >
               <MatchList
                 users={preferredMatches?.data}
                 isLoading={preferredMatches?.isLoading}
@@ -169,7 +173,11 @@ const DashboardPage: React.FC = () => {
             {/* New Matches: Recently joined profiles that meet 
             your basic criteria like age, location, and education. */}
 
-            <ProfileCard title="New Matches" link="/" className="mb-5">
+            <ProfileCard
+              title="New Matches"
+              link="/dashboard/new-matches"
+              className="mb-5"
+            >
               <MatchList
                 users={newMatches?.data}
                 isLoading={newMatches?.isLoading}
@@ -177,7 +185,7 @@ const DashboardPage: React.FC = () => {
               />
             </ProfileCard>
 
-            <ProfileCard title=" Recent Activity" link="/" className="mb-5">
+            <ProfileCard title=" Recent Activities" link="/" className="mb-5">
               <ActivityList />
             </ProfileCard>
           </div>

@@ -99,7 +99,7 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
         <div className="w-[75%] px-2">
           <div className="mt-5">
             <div className="flex gap-2">
-              <div className="w-[25%]">
+              <div className="w-[30%]">
                 <div className="ps-4">
                   <h3 className="font-semibold text-black text-md mb-6">
                     Account Settings
@@ -124,7 +124,7 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
                   </div>
                 </div>
               </div>
-              <div className="w-[75%]">{children}</div>
+              <div className="w-[70%]">{children}</div>
             </div>
           </div>
         </div>

@@ -249,6 +249,9 @@ export class Profile {
   @Prop({ type: String, default: null })
   profilePicture: string | null;
 
+  @Prop({ type: String, default: null })
+  coverImage: string | null;
+
   @Prop({ default: 'public' }) // 'public', 'private', 'hidden' - controls visibility
   visibility: string;
 

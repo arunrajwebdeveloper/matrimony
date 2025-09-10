@@ -24,6 +24,8 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from './jwt-auth.guard'; // Assume this guard exists
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -64,7 +66,7 @@ export class AuthController {
     @Body() loginUserDto: LoginUserDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { user, accessToken, refreshToken } =
+    const { accessToken, refreshToken } =
       await this.authService.login(loginUserDto);
 
     const refreshTokenExpiresIn = parseInt(
@@ -85,7 +87,7 @@ export class AuthController {
       maxAge: refreshTokenExpiresIn * 1000,
     });
 
-    return { accessToken, user };
+    return { accessToken };
   }
 
   @Post('refresh')
@@ -189,5 +191,31 @@ export class AuthController {
       changePasswordDto.newPassword,
     );
     return { message: 'Password changed successfully.' };
+  }
+
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Forgot password request' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Password reset link sent successfully.',
+  })
+  @ApiBody({ type: ForgotPasswordDto })
+  async forgotPassword(@Body() { email }: ForgotPasswordDto) {
+    await this.authService.forgotPassword(email);
+    return { message: 'Password reset link sent successfully.' };
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Reset password' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Password reset successfully.',
+  })
+  @ApiBody({ type: ResetPasswordDto })
+  async resetPassword(@Body() { token, password }: ResetPasswordDto) {
+    await this.authService.resetPassword(token, password);
+    return { message: 'Password reset link sent successfully.' };
   }
 }

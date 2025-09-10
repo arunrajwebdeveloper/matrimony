@@ -35,7 +35,7 @@ function MatchList({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-6">
       {!isLoading && users?.length !== 0 ? (
         users?.map((user) => {
           return <UserCard key={user.profileId} {...user} />;

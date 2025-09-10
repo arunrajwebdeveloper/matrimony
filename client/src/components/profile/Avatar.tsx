@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 function Avatar({
@@ -52,7 +53,7 @@ function Avatar({
     return (
       <img
         src={src}
-        alt=""
+        alt={`${firstname}-${lastname}-thumbnail`}
         className={`${border} object-cover flex-none overflow-hidden select-none bg-slate-400`}
         loading="lazy"
         style={{
@@ -66,7 +67,7 @@ function Avatar({
 
   return (
     <div
-      className={`${getBackgroundColor()} ${border} text-white flex items-center justify-center flex-none font-normal`}
+      className={`${getBackgroundColor()} ${border} text-white select-none flex items-center justify-center flex-none font-normal`}
       style={{
         width: size,
         height: size,
