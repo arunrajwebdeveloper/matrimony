@@ -60,7 +60,7 @@ export class UsersService {
         path: 'profile',
         select: 'profilePicture visibility isPremium',
       })
-      .select('-blockedUsers') // only removes this, all others stay
+      .select('-blockedUsers -resetPasswordToken -resetPasswordExpires') // only removes this, all others stay
       // .lean() // make it plain JS object (no mongoose doc overhead)
       .exec();
 
