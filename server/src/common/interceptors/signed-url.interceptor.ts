@@ -37,6 +37,17 @@ export class SignedUrlInterceptor implements NestInterceptor {
       entity = entity.toObject();
     }
 
+    // Handle list response with "result"
+    if (entity?.result && Array.isArray(entity?.result)) {
+      const signedResult = await Promise.all(
+        entity.result.map((item: any) => this.addSignedUrls(item, userId)),
+      );
+      return {
+        ...entity,
+        result: signedResult,
+      };
+    }
+
     // Handle user.profile.profilePicture
     if (entity?.profile?.profilePicture) {
       entity.profile.profilePicture = await this.sign(

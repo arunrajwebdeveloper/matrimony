@@ -88,6 +88,28 @@ export interface UserCardType {
   profilePicture: string;
 }
 
+export interface MatchResult {
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  limit: number;
+  page: number;
+  total: number;
+  totalPages: number;
+  result: UserCardType[];
+}
+
+export interface MatchState {
+  data: MatchResult | null;
+  isLoading: boolean;
+  error: string | null;
+}
+
+export interface MatchListProps {
+  users: UserCardType[];
+  isLoading: boolean;
+  error: string | null;
+}
+
 export interface UserCardSidebarItemType {
   name: string;
   profileId: string;

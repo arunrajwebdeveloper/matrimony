@@ -22,7 +22,11 @@ export class MatchesService {
    * @param userId The ID of the current user.
    * @returns An array of matching profiles.
    */
-  async getPreferredMatches(userId: string) {
+  async getPreferredMatches(
+    userId: string,
+    page = 1,
+    limit = 10, // default 10 results per page
+  ) {
     const userProfile = await this.profileModel
       .findOne({ user: userId })
       .exec();
@@ -33,6 +37,7 @@ export class MatchesService {
     const userInteractions = await this.userInteractionModel
       .findOne({ user: userId })
       .exec();
+
     const excludedIds = [
       userProfile._id, // Exclude the user's own profile
       ...(userInteractions?.shortlisted || []),
@@ -61,13 +66,33 @@ export class MatchesService {
     if (preferences.city && preferences.city.length > 0) {
       query.city = { $in: preferences.city };
     }
-    // You can add more preference filters here following the same pattern
-    return this.profileModel
-      .find(query)
-      .select(
-        'firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-      )
-      .exec();
+
+    // Pagination calculation
+    const skip = (page - 1) * limit;
+
+    // Run queries in parallel for efficiency
+    const [result, total] = await Promise.all([
+      this.profileModel
+        .find(query)
+        .select(
+          'firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+        )
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .exec(),
+      this.profileModel.countDocuments(query).exec(),
+    ]);
+
+    return {
+      result,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
+    };
   }
 
   /**
@@ -75,11 +100,14 @@ export class MatchesService {
    * @param userId The ID of the current user.
    * @returns An array of new matches.
    */
-  async getNewMatches(userId: string) {
+  async getNewMatches(
+    userId: string,
+    page = 1,
+    limit = 10, // default 10 per page
+  ) {
     const userProfile = await this.profileModel
       .findOne({ user: userId })
       .exec();
-
     if (!userProfile) {
       throw new NotFoundException('User profile not found.');
     }
@@ -89,7 +117,7 @@ export class MatchesService {
       .findOne({ user: userId })
       .exec();
 
-    // Directly create the array of ObjectIds to exclude
+    // Build excluded profile IDs
     const excludedIds = [
       userProfile._id,
       ...(userInteractions?.shortlisted || []),
@@ -97,17 +125,38 @@ export class MatchesService {
       ...(userInteractions?.blocked || []),
     ];
 
-    const newMatches = await this.profileModel
-      .find({
-        _id: { $nin: excludedIds },
-        gender: { $ne: userProfile.gender },
-      })
-      .select(
-        'firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-      )
-      .exec();
+    // Build query
+    const query = {
+      _id: { $nin: excludedIds },
+      gender: { $ne: userProfile.gender },
+    };
 
-    return newMatches;
+    // Pagination calculation
+    const skip = (page - 1) * limit;
+
+    // Fetch results and count in parallel
+    const [result, total] = await Promise.all([
+      this.profileModel
+        .find(query)
+        .select(
+          'firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+        )
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .exec(),
+      this.profileModel.countDocuments(query).exec(),
+    ]);
+
+    return {
+      result,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
+    };
   }
 
   /**

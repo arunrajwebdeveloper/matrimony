@@ -8,6 +8,7 @@ import {
   Body,
   UseGuards,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { MatchesService } from './matches.service';
 import {
@@ -36,9 +37,13 @@ export class MatchesController {
     description: 'List of profiles matching preferences',
     type: [ProfileDto],
   })
-  async getPreferredMatches(@Req() req: any) {
+  async getPreferredMatches(
+    @Req() req: any,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
     // req.user._id would come from a real authentication guard
-    return this.matchesService.getPreferredMatches(req.user._id);
+    return this.matchesService.getPreferredMatches(req.user._id, page, limit);
   }
 
   @UseInterceptors(SignedUrlInterceptor)
@@ -49,8 +54,12 @@ export class MatchesController {
     description: 'List of new profiles',
     type: [ProfileDto],
   })
-  async getNewMatches(@Req() req: any) {
-    return this.matchesService.getNewMatches(req.user._id);
+  async getNewMatches(
+    @Req() req: any,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.matchesService.getNewMatches(req.user._id, page, limit);
   }
 
   @UseInterceptors(SignedUrlInterceptor)

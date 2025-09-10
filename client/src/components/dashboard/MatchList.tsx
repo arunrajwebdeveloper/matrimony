@@ -1,13 +1,7 @@
 import React from "react";
 import UserCard from "../profile/UserCard";
-import { UserCardType } from "@/types";
+import { MatchListProps, UserCardType } from "@/types";
 import UserListSkeleton from "../skeleton/UserListSkeleton";
-
-interface MatchListProps {
-  users: UserCardType[];
-  isLoading: boolean;
-  error: string | null;
-}
 
 function MatchList({
   users = [],

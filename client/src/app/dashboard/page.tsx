@@ -16,7 +16,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import MatchList from "@/components/dashboard/MatchList";
-import { UserCardType } from "@/types";
+import { MatchResult, MatchState, UserCardType } from "@/types";
 import api from "@/lib/api";
 import Greeting from "@/components/dashboard/Greeting";
 import ActivityItem from "@/components/profile/ActivityFeedItem";
@@ -31,31 +31,25 @@ const statUsers = [
   "https://images.unsplash.com/flagged/photo-1595523667797-051afce20d86?q=80&w=1000",
 ];
 
-interface MatchState {
-  data: UserCardType[];
-  isLoading: boolean;
-  error: string | null;
-}
-
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
 
   const [newMatches, setNewMatches] = useState<MatchState>({
-    data: [],
+    data: null,
     isLoading: true,
     error: null,
   });
 
   const [preferredMatches, setPreferredMatches] = useState<MatchState>({
-    data: [],
+    data: null,
     isLoading: true,
     error: null,
   });
 
   const fetchPreferredMatches = async (): Promise<void> => {
     try {
-      const response = await api.get<UserCardType>(
-        API_ENDPOINTS.PREFERRED_MATCHES_LIST
+      const response = await api.get<MatchResult>(
+        `${API_ENDPOINTS.PREFERRED_MATCHES_LIST}?limit=5`
       );
       setPreferredMatches({
         data: response?.data as any,
@@ -64,7 +58,7 @@ const DashboardPage: React.FC = () => {
       });
     } catch (err: any) {
       setPreferredMatches({
-        data: [],
+        data: null,
         isLoading: false,
         error: "Failed to load Preferred matches data",
       });
@@ -74,8 +68,8 @@ const DashboardPage: React.FC = () => {
 
   const fetchNewMatches = async (): Promise<void> => {
     try {
-      const response = await api.get<UserCardType>(
-        API_ENDPOINTS.NEW_MATCHES_LIST
+      const response = await api.get<MatchResult>(
+        `${API_ENDPOINTS.NEW_MATCHES_LIST}?limit=5`
       );
       setNewMatches({
         data: response?.data as any,
@@ -84,7 +78,7 @@ const DashboardPage: React.FC = () => {
       });
     } catch (err: any) {
       setNewMatches({
-        data: [],
+        data: null,
         isLoading: false,
         error: "Failed to load New matches data",
       });
@@ -164,7 +158,7 @@ const DashboardPage: React.FC = () => {
               className="mb-5"
             >
               <MatchList
-                users={preferredMatches?.data}
+                users={preferredMatches?.data?.result!}
                 isLoading={preferredMatches?.isLoading}
                 error={preferredMatches?.error}
               />
@@ -179,7 +173,7 @@ const DashboardPage: React.FC = () => {
               className="mb-5"
             >
               <MatchList
-                users={newMatches?.data}
+                users={newMatches?.data?.result!}
                 isLoading={newMatches?.isLoading}
                 error={newMatches?.error}
               />
