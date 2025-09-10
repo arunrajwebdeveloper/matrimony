@@ -52,7 +52,7 @@ const DashboardPage: React.FC = () => {
         `${API_ENDPOINTS.PREFERRED_MATCHES_LIST}?limit=5`
       );
       setPreferredMatches({
-        data: response?.data as any,
+        data: response?.data as MatchResult,
         isLoading: false,
         error: null,
       });
@@ -72,7 +72,7 @@ const DashboardPage: React.FC = () => {
         `${API_ENDPOINTS.NEW_MATCHES_LIST}?limit=5`
       );
       setNewMatches({
-        data: response?.data as any,
+        data: response?.data as MatchResult,
         isLoading: false,
         error: null,
       });
