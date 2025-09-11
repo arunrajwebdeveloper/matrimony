@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import ProfileCard from "@/components/cards/ProfileCard";
 import UserCard from "@/components/profile/UserCard";
 import Navigation from "@/components/navigation/Navigation";
@@ -10,43 +9,41 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
 import SidebarCard from "@/components/cards/SidebarCard";
 import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
-import Link from "next/link";
-import StatisticsCard from "@/components/dashboard/StatisticsCard";
 import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import MatchList from "@/components/dashboard/MatchList";
-import { UserCardType } from "@/types";
+import { MatchResult, MatchState, UserCardType } from "@/types";
 import api from "@/lib/api";
-
-interface MatchState {
-  data: UserCardType[];
-  isLoading: boolean;
-  error: string | null;
-}
+import Pagination from "@/components/ui/Pagination";
+import { searchParamsToObject } from "@/utils/searchParamsToObject";
+import { useSearchParams } from "next/navigation";
 
 const PreferredMatchesPage: React.FC = () => {
   const { user } = useAuth();
 
+  const searchParams = useSearchParams();
+
   const [preferredMatches, setPreferredMatches] = useState<MatchState>({
-    data: [],
+    data: null,
     isLoading: true,
     error: null,
   });
 
   const fetchPreferredMatches = async (): Promise<void> => {
     try {
-      const response = await api.get<UserCardType>(
-        API_ENDPOINTS.PREFERRED_MATCHES_LIST
+      const response = await api.get<MatchResult>(
+        API_ENDPOINTS.PREFERRED_MATCHES_LIST,
+        { params: searchParamsToObject(searchParams) }
       );
       setPreferredMatches({
-        data: response?.data as any,
+        data: response?.data as MatchResult,
         isLoading: false,
         error: null,
       });
     } catch (err: any) {
       setPreferredMatches({
-        data: [],
+        data: null,
         isLoading: false,
         error: "Failed to load Preferred matches data",
       });
@@ -82,11 +79,18 @@ const PreferredMatchesPage: React.FC = () => {
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
             <ProfileCard title="Preferred Matches" className="mb-5">
               <MatchList
-                users={preferredMatches?.data}
+                users={preferredMatches?.data?.result!}
                 isLoading={preferredMatches?.isLoading}
                 error={preferredMatches?.error}
               />
             </ProfileCard>
+            {!preferredMatches?.isLoading && (
+              <Pagination
+                page={preferredMatches?.data?.page as number}
+                lastPage={preferredMatches?.data?.totalPages as number}
+                path="/dashboard/preferred-matches"
+              />
+            )}
           </div>
         </div>
         <div className="w-[25%] px-2">
