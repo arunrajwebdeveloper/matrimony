@@ -152,3 +152,28 @@ input[type="range"].range:hover::-moz-range-thumb {
 .rdtDay:not(.rdtActive):hover {
   background-color: #e5e7eb !important;
 }
+
+/* PAGINATION */
+
+.pagination-element {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.pagination-element a {
+  font-size: 1rem;
+  color: #000;
+  cursor: pointer;
+  user-select: none;
+}
+.pagination-element a.link-boxed {
+  padding: 5px 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  background-color: white;
+}
+.pagination-element a.link-boxed.active {
+  background-color: black !important;
+  color: white !important;
+}

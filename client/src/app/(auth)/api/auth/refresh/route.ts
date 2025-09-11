@@ -30,6 +30,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const setCookieHeader = response.headers.get("set-cookie");
     const nextResponse = NextResponse.json(data);
 
+    // const setCookieHeaders = response.headers.getSetCookie?.() ?? [];
+    // setCookieHeaders.forEach((cookie) => {
+    //   nextResponse.headers.append("set-cookie", cookie);
+    // });
+
     if (setCookieHeader) {
       nextResponse.headers.set("set-cookie", setCookieHeader);
     }
