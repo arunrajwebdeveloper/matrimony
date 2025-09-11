@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import ProfileCard from "@/components/cards/ProfileCard";
-import UserCard from "@/components/profile/UserCard";
 import Navigation from "@/components/navigation/Navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
@@ -13,7 +12,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import MatchList from "@/components/dashboard/MatchList";
-import { MatchResult, MatchState, UserCardType } from "@/types";
+import { MatchResult, MatchState } from "@/types";
 import api from "@/lib/api";
 import Pagination from "@/components/ui/Pagination";
 import { searchParamsToObject } from "@/utils/searchParamsToObject";
@@ -24,7 +23,7 @@ const PreferredMatchesPage: React.FC = () => {
 
   const searchParams = useSearchParams();
 
-  const [preferredMatches, setPreferredMatches] = useState<MatchState>({
+  const [state, setState] = useState<MatchState>({
     data: null,
     isLoading: true,
     error: null,
@@ -36,13 +35,13 @@ const PreferredMatchesPage: React.FC = () => {
         API_ENDPOINTS.PREFERRED_MATCHES_LIST,
         { params: searchParamsToObject(searchParams) }
       );
-      setPreferredMatches({
+      setState({
         data: response?.data as MatchResult,
         isLoading: false,
         error: null,
       });
     } catch (err: any) {
-      setPreferredMatches({
+      setState({
         data: null,
         isLoading: false,
         error: "Failed to load Preferred matches data",
@@ -79,15 +78,15 @@ const PreferredMatchesPage: React.FC = () => {
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
             <ProfileCard title="Preferred Matches" className="mb-5">
               <MatchList
-                users={preferredMatches?.data?.result!}
-                isLoading={preferredMatches?.isLoading}
-                error={preferredMatches?.error}
+                users={state?.data?.result!}
+                isLoading={state?.isLoading}
+                error={state?.error}
               />
             </ProfileCard>
-            {!preferredMatches?.isLoading && (
+            {!state?.isLoading && (
               <Pagination
-                page={preferredMatches?.data?.page as number}
-                lastPage={preferredMatches?.data?.totalPages as number}
+                page={state?.data?.page as number}
+                lastPage={state?.data?.totalPages as number}
                 path="/dashboard/preferred-matches"
               />
             )}
