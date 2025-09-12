@@ -146,7 +146,8 @@ export default function UploadSinglePage({
     if (image?.processedUrl || image?.source) {
       setShowModal(false);
     } else {
-      handleRemoveImage();
+      setImage(null);
+      setShowModal(false);
     }
   };
 
