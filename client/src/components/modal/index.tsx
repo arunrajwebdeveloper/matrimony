@@ -91,17 +91,15 @@ const Modal = ({ show, onHide, children }: ModalProps) => {
 
   return (
     <div
-      className={`fixed inset-0 bg-black/50 flex items-center justify-center z-50 transition-opacity duration-300 ease-out ${
+      className={`fixed inset-0 bg-black/50 flex items-center justify-center z-[99999] transition-opacity duration-500 ease-out ${
         // Changed transition-all to transition-opacity
         isVisible ? "opacity-100" : "opacity-0" // Changed bg-opacity-50 to opacity-100 and bg-opacity-0 to opacity-0
       }`}
       onClick={handleBackdropClick}
     >
       <div
-        className={`bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-[90vh] overflow-hidden transform transition-all duration-300 ease-out ${
-          isVisible
-            ? "translate-y-0 opacity-100 scale-100"
-            : "-translate-y-12 opacity-0 scale-95"
+        className={`bg-white py-4 px-4 rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-hidden transform transition-all duration-500 ease-out ${
+          isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
         }`}
       >
         {children}
@@ -116,12 +114,12 @@ Modal.Header = ({
   onClose,
   children,
 }: ModalHeaderProps) => (
-  <div className="flex items-center justify-between p-4 border-b border-gray-200">
+  <div className="flex items-center justify-between py-4 px-6 gap-4">
     <div className="flex-1">{children}</div>
     {closeButton && (
       <button
         onClick={onClose}
-        className="ml-4 text-gray-400 hover:text-gray-600 transition-colors duration-150"
+        className="text-gray-400 cursor-pointer hover:text-gray-600 transition-colors duration-150"
         aria-label="Close"
       >
         <svg
@@ -143,17 +141,15 @@ Modal.Header = ({
 );
 
 Modal.Title = ({ children }: ModalTitleProps) => (
-  <h4 className="text-lg font-semibold text-gray-900">{children}</h4>
+  <h4 className="text-lg font-semibold text-gray-800">{children}</h4>
 );
 
 Modal.Body = ({ children }: ModalBodyProps) => (
-  <div className="p-4 text-gray-700">{children}</div>
+  <div className="text-gray-500 text-base py-4 px-6">{children}</div>
 );
 
 Modal.Footer = ({ children }: ModalFooterProps) => (
-  <div className="flex gap-2 justify-end p-4 border-t border-gray-200 bg-gray-50">
-    {children}
-  </div>
+  <div className="flex gap-4 justify-start py-4 px-6">{children}</div>
 );
 
 const Button = ({
@@ -163,10 +159,11 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   const baseClasses =
-    "px-4 py-2 rounded font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
+    "px-4 py-2 cursor-pointer rounded font-medium transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2";
   const variants = {
     primary: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
-    secondary: "bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500",
+    secondary:
+      "bg-gray-200 text-gray-600 hover:bg-gray-300 focus:ring-gray-500",
   };
 
   return (
