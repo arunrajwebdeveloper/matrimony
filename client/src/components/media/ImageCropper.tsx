@@ -1,7 +1,7 @@
 // components/ImageCropper.tsx
 "use client";
 
-import { Pixels } from "@/types/imageCropper";
+import { Pixels } from "@/types/imageUpload";
 import { useState } from "react";
 import Cropper from "react-easy-crop";
 

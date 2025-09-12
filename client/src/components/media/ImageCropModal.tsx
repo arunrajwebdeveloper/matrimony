@@ -1,6 +1,6 @@
 import React from "react";
 import ImageCropper from "./ImageCropper";
-import { Pixels } from "@/types/imageCropper";
+import { Pixels } from "@/types/imageUpload";
 
 interface CropModalProps {
   src: string;

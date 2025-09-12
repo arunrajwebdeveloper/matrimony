@@ -6,7 +6,7 @@ import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
 import api from "@/lib/api";
 import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
-import { ImageSingleUpload } from "@/types/imageCropper";
+import { ImageSingleUpload } from "@/types/imageUpload";
 import { ApiResponse } from "@/types";
 
 type ImageItem = {

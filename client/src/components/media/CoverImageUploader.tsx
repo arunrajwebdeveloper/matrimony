@@ -7,7 +7,7 @@ import ImageCropModal from "./ImageCropModal";
 import api from "@/lib/api";
 import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 import { ApiResponse } from "@/types";
-import { ImageSingleUpload } from "@/types/imageCropper";
+import { ImageSingleUpload } from "@/types/imageUpload";
 
 type ImageItem = {
   id: string;
