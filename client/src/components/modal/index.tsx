@@ -91,7 +91,7 @@ const Modal = ({ show, onHide, children }: ModalProps) => {
 
   return (
     <div
-      className={`fixed inset-0 bg-black/50 flex items-center justify-center z-[99999] transition-opacity duration-500 ease-out ${
+      className={`fixed inset-0 bg-gray-900/50 flex items-center justify-center z-[99999] transition-opacity duration-500 ease-out ${
         // Changed transition-all to transition-opacity
         isVisible ? "opacity-100" : "opacity-0" // Changed bg-opacity-50 to opacity-100 and bg-opacity-0 to opacity-0
       }`}

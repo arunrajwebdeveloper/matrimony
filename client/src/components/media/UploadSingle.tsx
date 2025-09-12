@@ -232,14 +232,14 @@ export default function UploadSinglePage({
           <Modal.Title>Remove Profile Picture</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          This image will be used as your main profile picture.
+          Are you sure you want to remove your profile picture?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Cancel
           </Button>
           <Button variant="primary" onClick={onConfirmRemoveImage}>
-            Remove
+            Yes, I'm sure
           </Button>
         </Modal.Footer>
       </Modal>
