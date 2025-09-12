@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import api from "@/lib/api";
-import { UserProfile } from "@/types";
+import { ApiResponse, UserProfile } from "@/types";
 import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
 import {
   User,
@@ -52,8 +52,10 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     const fetchProfile = async (): Promise<void> => {
       try {
-        const response = await api.get<UserProfile>(API_ENDPOINTS.PROFILE);
-        setProfileData(response.data);
+        const response = await api.get<ApiResponse<UserProfile>>(
+          API_ENDPOINTS.PROFILE
+        );
+        setProfileData(response?.data?.result);
       } catch (err: any) {
         setError("Failed to load profile data");
         console.error("Profile fetch error:", err);

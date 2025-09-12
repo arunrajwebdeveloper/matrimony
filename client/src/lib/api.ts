@@ -5,7 +5,7 @@ import {
   ROUTES,
   TOKEN_KEYS,
 } from "@/utils/constants";
-import { RefreshTokenResponse } from "@/types/api";
+import { ApiResponse, RefreshTokenResponse } from "@/types/api";
 import Storage from "./storage";
 
 // Create axios instance
@@ -80,13 +80,11 @@ api.interceptors.response.use(
 
         try {
           // Try to refresh the token using our Next.js API route
-          const refreshResponse = await axios.post<RefreshTokenResponse>(
-            API_ENDPOINTS.REFRESH,
-            {},
-            { withCredentials: true }
-          );
+          const refreshResponse = await axios.post<
+            ApiResponse<RefreshTokenResponse>
+          >(API_ENDPOINTS.REFRESH, {}, { withCredentials: true });
 
-          const { accessToken } = refreshResponse.data;
+          const { accessToken } = refreshResponse?.data?.result;
           Storage.setItem(TOKEN_KEYS.ACCESS_TOKEN, accessToken);
 
           // Update the default header for all subsequent requests

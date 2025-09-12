@@ -4,27 +4,22 @@ import api from "@/lib/api";
 import { API_ENDPOINTS } from "@/utils/constants";
 import { Activity } from "@/types/activity";
 import ActivityListSkeleton from "../skeleton/ActivityListSkeleton";
+import { ApiResponse } from "@/types";
 
 function ActivityList() {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  /**
-   * Fetches activities from the backend using an API call.
-   */
   const fetchActivities = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // We'll use a placeholder URL for the API endpoint.
-      // You must replace this with your actual backend URL.
-      const response = await api.get(API_ENDPOINTS.ACTIVITY_RECENT_GET);
-
-      // Assuming your API returns an array of activities directly.
-
-      setActivities(response.data);
+      const response = await api.get<ApiResponse<Activity[]>>(
+        API_ENDPOINTS.ACTIVITY_RECENT_GET
+      );
+      setActivities(response?.data?.result);
     } catch (e) {
       console.error("Failed to fetch activities:", e);
       setError("Failed to load activities. Please try again.");
@@ -33,7 +28,6 @@ function ActivityList() {
     }
   };
 
-  // Fetch data when the component mounts
   useEffect(() => {
     fetchActivities();
   }, []);
