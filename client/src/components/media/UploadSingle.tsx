@@ -9,6 +9,7 @@ import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 import { ImageSingleUpload } from "@/types/imageUpload";
 import { ApiResponse } from "@/types";
 import { Button, Modal } from "../modal";
+import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
 
 type ImageItem = {
   id: string;
@@ -130,13 +131,37 @@ export default function UploadSinglePage({
     });
   };
 
+  const onRemoveImage = async (filename: string) => {
+    startTransition(async () => {
+      try {
+        if (!filename) {
+          alert("Filename not found.");
+          return;
+        }
+
+        const res = await api.patch(API_ENDPOINTS.PROFILE_PICTURE_REMOVE, {
+          filename,
+        });
+
+        console.log("✅ Profile image remove:", res.data?.result?.message);
+      } catch (err) {
+        console.error("❌ Error removing profile image:", err);
+        alert("Failed to remove profile image. Please try again.");
+      }
+    });
+  };
+
   const handleClose = (): void => setShow(false);
 
   const handleRemoveImage = () => {
     setShow(true);
   };
 
-  const onConfirmRemoveImage = () => {
+  const onConfirmRemoveImage = async () => {
+    if (image?.processedUrl && image?.source) {
+      const filename = getFileNameFromUrl(image?.processedUrl!);
+      await onRemoveImage(filename);
+    }
     setImage(null);
     setShowModal(false);
     handleClose();
@@ -195,6 +220,7 @@ export default function UploadSinglePage({
                 accept="image/*"
                 className="hidden w-0 h-0 opacity-0"
                 onChange={(e) => onFileChange(e.target.files?.[0])}
+                disabled={isPending}
               />
               <div className="m-auto flex justify-center items-center flex-col gap-1">
                 <Plus

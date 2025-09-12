@@ -21,6 +21,10 @@ export const API_ENDPOINTS = {
   PROFILE_COVER_UPLOAD: "/api/users/profile-cover",
   PROFILE_IMAGES_UPLOAD: "/api/users/profile-photos",
 
+  PROFILE_PICTURE_REMOVE: "/api/users/profile-picture/remove",
+  PROFILE_COVER_REMOVE: "/api/users/profile-cover/remove",
+  PROFILE_IMAGES_REMOVE: "/api/users/profile-photos/remove",
+
   // ACTIVITIES
 
   ACTIVITY_LOG: "/api/activities/log",
