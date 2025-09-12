@@ -7,6 +7,8 @@ import {
   Patch,
   Body,
   UseInterceptors,
+  BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -132,5 +134,83 @@ export class UsersController {
       return { message: 'User not found.' };
     }
     return { message: 'Profile photos updated successfully' };
+  }
+
+  /*
+   * Delete profile cover
+   */
+  @Patch('profile-cover/remove')
+  async deleteCoverImage(
+    @Request() req: any,
+    @Body('filename') filename: string,
+  ) {
+    if (!filename) {
+      throw new BadRequestException('Filename is required');
+    }
+
+    const userId = req.user._id;
+    const profile = await this.usersService.deleteCoverImage(userId, filename);
+
+    if (!profile) {
+      throw new NotFoundException('Profile not found');
+    }
+
+    return {
+      message: 'Cover image deleted successfully',
+    };
+  }
+
+  /*
+   * Delete profile picture
+   */
+  @Patch('profile-picture/remove')
+  async deleteProfilePicture(
+    @Request() req: any,
+    @Body('filename') filename: string,
+  ) {
+    if (!filename) {
+      throw new BadRequestException('Filename is required');
+    }
+
+    const userId = req.user._id;
+    const profile = await this.usersService.deleteProfilePicture(
+      userId,
+      filename,
+    );
+
+    if (!profile) {
+      throw new NotFoundException('Profile not found');
+    }
+
+    return {
+      message: 'Profile picture deleted successfully',
+    };
+  }
+
+  /*
+   * Delete profile picture
+   */
+  @Patch('profile-photos/remove')
+  async deleteProfilePhotos(
+    @Request() req: any,
+    @Body('filename') filename: string,
+  ) {
+    if (!filename) {
+      throw new BadRequestException('Filename is required');
+    }
+
+    const userId = req.user._id;
+    const profile = await this.usersService.deleteProfilePhotos(
+      userId,
+      filename,
+    );
+
+    if (!profile) {
+      throw new NotFoundException('Profile not found');
+    }
+
+    return {
+      message: 'Profile photo deleted successfully',
+    };
   }
 }
