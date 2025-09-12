@@ -6,6 +6,8 @@ import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
 import api from "@/lib/api";
 import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
+import { ImageSingleUpload } from "@/types/imageCropper";
+import { ApiResponse } from "@/types";
 
 type ImageItem = {
   id: string;
@@ -84,13 +86,17 @@ export default function UploadSinglePage({
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await api.post(API_ENDPOINTS.UPLOAD.SINGLE, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const res = await api.post<ApiResponse<ImageSingleUpload>>(
+      API_ENDPOINTS.UPLOAD.SINGLE,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
-    return res.data;
+    return res?.data?.result;
   }
 
   const onSubmit = () => {
@@ -115,7 +121,7 @@ export default function UploadSinglePage({
           filename,
         });
 
-        console.log("✅ Profile image updated:", res.data);
+        console.log("✅ Profile image updated:", res.data?.result?.message);
       } catch (err) {
         console.error("❌ Error uploading profile image:", err);
         alert("Failed to upload profile image. Please try again.");

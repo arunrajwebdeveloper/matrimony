@@ -6,6 +6,8 @@ import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
 import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 import api from "@/lib/api";
+import { ImageMultiUpload } from "@/types/imageCropper";
+import { ApiResponse } from "@/types";
 
 type ImageItem = {
   id: string;
@@ -111,13 +113,17 @@ export default function UploadMultiplePage({
       }
     });
 
-    const res = await api.post(API_ENDPOINTS.UPLOAD.MULTIPLE, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const res = await api.post<ApiResponse<ImageMultiUpload>>(
+      API_ENDPOINTS.UPLOAD.MULTIPLE,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
-    return res.data;
+    return res?.data?.result;
   }
 
   const onSubmit = async () => {

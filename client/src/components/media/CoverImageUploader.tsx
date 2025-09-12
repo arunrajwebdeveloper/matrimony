@@ -6,6 +6,8 @@ import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
 import api from "@/lib/api";
 import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
+import { ApiResponse } from "@/types";
+import { ImageSingleUpload } from "@/types/imageCropper";
 
 type ImageItem = {
   id: string;
@@ -81,13 +83,17 @@ export default function CoverImageUploader({
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await api.post(API_ENDPOINTS.UPLOAD.COVER, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const res = await api.post<ApiResponse<ImageSingleUpload>>(
+      API_ENDPOINTS.UPLOAD.COVER,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
-    return res.data;
+    return res?.data?.result;
   }
 
   const onSubmit = async () => {
@@ -108,7 +114,7 @@ export default function CoverImageUploader({
           filename,
         });
 
-        console.log("Profile cover updated:", res.data);
+        console.log("Profile cover updated:", res?.data?.result?.message);
       } catch (err) {
         console.error("❌ Error uploading profile cover:", err);
         alert("Failed to upload profile cover. Please try again.");
