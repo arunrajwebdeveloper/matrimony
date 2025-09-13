@@ -238,13 +238,17 @@ export default function CoverImageUploader({
           )}
         </div>
 
-        <button
-          className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
-          onClick={onSubmit}
-          disabled={!image || !image.processedUrl || image.source || isPending} // only enable if processed & not source
-        >
-          {isPending ? "Wait..." : "Upload"}
-        </button>
+        {!image?.source && (
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+            onClick={onSubmit}
+            disabled={
+              !image || !image.processedUrl || image.source || isPending
+            } // only enable if processed & not source
+          >
+            {isPending ? "Wait..." : "Upload"}
+          </button>
+        )}
 
         {/* Modal for cropping */}
         {image?.originalUrl && showModal && !image.source && (
