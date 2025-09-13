@@ -333,7 +333,7 @@ const Page: React.FC = () => {
             <div className="py-4">
               <div className="mb-8">
                 <UserSummaryDisplay
-                  avatar={profileData?.profilePicture!}
+                  avatar={user?.profile?.profilePicture!}
                   firstname={`${user?.firstName || ""}`}
                   lastname={`${user?.lastName || ""}`}
                   email={user?.email || ""}
