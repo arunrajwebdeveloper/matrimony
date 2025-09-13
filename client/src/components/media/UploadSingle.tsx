@@ -190,9 +190,8 @@ export default function UploadSinglePage({
       // if source image just close modal
       setShowModal(false);
     } else {
-      // setImage(null);
-      // setShowModal(false);
-      handleRemoveImage();
+      setImage(null);
+      setShowModal(false);
     }
 
     if (fileInputRef.current) {

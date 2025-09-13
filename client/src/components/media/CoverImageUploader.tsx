@@ -173,7 +173,8 @@ export default function CoverImageUploader({
       // if source image just close modal
       setShowModal(false);
     } else {
-      handleRemoveImage();
+      setImage(null);
+      setShowModal(false);
     }
 
     if (fileInputRef.current) {
