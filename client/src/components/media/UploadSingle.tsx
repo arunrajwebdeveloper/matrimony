@@ -8,11 +8,11 @@ import api from "@/lib/api";
 import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 import { ImageSingleUpload } from "@/types/imageUpload";
 import { ApiResponse, AuthActionType } from "@/types";
-import { Button, Modal } from "../modal";
 import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
 import { useAuth } from "@/hooks/useAuth";
 import { authService } from "@/lib/auth";
 import CircleSpinner from "../ui/CircleSpinner";
+import ConfirmModal from "../modal/ConfirmModal";
 
 type ImageItem = {
   id: string;
@@ -33,7 +33,7 @@ export default function UploadSinglePage({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [cropPixels, setCropPixels] = useState<any>(null);
   const [isPending, startTransition] = useTransition();
-  const [show, setShow] = useState<boolean>(false);
+  const [isShowConfirm, setIsShowConfirm] = useState<boolean>(false);
 
   // load source image if exists
   useEffect(() => {
@@ -167,10 +167,10 @@ export default function UploadSinglePage({
     });
   };
 
-  const handleClose = (): void => setShow(false);
+  const handleClose = (): void => setIsShowConfirm(false);
 
   const handleRemoveImage = () => {
-    setShow(true);
+    setIsShowConfirm(true);
   };
 
   const onConfirmRemoveImage = async () => {
@@ -281,22 +281,13 @@ export default function UploadSinglePage({
 
       {/* CONFIRM MODAL */}
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton onClose={handleClose}>
-          <Modal.Title>Remove Profile Picture</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to remove your profile picture?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={onConfirmRemoveImage}>
-            Yes, I'm sure
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ConfirmModal
+        isShow={isShowConfirm}
+        title={"Remove Profile Picture"}
+        description={"Are you sure you want to remove your profile picture?"}
+        onClose={handleClose}
+        onConfirm={onConfirmRemoveImage}
+      />
     </>
   );
 }

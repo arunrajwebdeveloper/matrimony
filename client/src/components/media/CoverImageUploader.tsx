@@ -9,8 +9,8 @@ import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 import { ApiResponse } from "@/types";
 import { ImageSingleUpload } from "@/types/imageUpload";
 import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
-import { Button, Modal } from "../modal";
 import CircleSpinner from "../ui/CircleSpinner";
+import ConfirmModal from "../modal/ConfirmModal";
 
 type ImageItem = {
   id: string;
@@ -30,7 +30,7 @@ export default function CoverImageUploader({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [cropPixels, setCropPixels] = useState<any>(null);
   const [isPending, startTransition] = useTransition();
-  const [show, setShow] = useState<boolean>(false);
+  const [isShowConfirm, setIsShowConfirm] = useState<boolean>(false);
 
   // load source image if exists
   useEffect(() => {
@@ -150,10 +150,10 @@ export default function CoverImageUploader({
     });
   };
 
-  const handleClose = (): void => setShow(false);
+  const handleClose = (): void => setIsShowConfirm(false);
 
   const handleRemoveImage = () => {
-    setShow(true);
+    setIsShowConfirm(true);
   };
 
   const onConfirmRemoveImage = async () => {
@@ -264,22 +264,13 @@ export default function CoverImageUploader({
 
       {/* CONFIRM MODAL */}
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton onClose={handleClose}>
-          <Modal.Title>Remove Cover Image</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to remove your cover image?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={onConfirmRemoveImage}>
-            Yes, I'm sure
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ConfirmModal
+        isShow={isShowConfirm}
+        title={"Remove Cover Image"}
+        description={"Are you sure you want to remove your cover image?"}
+        onClose={handleClose}
+        onConfirm={onConfirmRemoveImage}
+      />
     </>
   );
 }

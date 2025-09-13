@@ -190,9 +190,11 @@ const DashboardPage: React.FC = () => {
               <ProfileCompletionCard />
             </div> */}
 
-            <div className="mb-3">
-              <UpgradePremiumCard />
-            </div>
+            {!user?.profile?.isPremium && (
+              <div className="mb-3">
+                <UpgradePremiumCard />
+              </div>
+            )}
 
             <div className="mb-3">
               <InfoSidebarCard />
