@@ -7,9 +7,11 @@ import ImageCropModal from "./ImageCropModal";
 import api from "@/lib/api";
 import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 import { ImageSingleUpload } from "@/types/imageUpload";
-import { ApiResponse } from "@/types";
+import { ApiResponse, AuthActionType } from "@/types";
 import { Button, Modal } from "../modal";
 import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
+import { useAuth } from "@/hooks/useAuth";
+import { authService } from "@/lib/auth";
 
 type ImageItem = {
   id: string;
@@ -25,6 +27,7 @@ export default function UploadSinglePage({
 }: {
   sourceImage?: string | null;
 }) {
+  const { dispatch } = useAuth();
   const [image, setImage] = useState<ImageItem | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [cropPixels, setCropPixels] = useState<any>(null);
@@ -123,6 +126,9 @@ export default function UploadSinglePage({
           filename,
         });
 
+        const user = await authService.getMe();
+        dispatch({ type: AuthActionType.SET_USER, payload: user });
+
         console.log("✅ Profile image updated:", res.data?.result?.message);
       } catch (err) {
         console.error("❌ Error uploading profile image:", err);
@@ -142,6 +148,9 @@ export default function UploadSinglePage({
         const res = await api.patch(API_ENDPOINTS.PROFILE_PICTURE_REMOVE, {
           filename,
         });
+
+        const user = await authService.getMe();
+        dispatch({ type: AuthActionType.SET_USER, payload: user });
 
         console.log("✅ Profile image remove:", res.data?.result?.message);
       } catch (err) {

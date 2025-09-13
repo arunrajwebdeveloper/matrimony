@@ -66,6 +66,7 @@ export interface AuthContextType extends AuthState {
   resetPassword: (credentials: ResetPasswordCredentials) => Promise<AuthResult>;
   logout: () => Promise<void>;
   clearError: () => void;
+  dispatch: (action: AuthAction) => void;
 }
 
 export interface AuthResult {
