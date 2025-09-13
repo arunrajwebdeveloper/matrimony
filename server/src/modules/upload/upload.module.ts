@@ -15,7 +15,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: {
           expiresIn: configService.get<string | number>(
             'UPLOAD_TOKEN_EXPIRES',
-            '2h',
+            '24h',
           ),
         },
       }),
