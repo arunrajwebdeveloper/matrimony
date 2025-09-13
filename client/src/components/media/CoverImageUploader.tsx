@@ -266,10 +266,10 @@ export default function CoverImageUploader({
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton onClose={handleClose}>
-          <Modal.Title>Remove Profile Picture</Modal.Title>
+          <Modal.Title>Remove Cover Image</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to remove your profile picture?
+          Are you sure you want to remove your cover image?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
