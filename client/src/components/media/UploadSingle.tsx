@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
@@ -28,6 +28,8 @@ export default function UploadSinglePage({
 }: {
   sourceImage?: string | null;
 }) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const { dispatch } = useAuth();
   const [image, setImage] = useState<ImageItem | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -185,10 +187,16 @@ export default function UploadSinglePage({
 
   const handleCancelCrop = () => {
     if (image?.processedUrl || image?.source) {
+      // if source image just close modal
       setShowModal(false);
     } else {
-      setImage(null);
-      setShowModal(false);
+      // setImage(null);
+      // setShowModal(false);
+      handleRemoveImage();
+    }
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // reset input file
     }
   };
 
@@ -240,6 +248,7 @@ export default function UploadSinglePage({
           ) : (
             <label className="w-50 h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
               <input
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 className="hidden w-0 h-0 opacity-0"
