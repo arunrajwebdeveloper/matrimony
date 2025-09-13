@@ -12,6 +12,7 @@ import { Button, Modal } from "../modal";
 import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
 import { useAuth } from "@/hooks/useAuth";
 import { authService } from "@/lib/auth";
+import CircleSpinner from "../ui/CircleSpinner";
 
 type ImageItem = {
   id: string;
@@ -129,6 +130,12 @@ export default function UploadSinglePage({
         const user = await authService.getMe();
         dispatch({ type: AuthActionType.SET_USER, payload: user });
 
+        setImage({
+          id: "source",
+          processedUrl: user?.profile?.profilePicture!,
+          source: true,
+        });
+
         console.log("✅ Profile image updated:", res.data?.result?.message);
       } catch (err) {
         console.error("❌ Error uploading profile image:", err);
@@ -221,6 +228,14 @@ export default function UploadSinglePage({
                   <span>Edit</span>
                 </button>
               )}
+
+              {/* Loader */}
+
+              {isPending && (
+                <div className="absolute inset-0 w-full h-full bg-blue-600/50 text-white p-1 z-10 flex items-center justify-center opacity-50">
+                  <CircleSpinner size={50} />
+                </div>
+              )}
             </div>
           ) : (
             <label className="w-50 h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
@@ -242,11 +257,11 @@ export default function UploadSinglePage({
         </div>
 
         <button
-          className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+          className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50 min-w-36"
           onClick={onSubmit}
           disabled={!image || !image.processedUrl || image.source || isPending} // only enable if processed & not source
         >
-          {isPending ? "Uploading..." : "Upload"}
+          {isPending ? "Wait..." : "Upload"}
         </button>
 
         {/* Modal for cropping */}

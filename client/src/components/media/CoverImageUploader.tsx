@@ -10,6 +10,7 @@ import { ApiResponse } from "@/types";
 import { ImageSingleUpload } from "@/types/imageUpload";
 import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
 import { Button, Modal } from "../modal";
+import CircleSpinner from "../ui/CircleSpinner";
 
 type ImageItem = {
   id: string;
@@ -116,6 +117,11 @@ export default function CoverImageUploader({
           filename,
         });
 
+        setImage({
+          ...image,
+          source: true,
+        });
+
         console.log("Profile cover updated:", res?.data?.result?.message);
       } catch (err) {
         console.error("❌ Error uploading profile cover:", err);
@@ -204,6 +210,14 @@ export default function CoverImageUploader({
                   <span>Edit</span>
                 </button>
               )}
+
+              {/* Loader */}
+
+              {isPending && (
+                <div className="absolute inset-0 w-full h-full bg-blue-600/50 text-white p-1 z-10 flex items-center justify-center opacity-50">
+                  <CircleSpinner size={50} />
+                </div>
+              )}
             </div>
           ) : (
             <label className="aspect-[16/9] h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
@@ -229,7 +243,7 @@ export default function CoverImageUploader({
           onClick={onSubmit}
           disabled={!image || !image.processedUrl || image.source || isPending} // only enable if processed & not source
         >
-          {isPending ? "Uploading..." : "Upload"}
+          {isPending ? "Wait..." : "Upload"}
         </button>
 
         {/* Modal for cropping */}
