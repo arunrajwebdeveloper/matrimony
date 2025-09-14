@@ -60,7 +60,9 @@ export class UsersService {
         path: 'profile',
         select: 'profilePicture visibility isPremium',
       })
-      .select('-blockedUsers -resetPasswordToken -resetPasswordExpires') // only removes this, all others stay
+      .select(
+        '-blockedUsers -acceptedUsers -recentlyViewedUsers -shortlistedUsers -requestedUsers -declinedUsers -resetPasswordToken -resetPasswordExpires',
+      ) // only removes this, all others stay
       // .lean() // make it plain JS object (no mongoose doc overhead)
       .exec();
 
@@ -98,6 +100,27 @@ export class UsersService {
 
     // Convert the array of ObjectIds to strings
     return user.blockedUsers.map((id) => id.toString());
+  }
+
+  /**
+   * Retrieves the list of user IDs that the specified user has declined.
+   *
+   * @param userId The ID of the user.
+   * @returns An array of string IDs of declined users.
+   */
+  async getDeclinedUserIds(userId: string): Promise<string[]> {
+    const user = await this.userModel
+      .findById(new Types.ObjectId(userId))
+      .select('declinedUsers') // Only fetch the declinedUsers field
+      .exec();
+
+    if (!user) {
+      // Handle case where user is not found
+      return [];
+    }
+
+    // Convert the array of ObjectIds to strings
+    return user.declinedUsers.map((id) => id.toString());
   }
 
   // FILE UPLOADS

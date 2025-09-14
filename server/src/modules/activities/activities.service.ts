@@ -71,7 +71,7 @@ export class ActivitiesService {
 
   /**
    * Retrieves a list of recent activities for a specific user, filtering out
-   * activities related to users on their blocked list.
+   * activities related to users on their blocked, declined list.
    *
    * @param userId The ID of the user to get activities for.
    * @returns An array of populated activity documents.
@@ -79,18 +79,24 @@ export class ActivitiesService {
   async getRecentActivitiesForUser(
     userId: string,
   ): Promise<ActivityDocument[]> {
-    // 1. Get the list of IDs for users that the current user has blocked.
-    // We assume the UsersService has a method to get this list.
-    const blockedUserIds = await this.usersService.getBlockedUserIds(userId);
-    const blockedObjectIds = blockedUserIds.map((id) => new Types.ObjectId(id));
+    // 1. Run both service calls in parallel
+    const [blockedUserIds, declinedUserIds] = await Promise.all([
+      this.usersService.getBlockedUserIds(userId),
+      this.usersService.getDeclinedUserIds(userId),
+    ]);
+
+    // 2. Merge blocked + declined into a single exclusion list
+    const excludedIds = [...(blockedUserIds || []), ...(declinedUserIds || [])];
+    const excludedObjectIds = excludedIds.map((id) => new Types.ObjectId(id));
 
     // 2. Build the query to find activities where:
     //    a) The target of the activity is the current user.
-    //    b) The actor of the activity is NOT in the blocked list.
+    //    b) The actor of the activity is NOT in the blocked, declined list.
+
     const activities = await this.activityModel
       .find({
         targetId: new Types.ObjectId(userId),
-        actorId: { $nin: blockedObjectIds },
+        actorId: { $nin: excludedObjectIds },
       })
       .sort({ timestamp: -1 }) // Sort by the auto-generated timestamp
       .limit(10)
