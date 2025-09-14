@@ -60,7 +60,9 @@ export class UsersService {
         path: 'profile',
         select: 'profilePicture visibility isPremium',
       })
-      .select('-blockedUsers -resetPasswordToken -resetPasswordExpires') // only removes this, all others stay
+      .select(
+        '-blockedUsers -acceptedUsers -recentlyViewedUsers -shortlistedUsers -requestedUsers -declinedUsers -resetPasswordToken -resetPasswordExpires',
+      ) // only removes this, all others stay
       // .lean() // make it plain JS object (no mongoose doc overhead)
       .exec();
 
@@ -100,6 +102,27 @@ export class UsersService {
     return user.blockedUsers.map((id) => id.toString());
   }
 
+  /**
+   * Retrieves the list of user IDs that the specified user has declined.
+   *
+   * @param userId The ID of the user.
+   * @returns An array of string IDs of declined users.
+   */
+  async getDeclinedUserIds(userId: string): Promise<string[]> {
+    const user = await this.userModel
+      .findById(new Types.ObjectId(userId))
+      .select('declinedUsers') // Only fetch the declinedUsers field
+      .exec();
+
+    if (!user) {
+      // Handle case where user is not found
+      return [];
+    }
+
+    // Convert the array of ObjectIds to strings
+    return user.declinedUsers.map((id) => id.toString());
+  }
+
   // FILE UPLOADS
 
   /** Update single profile picture */
@@ -126,6 +149,52 @@ export class UsersService {
 
     profile.coverImage = filename;
     return profile.save();
+  }
+
+  /** Delete entire user and profile*/
+
+  async deleteUser(userId: string) {
+    const session = await this.userModel.db.startSession();
+
+    try {
+      const result = await session.withTransaction(async () => {
+        const user = await this.userModel.findById(userId).session(session);
+        if (!user) return null;
+
+        const profile = await this.profileModel
+          .findOne({ user: userId })
+          .session(session);
+
+        // Delete from database first (within transaction)
+        await this.userModel.findByIdAndDelete(userId).session(session);
+        await this.profileModel
+          .findOneAndDelete({ user: userId })
+          .session(session);
+
+        return profile; // Return profile to delete files later
+      });
+
+      // Only delete files AFTER successful database transaction
+      if (result) {
+        if (result.profilePicture) {
+          this.removeFile(FOLDER_TYPES.PROFILE_PICTURES, result.profilePicture);
+        }
+
+        if (result.profilePhotos?.length) {
+          result.profilePhotos.forEach((f) =>
+            this.removeFile(FOLDER_TYPES.PROFILE_PHOTOS, f),
+          );
+        }
+
+        if (result.coverImage) {
+          this.removeFile(FOLDER_TYPES.COVER_IMAGES, result.coverImage);
+        }
+      }
+
+      return { success: true };
+    } finally {
+      await session.endSession();
+    }
   }
 
   /** Update multiple profile photos */
@@ -156,8 +225,30 @@ export class UsersService {
     return profile.save();
   }
 
-  /** Delete a single profile image */
-  async deleteProfileImage(userId: string, filename: string) {
+  /** Delete profile picture */
+  async deleteProfilePicture(userId: string, filename: string) {
+    const profile = await this.profileModel.findOne({ user: userId });
+    if (!profile) return null;
+
+    profile.profilePicture = null;
+    this.removeFile(FOLDER_TYPES.PROFILE_PICTURES, filename);
+
+    return profile.save();
+  }
+
+  /** Delete cover image */
+  async deleteCoverImage(userId: string, filename: string) {
+    const profile = await this.profileModel.findOne({ user: userId });
+    if (!profile) return null;
+
+    profile.coverImage = null;
+    this.removeFile(FOLDER_TYPES.COVER_IMAGES, filename);
+
+    return profile.save();
+  }
+
+  /** Delete profile photos */
+  async deleteProfilePhotos(userId: string, filename: string) {
     const profile = await this.profileModel.findOne({ user: userId });
     if (!profile) return null;
 
@@ -169,30 +260,7 @@ export class UsersService {
     return profile.save();
   }
 
-  /** Delete entire user and their files */
-  async deleteUser(userId: string) {
-    const user = await this.userModel.findById(userId);
-    if (!user) return null;
-
-    const profile = await this.profileModel.findOne({ user: userId });
-
-    if (profile?.profilePicture) {
-      this.removeFile(FOLDER_TYPES.PROFILE_PICTURES, profile?.profilePicture);
-    }
-
-    if (profile?.profilePhotos?.length) {
-      profile?.profilePhotos.forEach((f) =>
-        this.removeFile(FOLDER_TYPES.PROFILE_PHOTOS, f),
-      );
-    }
-
-    if (profile?.coverImage) {
-      this.removeFile(FOLDER_TYPES.COVER_IMAGES, profile?.coverImage);
-    }
-
-    await this.userModel.findByIdAndDelete(userId);
-    return { success: true };
-  }
+  // REMOVE FILE
 
   private removeFile(folder: FolderType, filename: string) {
     // Use project root as base

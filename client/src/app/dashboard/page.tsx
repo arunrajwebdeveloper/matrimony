@@ -16,7 +16,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import MatchList from "@/components/dashboard/MatchList";
-import { MatchResult, MatchState, UserCardType } from "@/types";
+import { ApiResponse, MatchResult, MatchState, UserCardType } from "@/types";
 import api from "@/lib/api";
 import Greeting from "@/components/dashboard/Greeting";
 import ActivityItem from "@/components/profile/ActivityFeedItem";
@@ -48,11 +48,11 @@ const DashboardPage: React.FC = () => {
 
   const fetchPreferredMatches = async (): Promise<void> => {
     try {
-      const response = await api.get<MatchResult>(
+      const response = await api.get<ApiResponse<MatchResult>>(
         `${API_ENDPOINTS.PREFERRED_MATCHES_LIST}?limit=5`
       );
       setPreferredMatches({
-        data: response?.data as MatchResult,
+        data: response?.data?.result as MatchResult,
         isLoading: false,
         error: null,
       });
@@ -68,11 +68,11 @@ const DashboardPage: React.FC = () => {
 
   const fetchNewMatches = async (): Promise<void> => {
     try {
-      const response = await api.get<MatchResult>(
+      const response = await api.get<ApiResponse<MatchResult>>(
         `${API_ENDPOINTS.NEW_MATCHES_LIST}?limit=5`
       );
       setNewMatches({
-        data: response?.data as MatchResult,
+        data: response?.data?.result as MatchResult,
         isLoading: false,
         error: null,
       });
@@ -190,9 +190,11 @@ const DashboardPage: React.FC = () => {
               <ProfileCompletionCard />
             </div> */}
 
-            <div className="mb-3">
-              <UpgradePremiumCard />
-            </div>
+            {!user?.profile?.isPremium && (
+              <div className="mb-3">
+                <UpgradePremiumCard />
+              </div>
+            )}
 
             <div className="mb-3">
               <InfoSidebarCard />

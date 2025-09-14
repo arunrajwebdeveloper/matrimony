@@ -18,7 +18,7 @@ export class UploadService {
     );
     const expires = this.configService.get<string>(
       'UPLOAD_TOKEN_EXPIRES',
-      '2h',
+      '24h',
     );
 
     // Convert "2h" to seconds
@@ -33,7 +33,7 @@ export class UploadService {
 
     return {
       signedUrl: `${this.baseUrl}/api/upload/file/${folder}/${filename}?token=${token}`,
-      expiresIn: 2 * 60 * 60, // 2 hours in seconds
+      expiresIn: 24 * 60 * 60, // 2 hours in seconds
     };
   }
 

@@ -35,7 +35,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   // Global response format:
-  // app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   // Swagger API Documentation
   const config = new DocumentBuilder()

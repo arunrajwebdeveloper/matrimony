@@ -50,6 +50,21 @@ export class User {
   role: 'user' | 'admin'; // Add this line for role-based access control
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  acceptedUsers: Types.ObjectId[];
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  recentlyViewedUsers: Types.ObjectId[];
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  shortlistedUsers: Types.ObjectId[];
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  requestedUsers: Types.ObjectId[];
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  declinedUsers: Types.ObjectId[];
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
   blockedUsers: Types.ObjectId[];
 
   // Fields for password reset

@@ -10,6 +10,8 @@ import {
   RegisterPayloads,
   EmailField,
   ResetPasswordCredentials,
+  ApiResponse,
+  ResetPasswordResponse,
 } from "@/types";
 import { TOKEN_KEYS } from "@/utils/constants";
 
@@ -18,12 +20,12 @@ export const authService = {
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
-      const response = await api.post<AuthResponse>(
+      const response = await api.post<ApiResponse<AuthResponse>>(
         API_ENDPOINTS.LOGIN,
         credentials
       );
 
-      const { accessToken } = response.data;
+      const { accessToken } = response?.data?.result;
 
       if (!accessToken) {
         throw new Error("No access token received");
@@ -52,7 +54,10 @@ export const authService = {
 
   async register(credentials: RegisterPayloads) {
     try {
-      await api.post<AuthResponse>(API_ENDPOINTS.REGISTER, credentials);
+      await api.post<ApiResponse<AuthResponse>>(
+        API_ENDPOINTS.REGISTER,
+        credentials
+      );
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error("Register error:", {
@@ -83,8 +88,8 @@ export const authService = {
   // Get user profile
   async getMe(): Promise<User> {
     try {
-      const response = await api.get<User>(API_ENDPOINTS.ME);
-      return response.data;
+      const response = await api.get<ApiResponse<User>>(API_ENDPOINTS.ME);
+      return response?.data?.result;
     } catch (error) {
       const axiosError = error as AxiosError;
       throw axiosError;
@@ -99,10 +104,10 @@ export const authService = {
   // Refresh token
   async refreshToken(): Promise<string> {
     try {
-      const response = await api.post<RefreshTokenResponse>(
+      const response = await api.post<ApiResponse<RefreshTokenResponse>>(
         API_ENDPOINTS.REFRESH
       );
-      const { accessToken } = response.data;
+      const { accessToken } = response?.data?.result;
       Storage.setItem(TOKEN_KEYS.ACCESS_TOKEN, accessToken);
       return accessToken;
     } catch (error) {
@@ -115,7 +120,10 @@ export const authService = {
   // send password reset link
   async forgotPassword(payload: EmailField) {
     try {
-      await api.post<string>(API_ENDPOINTS.FORGOT_PASSWORD, payload);
+      await api.post<ApiResponse<ResetPasswordResponse>>(
+        API_ENDPOINTS.FORGOT_PASSWORD,
+        payload
+      );
     } catch (error) {
       const axiosError = error as AxiosError;
       throw axiosError;
@@ -125,7 +133,10 @@ export const authService = {
   // reset password
   async resetPassword(payload: ResetPasswordCredentials) {
     try {
-      await api.post<string>(API_ENDPOINTS.RESET_PASSWORD, payload);
+      await api.post<ApiResponse<ResetPasswordResponse>>(
+        API_ENDPOINTS.RESET_PASSWORD,
+        payload
+      );
     } catch (error) {
       const axiosError = error as AxiosError;
       throw axiosError;

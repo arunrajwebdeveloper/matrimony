@@ -12,7 +12,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import MatchList from "@/components/dashboard/MatchList";
-import { MatchResult, MatchState } from "@/types";
+import { ApiResponse, MatchResult, MatchState } from "@/types";
 import api from "@/lib/api";
 import Pagination from "@/components/ui/Pagination";
 import { searchParamsToObject } from "@/utils/searchParamsToObject";
@@ -31,12 +31,12 @@ const PreferredMatchesPage: React.FC = () => {
 
   const fetchPreferredMatches = async (): Promise<void> => {
     try {
-      const response = await api.get<MatchResult>(
+      const response = await api.get<ApiResponse<MatchResult>>(
         API_ENDPOINTS.PREFERRED_MATCHES_LIST,
         { params: searchParamsToObject(searchParams) }
       );
       setState({
-        data: response?.data as MatchResult,
+        data: response?.data?.result as MatchResult,
         isLoading: false,
         error: null,
       });

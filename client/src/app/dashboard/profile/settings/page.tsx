@@ -5,7 +5,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import api from "@/lib/api";
-import { UserProfile } from "@/types";
+import { ApiResponse, UserProfile } from "@/types";
 import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
 import Navigation from "@/components/navigation/Navigation";
 import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
@@ -204,8 +204,10 @@ const Page: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async (): Promise<void> => {
       try {
-        const response = await api.get<UserProfile>(API_ENDPOINTS.PROFILE);
-        setProfileData(response.data);
+        const response = await api.get<ApiResponse<UserProfile>>(
+          API_ENDPOINTS.PROFILE
+        );
+        setProfileData(response?.data?.result);
       } catch (err: any) {
         setError("Failed to load profile data");
         console.error("Profile fetch error:", err);
@@ -331,7 +333,7 @@ const Page: React.FC = () => {
             <div className="py-4">
               <div className="mb-8">
                 <UserSummaryDisplay
-                  avatar={profileData?.profilePicture!}
+                  avatar={user?.profile?.profilePicture!}
                   firstname={`${user?.firstName || ""}`}
                   lastname={`${user?.lastName || ""}`}
                   email={user?.email || ""}

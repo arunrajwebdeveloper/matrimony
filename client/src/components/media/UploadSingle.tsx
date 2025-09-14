@@ -1,11 +1,18 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { fileToObjectURL, processImagePipeline } from "@/lib/image";
 import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
 import api from "@/lib/api";
 import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
+import { ImageSingleUpload } from "@/types/imageUpload";
+import { ApiResponse, AuthActionType } from "@/types";
+import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
+import { useAuth } from "@/hooks/useAuth";
+import { authService } from "@/lib/auth";
+import CircleSpinner from "../ui/CircleSpinner";
+import ConfirmModal from "../modal/ConfirmModal";
 
 type ImageItem = {
   id: string;
@@ -21,11 +28,14 @@ export default function UploadSinglePage({
 }: {
   sourceImage?: string | null;
 }) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { dispatch } = useAuth();
   const [image, setImage] = useState<ImageItem | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [cropPixels, setCropPixels] = useState<any>(null);
-
   const [isPending, startTransition] = useTransition();
+  const [isShowConfirm, setIsShowConfirm] = useState<boolean>(false);
 
   // load source image if exists
   useEffect(() => {
@@ -84,13 +94,17 @@ export default function UploadSinglePage({
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await api.post(API_ENDPOINTS.UPLOAD.SINGLE, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const res = await api.post<ApiResponse<ImageSingleUpload>>(
+      API_ENDPOINTS.UPLOAD.SINGLE,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
-    return res.data;
+    return res?.data?.result;
   }
 
   const onSubmit = () => {
@@ -115,7 +129,16 @@ export default function UploadSinglePage({
           filename,
         });
 
-        console.log("✅ Profile image updated:", res.data);
+        const user = await authService.getMe();
+        dispatch({ type: AuthActionType.SET_USER, payload: user });
+
+        setImage({
+          id: "source",
+          processedUrl: user?.profile?.profilePicture!,
+          source: true,
+        });
+
+        console.log("✅ Profile image updated:", res.data?.result?.message);
       } catch (err) {
         console.error("❌ Error uploading profile image:", err);
         alert("Failed to upload profile image. Please try again.");
@@ -123,16 +146,56 @@ export default function UploadSinglePage({
     });
   };
 
+  const onRemoveImage = async (filename: string) => {
+    startTransition(async () => {
+      try {
+        if (!filename) {
+          alert("Filename not found.");
+          return;
+        }
+
+        const res = await api.patch(API_ENDPOINTS.PROFILE_PICTURE_REMOVE, {
+          filename,
+        });
+
+        const user = await authService.getMe();
+        dispatch({ type: AuthActionType.SET_USER, payload: user });
+
+        console.log("✅ Profile image remove:", res.data?.result?.message);
+      } catch (err) {
+        console.error("❌ Error removing profile image:", err);
+        alert("Failed to remove profile image. Please try again.");
+      }
+    });
+  };
+
+  const handleClose = (): void => setIsShowConfirm(false);
+
   const handleRemoveImage = () => {
+    setIsShowConfirm(true);
+  };
+
+  const onConfirmRemoveImage = async () => {
+    if (image?.processedUrl && image?.source) {
+      const filename = getFileNameFromUrl(image?.processedUrl!);
+      await onRemoveImage(filename);
+    }
     setImage(null);
     setShowModal(false);
+    handleClose();
   };
 
   const handleCancelCrop = () => {
     if (image?.processedUrl || image?.source) {
+      // if source image just close modal
       setShowModal(false);
     } else {
-      handleRemoveImage();
+      setImage(null);
+      setShowModal(false);
+    }
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // reset input file
     }
   };
 
@@ -142,71 +205,97 @@ export default function UploadSinglePage({
   };
 
   return (
-    <main className="space-y-4">
-      <div className="space-y-2">
-        {image?.processedUrl ? (
-          <div className="relative w-50 h-50 overflow-hidden rounded group">
-            <img
-              src={image.processedUrl}
-              alt="preview"
-              className="w-50 h-50 object-cover rounded"
-            />
-            {/* Remove button */}
-            <button
-              type="button"
-              onClick={handleRemoveImage}
-              className="absolute top-1 right-1 bg-red-600 rounded z-20 cursor-pointer w-7 h-7 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              <Trash2 size={18} color="white" />
-            </button>
-
-            {/* Edit button only if NOT source */}
-            {!image.source && (
+    <>
+      <main className="space-y-4">
+        <div className="space-y-2">
+          {image?.processedUrl ? (
+            <div className="relative w-50 h-50 overflow-hidden rounded group">
+              <img
+                src={image.processedUrl}
+                alt="preview"
+                className="w-50 h-50 object-cover rounded"
+              />
+              {/* Remove button */}
               <button
                 type="button"
-                className="absolute inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={onHandleCrop}
+                onClick={handleRemoveImage}
+                className="absolute top-1 right-1 bg-red-600 rounded z-20 cursor-pointer w-7 h-7 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
-                <Crop size={18} color="white" />
-                <span>Edit</span>
+                <Trash2 size={18} color="white" />
               </button>
-            )}
-          </div>
-        ) : (
-          <label className="w-50 h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden w-0 h-0 opacity-0"
-              onChange={(e) => onFileChange(e.target.files?.[0])}
-            />
-            <div className="m-auto flex justify-center items-center flex-col gap-1">
-              <Plus
-                size={30}
-                className="text-slate-400 group-hover:text-slate-500 transition duration-300"
-              />
+
+              {/* Edit button only if NOT source */}
+              {!image.source && (
+                <button
+                  type="button"
+                  className="absolute inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={onHandleCrop}
+                >
+                  <Crop size={18} color="white" />
+                  <span>Edit</span>
+                </button>
+              )}
+
+              {/* Loader */}
+
+              {isPending && (
+                <div className="absolute inset-0 w-full h-full bg-blue-600/50 text-white p-1 z-10 flex items-center justify-center opacity-50">
+                  <CircleSpinner size={50} />
+                </div>
+              )}
             </div>
-          </label>
+          ) : (
+            <label className="w-50 h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden w-0 h-0 opacity-0"
+                onChange={(e) => onFileChange(e.target.files?.[0])}
+                disabled={isPending}
+              />
+              <div className="m-auto flex justify-center items-center flex-col gap-1">
+                <Plus
+                  size={30}
+                  className="text-slate-400 group-hover:text-slate-500 transition duration-300"
+                />
+              </div>
+            </label>
+          )}
+        </div>
+
+        {!image?.source && (
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50 min-w-36"
+            onClick={onSubmit}
+            disabled={
+              !image || !image.processedUrl || image.source || isPending
+            } // only enable if processed & not source
+          >
+            {isPending ? "Wait..." : "Upload"}
+          </button>
         )}
-      </div>
 
-      <button
-        className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
-        onClick={onSubmit}
-        disabled={!image || !image.processedUrl || image.source || isPending} // only enable if processed & not source
-      >
-        {isPending ? "Uploading..." : "Upload"}
-      </button>
+        {/* Modal for cropping */}
+        {image?.originalUrl && showModal && !image.source && (
+          <ImageCropModal
+            src={image.originalUrl}
+            onCropComplete={setCropPixels}
+            onComplete={buildAndPreview}
+            onCancel={handleCancelCrop}
+          />
+        )}
+      </main>
 
-      {/* Modal for cropping */}
-      {image?.originalUrl && showModal && !image.source && (
-        <ImageCropModal
-          src={image.originalUrl}
-          onCropComplete={setCropPixels}
-          onComplete={buildAndPreview}
-          onCancel={handleCancelCrop}
-        />
-      )}
-    </main>
+      {/* CONFIRM MODAL */}
+
+      <ConfirmModal
+        isShow={isShowConfirm}
+        title={"Remove Profile Picture"}
+        description={"Are you sure you want to remove your profile picture?"}
+        onClose={handleClose}
+        onConfirm={onConfirmRemoveImage}
+      />
+    </>
   );
 }
