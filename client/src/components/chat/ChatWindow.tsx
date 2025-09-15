@@ -11,15 +11,32 @@ const ChatWindow: React.FC = () => {
   const { user } = useAuth();
   const { isOpenChat, setIsOpenChat } = useChat();
 
-  console.log("isOpenChat :>> ", isOpenChat);
-
   return (
     <div className="chat-container">
       <ChatModal show={isOpenChat} onHide={() => setIsOpenChat(false)}>
         <ChatModal.Body>
-          <ChatModal.Sidebar>drtyrt</ChatModal.Sidebar>
-          <ChatModal.Chat>fghfghfg</ChatModal.Chat>
-          <ChatModal.Sidebar>dcxccvb</ChatModal.Sidebar>
+          <ChatModal.Sidebar>
+            <ChatModal.ChatHeader>
+              <ChatModal.Title>Chats</ChatModal.Title>
+            </ChatModal.ChatHeader>
+            <ChatModal.ChatCardList>
+              <ChatModal.ChatCard>User 1</ChatModal.ChatCard>
+              <ChatModal.ChatCard>User 2</ChatModal.ChatCard>
+            </ChatModal.ChatCardList>
+          </ChatModal.Sidebar>
+          <ChatModal.Chat>
+            <ChatModal.ChatHeader>
+              <div>
+                <ChatModal.Title>User 1</ChatModal.Title>
+                <ChatModal.Status>Online</ChatModal.Status>
+              </div>
+            </ChatModal.ChatHeader>
+          </ChatModal.Chat>
+          <ChatModal.Sidebar>
+            <ChatModal.ChatHeader>
+              <ChatModal.Title>Basic Information</ChatModal.Title>
+            </ChatModal.ChatHeader>
+          </ChatModal.Sidebar>
         </ChatModal.Body>
       </ChatModal>
 

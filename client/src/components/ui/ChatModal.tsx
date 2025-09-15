@@ -120,6 +120,30 @@ ChatModal.Chat = ({ children }: ChatModalChatProps) => (
   <div className="w-[calc(100%-640px)]">{children}</div>
 );
 
+ChatModal.ChatHeader = ({ children }: ChatModalChatProps) => (
+  <div className="w-full h-12 flex justify-between items-center">
+    {children}
+  </div>
+);
+
+ChatModal.Title = ({ children }: ChatModalChatProps) => (
+  <h3 className="text-slate-700 text-base m-0">{children}</h3>
+);
+
+ChatModal.ChatCardList = ({ children }: ChatModalChatProps) => (
+  <div className="w-full max-h-[calc(100%-48px)] overflow-y-auto">
+    {children}
+  </div>
+);
+
+ChatModal.ChatCard = ({ children }: ChatModalChatProps) => (
+  <div className="w-full flex justify-between items-center">{children}</div>
+);
+
+ChatModal.Status = ({ children }: ChatModalChatProps) => (
+  <div className="text-slate-700 text-sm m-0">{children}</div>
+);
+
 const Button = ({
   variant = "primary",
   onClick,
