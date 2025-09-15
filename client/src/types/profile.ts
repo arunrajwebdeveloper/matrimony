@@ -89,6 +89,8 @@ export interface UserMatchType {
 }
 
 export interface MatchCardActions {
+  onAcceptRequest?: (id: string) => void;
+  onDeclineRequest?: (id: string) => void;
   onAddToShortlist?: (id: string) => void;
   onRemove?: (id: string) => void;
   onCancelRequest?: (id: string) => void;

@@ -19,7 +19,12 @@ export const navItems: NavigationItemType[] = [
     count: 0,
     href: ROUTES.PROFILE_ME,
   },
-  { label: "Inbox", icon: MailOpen, count: 12, href: ROUTES.INBOX },
+  {
+    label: "New Requests",
+    icon: MailOpen,
+    count: 12,
+    href: ROUTES.NEW_REQUESTS,
+  },
   {
     label: "Accepted Requests",
     icon: CircleCheck,

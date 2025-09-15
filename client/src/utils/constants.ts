@@ -69,7 +69,7 @@ export const ROUTES = {
     NOTIFICATION: "/dashboard/settings/notification",
     DELETE_ACCOUNT: "/dashboard/settings/delete-account",
   },
-  INBOX: "/dashboard/inbox",
+  NEW_REQUESTS: "/dashboard/new-requests",
   ACCEPTED: "/dashboard/accepted-requests",
   RECENTLY_VIEWED: "/dashboard/recently-viewed",
   SHORTLISTED: "/dashboard/shortlisted",

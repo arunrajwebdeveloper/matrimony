@@ -10,6 +10,8 @@ function MatchList({
   onAddToShortlist,
   onRemove,
   onCancelRequest,
+  onAcceptRequest,
+  onDeclineRequest,
 }: MatchListProps) {
   if (isLoading) {
     return (
@@ -42,6 +44,8 @@ function MatchList({
               onAddToShortlist={onAddToShortlist}
               onRemove={onRemove}
               onCancelRequest={onCancelRequest}
+              onAcceptRequest={onAcceptRequest}
+              onDeclineRequest={onDeclineRequest}
             />
           );
         })

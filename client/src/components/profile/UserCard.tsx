@@ -4,7 +4,7 @@ import { MatchCardProps } from "@/types";
 import OnlineStatusDot from "./OnlineStatusDot";
 import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import { ROUTES } from "@/utils/constants";
-import { Ban, Bookmark, Eye } from "lucide-react";
+import { Ban, Bookmark, CircleCheck, Eye } from "lucide-react";
 import Avatar from "./Avatar";
 
 function UserCard(props: MatchCardProps) {
@@ -23,13 +23,15 @@ function UserCard(props: MatchCardProps) {
     onAddToShortlist,
     onRemove,
     onCancelRequest,
+    onAcceptRequest,
+    onDeclineRequest,
   } = props;
 
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
 
   return (
-    <div className="flex overflow-hidden">
-      <div className="w-[130px] relative flex-none group rounded-full">
+    <div className="flex overflow-hidden group">
+      <div className="w-[130px] relative flex-none rounded-full">
         <Avatar
           src={profilePicture!}
           firstname={`${firstName || ""}`}
@@ -40,7 +42,7 @@ function UserCard(props: MatchCardProps) {
         />
         <Link
           href={`${ROUTES.PROFILE}/${profileId}`}
-          className="absolute rounded-full inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute rounded-full inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         >
           <Eye size={16} />
           <span>View</span>
@@ -62,13 +64,13 @@ function UserCard(props: MatchCardProps) {
           occupation ?? ""
         }, ${city}, ${state}`}</p>
         <div className="flex items-center gap-2 mt-3">
-          <Link
+          {/* <Link
             href={`${ROUTES.PROFILE}/${profileId}`}
             className="flex items-center text-xs cursor-pointer py-1 px-2 bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors duration-300 rounded-sm gap-1"
           >
             <Eye size={14} className="flex-1" />
             <span className="whitespace-nowrap">View</span>
-          </Link>
+          </Link> */}
           {onAddToShortlist && (
             <button
               onClick={() => onAddToShortlist?.(_id!?.toString())}
@@ -81,7 +83,7 @@ function UserCard(props: MatchCardProps) {
           {onRemove && (
             <button
               onClick={() => onRemove?.(_id!?.toString())}
-              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-300 rounded-sm gap-1"
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors duration-300 rounded-sm gap-1"
             >
               <Ban size={14} className="flex-1" />
               <span className="whitespace-nowrap">Remove</span>
@@ -90,10 +92,28 @@ function UserCard(props: MatchCardProps) {
           {onCancelRequest && (
             <button
               onClick={() => onCancelRequest?.(_id!?.toString())}
-              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-300 rounded-sm gap-1"
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors duration-300 rounded-sm gap-1"
             >
               <Ban size={14} className="flex-1" />
               <span className="whitespace-nowrap">Cancel Request</span>
+            </button>
+          )}
+          {onAcceptRequest && (
+            <button
+              onClick={() => onAcceptRequest?.(_id!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-green-100 text-green-600 hover:bg-green-200 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <CircleCheck size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Accept Request</span>
+            </button>
+          )}
+          {onDeclineRequest && (
+            <button
+              onClick={() => onDeclineRequest?.(_id!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Ban size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Decline Request</span>
             </button>
           )}
         </div>
