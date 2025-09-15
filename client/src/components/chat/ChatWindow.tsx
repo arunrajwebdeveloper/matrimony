@@ -2,20 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import Breadcrumb from "@/components/ui/Breadcrumb";
 import Avatar from "@/components/profile/Avatar";
 import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
 
-const NewMatchesPage: React.FC = () => {
+const ChatWindow: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="main-container">
-      {/* Breadcrumb */}
-      {/* <div className="py-2">
-        <Breadcrumb />
-      </div> */}
-
+    <div className="chat-container">
       <div className="flex">
         <div className="w-[25%] px-2">
           <div className="h-12 border-b-slate-200 border-b-1">
@@ -89,4 +83,4 @@ const NewMatchesPage: React.FC = () => {
   );
 };
 
-export default NewMatchesPage;
+export default ChatWindow;
