@@ -96,13 +96,11 @@ function Header() {
               <MailOpen size={18} />
             </Link>
 
-            <Link
-              href="/"
-              className="w-[30px] h-[30px] flex items-center justify-center relative"
-            >
+            <button className="w-[30px] h-[30px] flex items-center justify-center relative cursor-pointer">
               <span className="w-1.5 h-1.5 bg-red-600 rounded-full absolute top-0.5 right-0.5 z-20 pointer-events-none"></span>
               <Bell size={18} />
-            </Link>
+            </button>
+
             <div className="ms-4">
               <UserDropdown
                 menu={navItems}
