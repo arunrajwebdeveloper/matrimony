@@ -253,7 +253,7 @@ export default function UploadMultiplePage({
 
               {/* Loader */}
 
-              {isPending && (
+              {isPending && !img.source && (
                 <div className="absolute inset-0 w-full h-full bg-blue-600/50 text-white p-1 z-10 flex items-center justify-center opacity-50">
                   <CircleSpinner size={50} />
                 </div>
