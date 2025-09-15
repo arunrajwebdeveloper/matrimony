@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  MailOpen,
   Settings2,
   UserRound,
   Users,
@@ -80,22 +81,27 @@ function Header() {
               </Link>
             )}
             <Link
-              href="/"
-              className="w-[30px] h-[30px] flex items-center justify-center"
+              href={ROUTES.NEW_REQUESTS}
+              className="w-[30px] h-[30px] flex items-center justify-center relative"
             >
+              <span className="w-1.5 h-1.5 bg-red-600 rounded-full absolute top-0.5 right-0.5 z-20 pointer-events-none"></span>
               <Users size={18} />
             </Link>
+
             <Link
               href="/"
-              className="w-[30px] h-[30px] flex items-center justify-center"
+              className="w-[30px] h-[30px] flex items-center justify-center relative"
             >
-              <Bell size={18} />
+              {/* <span className="w-1.5 h-1.5 bg-red-600 rounded-full absolute top-0.5 right-0.5 z-20 pointer-events-none"></span> */}
+              <MailOpen size={18} />
             </Link>
+
             <Link
               href="/"
-              className="w-[30px] h-[30px] flex items-center justify-center"
+              className="w-[30px] h-[30px] flex items-center justify-center relative"
             >
-              <Mail size={18} />
+              <span className="w-1.5 h-1.5 bg-red-600 rounded-full absolute top-0.5 right-0.5 z-20 pointer-events-none"></span>
+              <Bell size={18} />
             </Link>
             <div className="ms-4">
               <UserDropdown

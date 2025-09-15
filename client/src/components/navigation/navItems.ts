@@ -1,7 +1,6 @@
 import { NavigationItemType } from "@/types/menu";
 import { ROUTES } from "@/utils/constants";
 import {
-  MailOpen,
   CircleCheck,
   Eye,
   Heart,
@@ -10,6 +9,7 @@ import {
   EyeOff,
   UserRound,
   Settings2,
+  UsersRound,
 } from "lucide-react";
 
 export const navItems: NavigationItemType[] = [
@@ -21,7 +21,7 @@ export const navItems: NavigationItemType[] = [
   },
   {
     label: "New Requests",
-    icon: MailOpen,
+    icon: UsersRound,
     count: 12,
     href: ROUTES.NEW_REQUESTS,
   },
