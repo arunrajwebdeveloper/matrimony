@@ -74,7 +74,7 @@ export interface SidebarCardProps {
   children: React.ReactNode;
 }
 
-export interface UserCardType {
+export interface UserMatchType {
   _id?: string;
   firstName: string;
   lastName: string;
@@ -88,6 +88,14 @@ export interface UserCardType {
   profilePicture: string;
 }
 
+export interface MatchCardActions {
+  onAddToShortlist?: (id: string) => void;
+  onRemove?: (id: string) => void;
+  onCancelRequest?: (id: string) => void;
+}
+
+export interface MatchCardProps extends UserMatchType, MatchCardActions {}
+
 export interface MatchResult {
   hasNextPage: boolean;
   hasPrevPage: boolean;
@@ -95,7 +103,7 @@ export interface MatchResult {
   page: number;
   total: number;
   totalPages: number;
-  result: UserCardType[];
+  result: UserMatchType[];
 }
 
 export interface MatchState {
@@ -104,8 +112,8 @@ export interface MatchState {
   error: string | null;
 }
 
-export interface MatchListProps {
-  users: UserCardType[];
+export interface MatchListProps extends MatchCardActions {
+  users: UserMatchType[];
   isLoading: boolean;
   error: string | null;
 }

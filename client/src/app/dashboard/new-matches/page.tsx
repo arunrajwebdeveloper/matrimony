@@ -83,6 +83,12 @@ const NewMatchesPage: React.FC = () => {
                 users={state?.data?.result!}
                 isLoading={state?.isLoading}
                 error={state?.error}
+                onAddToShortlist={(e) => {
+                  console.log(e);
+                }}
+                onRemove={(e) => {
+                  console.log(e);
+                }}
               />
             </ProfileCard>
             {!state?.isLoading && (

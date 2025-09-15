@@ -16,7 +16,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import MatchList from "@/components/dashboard/MatchList";
-import { ApiResponse, MatchResult, MatchState, UserCardType } from "@/types";
+import { ApiResponse, MatchResult, MatchState } from "@/types";
 import api from "@/lib/api";
 import Greeting from "@/components/dashboard/Greeting";
 import ActivityItem from "@/components/profile/ActivityFeedItem";
@@ -161,6 +161,12 @@ const DashboardPage: React.FC = () => {
                 users={preferredMatches?.data?.result!}
                 isLoading={preferredMatches?.isLoading}
                 error={preferredMatches?.error}
+                onAddToShortlist={(e) => {
+                  console.log(e);
+                }}
+                onRemove={(e) => {
+                  console.log(e);
+                }}
               />
             </ProfileCard>
 
@@ -176,6 +182,12 @@ const DashboardPage: React.FC = () => {
                 users={newMatches?.data?.result!}
                 isLoading={newMatches?.isLoading}
                 error={newMatches?.error}
+                onAddToShortlist={(e) => {
+                  console.log(e);
+                }}
+                onRemove={(e) => {
+                  console.log(e);
+                }}
               />
             </ProfileCard>
 

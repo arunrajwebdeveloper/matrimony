@@ -209,17 +209,17 @@ export default function UploadSinglePage({
       <main className="space-y-4">
         <div className="space-y-2">
           {image?.processedUrl ? (
-            <div className="relative w-50 h-50 overflow-hidden rounded group">
+            <div className="relative w-50 h-50 overflow-hidden rounded-2xl group">
               <img
                 src={image.processedUrl}
                 alt="preview"
-                className="w-50 h-50 object-cover rounded"
+                className="w-50 h-50 object-cover rounded-2xl"
               />
               {/* Remove button */}
               <button
                 type="button"
                 onClick={handleRemoveImage}
-                className="absolute top-1 right-1 bg-red-600 rounded z-20 cursor-pointer w-7 h-7 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 bg-red-600 rounded-full z-20 cursor-pointer w-10 h-10 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <Trash2 size={18} color="white" />
               </button>
@@ -245,7 +245,7 @@ export default function UploadSinglePage({
               )}
             </div>
           ) : (
-            <label className="w-50 h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
+            <label className="w-50 h-50 group rounded-2xl bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
               <input
                 ref={fileInputRef}
                 type="file"

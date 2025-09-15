@@ -75,14 +75,14 @@ const NewMatchesPage: React.FC = () => {
           <div className="mt-5">
             {/* LISTS */}
 
-            {/* New Matches: Recently joined profiles that meet 
-            your basic criteria like age, location, and education. */}
-
-            <ProfileCard title="New Matches" className="mb-5">
+            <ProfileCard title="Declined Requests" className="mb-5">
               <MatchList
                 users={state?.data?.result!}
                 isLoading={state?.isLoading}
                 error={state?.error}
+                onRemove={(e) => {
+                  console.log(e);
+                }}
               />
             </ProfileCard>
             {!state?.isLoading && (

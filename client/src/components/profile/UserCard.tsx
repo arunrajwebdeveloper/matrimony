@@ -1,24 +1,30 @@
 import React from "react";
 import Link from "next/link";
-import { UserCardType } from "@/types";
+import { MatchCardProps } from "@/types";
 import OnlineStatusDot from "./OnlineStatusDot";
 import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import { ROUTES } from "@/utils/constants";
 import { Ban, Bookmark, Eye } from "lucide-react";
 import Avatar from "./Avatar";
 
-function UserCard({
-  firstName,
-  lastName,
-  profileId,
-  dateOfBirth,
-  occupation,
-  city,
-  state,
-  motherTongue,
-  isOnline = false,
-  profilePicture,
-}: UserCardType) {
+function UserCard(props: MatchCardProps) {
+  const {
+    _id,
+    firstName,
+    lastName,
+    profileId,
+    dateOfBirth,
+    occupation,
+    city,
+    state,
+    motherTongue,
+    isOnline = false,
+    profilePicture,
+    onAddToShortlist,
+    onRemove,
+    onCancelRequest,
+  } = props;
+
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
 
   return (
@@ -60,17 +66,36 @@ function UserCard({
             href={`${ROUTES.PROFILE}/${profileId}`}
             className="flex items-center text-xs cursor-pointer py-1 px-2 bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors duration-300 rounded-sm gap-1"
           >
-            <Eye size={14} />
-            <span>View</span>
+            <Eye size={14} className="flex-1" />
+            <span className="whitespace-nowrap">View</span>
           </Link>
-          <button className="flex items-center text-xs cursor-pointer py-1 px-2 bg-yellow-100 text-yellow-600 hover:bg-yellow-200 transition-colors duration-300 rounded-sm gap-1">
-            <Bookmark size={14} />
-            <span>Add to Shortlist</span>
-          </button>
-          <button className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-300 rounded-sm gap-1">
-            <Ban size={14} />
-            <span>Remove</span>
-          </button>
+          {onAddToShortlist && (
+            <button
+              onClick={() => onAddToShortlist?.(_id!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-yellow-100 text-yellow-600 hover:bg-yellow-200 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Bookmark size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Add to Shortlist</span>
+            </button>
+          )}
+          {onRemove && (
+            <button
+              onClick={() => onRemove?.(_id!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Ban size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Remove</span>
+            </button>
+          )}
+          {onCancelRequest && (
+            <button
+              onClick={() => onCancelRequest?.(_id!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Ban size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Cancel Request</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

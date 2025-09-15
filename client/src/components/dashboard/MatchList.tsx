@@ -1,12 +1,15 @@
 import React from "react";
 import UserCard from "../profile/UserCard";
-import { MatchListProps, UserCardType } from "@/types";
+import { MatchListProps } from "@/types";
 import UserListSkeleton from "../skeleton/UserListSkeleton";
 
 function MatchList({
   users = [],
   isLoading = false,
   error = null,
+  onAddToShortlist,
+  onRemove,
+  onCancelRequest,
 }: MatchListProps) {
   if (isLoading) {
     return (
@@ -32,7 +35,15 @@ function MatchList({
     <div className="space-y-6">
       {!isLoading && users?.length !== 0 ? (
         users?.map((user) => {
-          return <UserCard key={user.profileId} {...user} />;
+          return (
+            <UserCard
+              key={user.profileId}
+              {...user}
+              onAddToShortlist={onAddToShortlist}
+              onRemove={onRemove}
+              onCancelRequest={onCancelRequest}
+            />
+          );
         })
       ) : (
         <p className="text-sm text-slate-500 m-0">No items found</p>
