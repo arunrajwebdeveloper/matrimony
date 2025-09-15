@@ -3,25 +3,18 @@ import { useState, useEffect, ReactNode, MouseEvent } from "react";
 // Type definitions
 interface ChatModalProps {
   show: boolean;
-  onHide: () => void;
-  children: ReactNode;
-}
-
-interface ChatModalHeaderProps {
-  closeButton?: boolean;
-  onClose?: () => void;
-  children: ReactNode;
-}
-
-interface ChatModalTitleProps {
+  onHide?: () => void;
+  isBackdropClickClose?: boolean;
   children: ReactNode;
 }
 
 interface ChatModalBodyProps {
   children: ReactNode;
 }
-
-interface ChatModalFooterProps {
+interface ChatModalSidebarProps {
+  children: ReactNode;
+}
+interface ChatModalChatProps {
   children: ReactNode;
 }
 
@@ -32,7 +25,12 @@ interface ButtonProps {
   [key: string]: any; // For additional props
 }
 
-const ChatModal = ({ show, onHide, children }: ChatModalProps) => {
+const ChatModal = ({
+  show,
+  onHide,
+  isBackdropClickClose = true,
+  children,
+}: ChatModalProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [shouldRender, setShouldRender] = useState<boolean>(false);
 
@@ -82,7 +80,7 @@ const ChatModal = ({ show, onHide, children }: ChatModalProps) => {
   };
 
   const handleBackdropClick = (e: MouseEvent<HTMLDivElement>): void => {
-    if (e.target === e.currentTarget && isVisible) {
+    if (isBackdropClickClose && e.target === e.currentTarget && isVisible) {
       handleClose();
     }
   };
@@ -98,7 +96,7 @@ const ChatModal = ({ show, onHide, children }: ChatModalProps) => {
       onClick={handleBackdropClick}
     >
       <div
-        className={`bg-white py-4 px-4 rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-hidden transform transition-all duration-500 ease-out ${
+        className={`bg-white rounded-lg shadow-xl max-w-[1280px] w-full mx-4 h-[95vh] overflow-hidden transform transition-all duration-500 ease-out ${
           isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
         }`}
       >
@@ -109,47 +107,17 @@ const ChatModal = ({ show, onHide, children }: ChatModalProps) => {
 };
 
 // Modal subcomponents with types
-ChatModal.Header = ({
-  closeButton = false,
-  onClose,
-  children,
-}: ChatModalHeaderProps) => (
-  <div className="flex items-center justify-between py-4 px-6 gap-4">
-    <div className="flex-1">{children}</div>
-    {closeButton && (
-      <button
-        onClick={onClose}
-        className="text-gray-400 cursor-pointer hover:text-gray-600 transition-colors duration-150"
-        aria-label="Close"
-      >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-    )}
-  </div>
-);
-
-ChatModal.Title = ({ children }: ChatModalTitleProps) => (
-  <h4 className="text-lg font-semibold text-gray-800">{children}</h4>
-);
 
 ChatModal.Body = ({ children }: ChatModalBodyProps) => (
-  <div className="text-gray-500 text-base py-4 px-6">{children}</div>
+  <div className="w-full h-full flex justify-between">{children}</div>
 );
 
-ChatModal.Footer = ({ children }: ChatModalFooterProps) => (
-  <div className="flex gap-4 justify-start py-4 px-6">{children}</div>
+ChatModal.Sidebar = ({ children }: ChatModalSidebarProps) => (
+  <div className="w-[320px]">{children}</div>
+);
+
+ChatModal.Chat = ({ children }: ChatModalChatProps) => (
+  <div className="w-[calc(100%-640px)]">{children}</div>
 );
 
 const Button = ({
@@ -180,9 +148,8 @@ const Button = ({
 export { ChatModal, Button };
 export type {
   ChatModalProps,
-  ChatModalHeaderProps,
-  ChatModalTitleProps,
   ChatModalBodyProps,
-  ChatModalFooterProps,
+  ChatModalSidebarProps,
+  ChatModalChatProps,
   ButtonProps,
 };

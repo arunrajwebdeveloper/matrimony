@@ -20,9 +20,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import UserDropdown from "./dropdowns/UserDropdown";
 import { UserDropdownMenuType } from "@/types/menu";
+import { useChat } from "@/hooks/useChat";
 
 function Header() {
   const { user, isAuthenticated, logout } = useAuth();
+  const { setIsOpenChat } = useChat();
   const router = useRouter();
 
   const handleLogout = async (): Promise<void> => {
@@ -88,7 +90,10 @@ function Header() {
               <Users size={18} />
             </Link>
 
-            <button className="w-[30px] h-[30px] flex items-center justify-center relative  cursor-pointer">
+            <button
+              onClick={() => setIsOpenChat(true)}
+              className="w-[30px] h-[30px] flex items-center justify-center relative  cursor-pointer"
+            >
               {/* <span className="w-1.5 h-1.5 bg-red-600 rounded-full absolute top-0.5 right-0.5 z-20 pointer-events-none"></span> */}
               <MailOpen size={18} />
             </button>

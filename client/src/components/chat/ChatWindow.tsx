@@ -4,13 +4,26 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import Avatar from "@/components/profile/Avatar";
 import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
+import { useChat } from "@/hooks/useChat";
+import { ChatModal } from "../ui/ChatModal";
 
 const ChatWindow: React.FC = () => {
   const { user } = useAuth();
+  const { isOpenChat, setIsOpenChat } = useChat();
+
+  console.log("isOpenChat :>> ", isOpenChat);
 
   return (
     <div className="chat-container">
-      <div className="flex">
+      <ChatModal show={isOpenChat} onHide={() => setIsOpenChat(false)}>
+        <ChatModal.Body>
+          <ChatModal.Sidebar>drtyrt</ChatModal.Sidebar>
+          <ChatModal.Chat>fghfghfg</ChatModal.Chat>
+          <ChatModal.Sidebar>dcxccvb</ChatModal.Sidebar>
+        </ChatModal.Body>
+      </ChatModal>
+
+      {/* <div className="flex">
         <div className="w-[25%] px-2">
           <div className="h-12 border-b-slate-200 border-b-1">
             <h3 className="font-semibold text-black text-md mb-6">
@@ -78,7 +91,7 @@ const ChatWindow: React.FC = () => {
             <p>John Thomas</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
