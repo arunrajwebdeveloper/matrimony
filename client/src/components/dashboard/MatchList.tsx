@@ -21,6 +21,9 @@ function MatchList({
         <UserListSkeleton />
         <UserListSkeleton />
         <UserListSkeleton />
+        <UserListSkeleton />
+        <UserListSkeleton />
+        <UserListSkeleton />
       </div>
     );
   }
