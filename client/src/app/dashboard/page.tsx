@@ -21,6 +21,7 @@ import api from "@/lib/api";
 import Greeting from "@/components/dashboard/Greeting";
 import ActivityItem from "@/components/profile/ActivityFeedItem";
 import ActivityList from "@/components/dashboard/ActivityList";
+import EventsCalendar from "@/components/profile/EventsCalendar";
 
 const statUsers = [
   "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
@@ -201,6 +202,10 @@ const DashboardPage: React.FC = () => {
             {/* <div className="mb-3">
               <ProfileCompletionCard />
             </div> */}
+
+            <div className="mb-3">
+              <EventsCalendar />
+            </div>
 
             {!user?.profile?.isPremium && (
               <div className="mb-3">
