@@ -138,6 +138,7 @@ input[type="range"].range:hover::-moz-range-thumb {
 
 .rdtPicker {
   min-width: 100% !important;
+  user-select: none;
 }
 .rdtPicker td,
 .rdtPicker th {
@@ -151,6 +152,26 @@ input[type="range"].range:hover::-moz-range-thumb {
 
 .rdtDay:not(.rdtActive):hover {
   background-color: #e5e7eb !important;
+}
+.rdtDay {
+  position: relative;
+}
+.rdtDay.has-event::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  z-index: 5;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.rdtDay.has-event.past-event::after {
+  background-color: #414141;
+}
+.rdtDay.has-event.upcoming-event::after {
+  background-color: #ff0077;
 }
 
 /* PAGINATION */
