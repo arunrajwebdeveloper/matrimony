@@ -203,21 +203,21 @@ const DashboardPage: React.FC = () => {
               <ProfileCompletionCard />
             </div> */}
 
-            <div className="mb-3">
+            <div className="mb-6">
               <EventsCalendar />
             </div>
 
             {!user?.profile?.isPremium && (
-              <div className="mb-3">
+              <div className="mb-6">
                 <UpgradePremiumCard />
               </div>
             )}
 
-            <div className="mb-3">
+            <div className="mb-6">
               <InfoSidebarCard />
             </div>
 
-            <div className="mb-3">
+            <div className="mb-6">
               <SafeTipsSidebarCard />
             </div>
 

@@ -77,7 +77,7 @@ const handleDateChange = (date: moment.Moment | string) => {
 
 function EventsCalendar() {
   return (
-    <div className="py-4">
+    <div className="py-1">
       <h2 className="font-semibold text-black text-md mb-6">Events Calendar</h2>
       <Datetime
         dateFormat="YYYY-MM-DD"
