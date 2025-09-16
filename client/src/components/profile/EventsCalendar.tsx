@@ -42,19 +42,14 @@ const renderDay = (props: any, currentDate: any) => {
       }
     >
       {currentDate.date()}
-      {eventsForDay.length > 0 && (
-        <span className="absolute bottom-0 right-0 text-xs bg-blue-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
-          {eventsForDay.length}
-        </span>
-      )}
     </td>
   );
 };
 
 // Disable past days
-const isValidDate = (currentDate: moment.Moment) => {
-  return currentDate.isSameOrAfter(moment(), "day");
-};
+// const isValidDate = (currentDate: moment.Moment) => {
+//   return currentDate.isSameOrAfter(moment(), "day");
+// };
 
 // on change date
 const handleDateChange = (date: moment.Moment | string) => {
@@ -83,7 +78,7 @@ function EventsCalendar() {
         timeFormat={false}
         input={false}
         renderDay={renderDay}
-        isValidDate={isValidDate}
+        // isValidDate={isValidDate}
         onChange={handleDateChange}
       />
     </div>
