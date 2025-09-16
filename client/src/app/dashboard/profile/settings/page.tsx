@@ -379,7 +379,7 @@ const Page: React.FC = () => {
 
                   {activeTab === "image-uploads" && (
                     <section className="mb-6 space-y-4">
-                      <div>
+                      <div className="mb-6">
                         <h2 className="font-semibold text-black text-md mb-4">
                           Upload profile image
                         </h2>
@@ -393,7 +393,7 @@ const Page: React.FC = () => {
                           sourceImage={profileData?.profilePicture}
                         />
                       </div>
-                      <div>
+                      <div className="mb-6">
                         <h2 className="font-semibold text-black text-md mb-4">
                           Upload cover photo
                         </h2>
@@ -431,7 +431,7 @@ const Page: React.FC = () => {
                     {activeTab === "personal-details" && (
                       <section className="mb-6">
                         <h2 className="font-semibold text-black text-md mb-4">
-                          Profile Picture
+                          Personal Details
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {renderTextField("First Name", "firstName", "John")}

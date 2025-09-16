@@ -220,7 +220,7 @@ export default function UploadMultiplePage({
           {processedImages?.map((img) => (
             <div
               key={img.id}
-              className="relative aspect-[4/3] h-50 overflow-hidden rounded-2xl group "
+              className="relative aspect-[4/3] w-[calc(50%-8px)] overflow-hidden rounded-2xl group "
             >
               <img
                 src={img.processedUrl}
