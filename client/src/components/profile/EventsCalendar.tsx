@@ -14,7 +14,8 @@ const events = [
 ];
 
 const renderDay = (props: any, currentDate: any) => {
-  let classes = props.className;
+  let { key, ...rest } = props;
+  let classes = rest.className;
   const formattedDate = currentDate.format("DD-MM-YYYY");
 
   // Check if the date has an  event
@@ -33,7 +34,8 @@ const renderDay = (props: any, currentDate: any) => {
 
   return (
     <td
-      {...props}
+      key={key}
+      {...rest}
       className={classes}
       title={
         eventLength > 0

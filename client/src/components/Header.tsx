@@ -21,6 +21,7 @@ import { ROUTES } from "@/utils/constants";
 import UserDropdown from "./dropdowns/UserDropdown";
 import { UserDropdownMenuType } from "@/types/menu";
 import { useChat } from "@/hooks/useChat";
+import LiveClock from "./liveClock";
 
 function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -69,6 +70,9 @@ function Header() {
 
         {isAuthenticated ? (
           <div className="flex items-center gap-4">
+            {/* Clock */}
+            <LiveClock />
+
             {user?.profile?.isPremium ? (
               <div className="flex items-center gap-2 border-1 border-amber-500 px-2.5 py-1.5 rounded-full font-medium select-none">
                 <CrownIcon size={16} color="#fe9a00" fill="#fe9a00" />
