@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lexend_Deca } from "next/font/google";
 import "./globals.css";
+import "react-datetime/css/react-datetime.css";
 import AuthProviderWrapper from "@/components/auth/AuthProvider";
 import { ToastProvider } from "@/contexts/ToastScope";
 import ChatProviderWrapper from "@/components/chat/ChatProvider";

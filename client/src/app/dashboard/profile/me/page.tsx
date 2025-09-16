@@ -28,6 +28,7 @@ import ProfileUserCard from "@/components/profile/ProfileUserCard";
 import SidebarCard from "@/components/cards/SidebarCard";
 import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
 import VerificationLabelBadge from "@/components/profile/VerificationLabelBadge";
+import EventsCalendar from "@/components/profile/EventsCalendar";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -411,6 +412,9 @@ const ProfilePage: React.FC = () => {
               <ProfileCompletionCard
                 profileCompletionInfo={profileCompletionInfo}
               />
+            </div>
+            <div className="mb-3">
+              <EventsCalendar />
             </div>
 
             {/* <SidebarCard title="Online Users" link="/" className="mb-3">

@@ -12,7 +12,6 @@ import CircleSpinner from "../ui/CircleSpinner";
 import moment from "moment";
 import { useToast } from "@/contexts/ToastScope";
 import Datetime from "react-datetime";
-import "react-datetime/css/react-datetime.css";
 
 type PasswordField = "password" | "confirmPassword";
 
