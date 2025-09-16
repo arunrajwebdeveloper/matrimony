@@ -17,6 +17,7 @@ import api from "@/lib/api";
 import Pagination from "@/components/ui/Pagination";
 import { searchParamsToObject } from "@/utils/searchParamsToObject";
 import { useSearchParams } from "next/navigation";
+import EventsCalendar from "@/components/profile/EventsCalendar";
 
 const PreferredMatchesPage: React.FC = () => {
   const { user } = useAuth();
@@ -104,15 +105,21 @@ const PreferredMatchesPage: React.FC = () => {
               <ProfileCompletionCard />
             </div> */}
 
-            <div className="mb-3">
-              <UpgradePremiumCard />
+            <div className="mb-6">
+              <EventsCalendar />
             </div>
 
-            <div className="mb-3">
+            {!user?.profile?.isPremium && (
+              <div className="mb-6">
+                <UpgradePremiumCard />
+              </div>
+            )}
+
+            <div className="mb-6">
               <InfoSidebarCard />
             </div>
 
-            <div className="mb-3">
+            <div className="mb-6">
               <SafeTipsSidebarCard />
             </div>
 
