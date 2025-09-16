@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { fileToObjectURL, processImagePipeline } from "@/lib/image";
+import { fileToObjectURL, processImagePipeline } from "@/utils/image";
 import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
 import api from "@/lib/api";

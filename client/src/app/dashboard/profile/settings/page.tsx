@@ -371,8 +371,8 @@ const Page: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-[70%]">
-                <div className="ps-4">
+              <div className="w-[70%] ps-6">
+                <div>
                   {/* <h1 className="text-xl font-semibold text-gray-800 mb-6">
                     Image Uploads
                   </h1> */}

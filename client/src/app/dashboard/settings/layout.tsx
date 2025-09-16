@@ -126,7 +126,7 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
                   </div>
                 </div>
               </div>
-              <div className="w-[70%]">{children}</div>
+              <div className="w-[70%] ps-6">{children}</div>
             </div>
           </div>
         </div>
