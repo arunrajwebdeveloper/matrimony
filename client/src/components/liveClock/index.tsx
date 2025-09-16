@@ -14,7 +14,7 @@ export default function LiveClock() {
   }, []);
 
   return (
-    <div className="font-medium text-base">
+    <div className="font-medium text-base text-slate-700 select-none pointer-events-none">
       {time.format("dddd, DD MMMM YYYY • hh:mm:ss A")}
     </div>
   );
