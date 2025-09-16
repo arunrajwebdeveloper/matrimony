@@ -196,7 +196,7 @@ export default function CoverImageUploader({
               <img
                 src={image.processedUrl}
                 alt="preview"
-                className="aspect-[16/9] h-50 object-cover rounded-2xl"
+                className="h-full w-full object-cover rounded-2xl"
               />
               {/* Remove button */}
               <button

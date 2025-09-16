@@ -225,7 +225,7 @@ export default function UploadMultiplePage({
               <img
                 src={img.processedUrl}
                 alt="preview"
-                className="aspect-[4/3] h-50 object-cover rounded-2xl"
+                className="h-full w-full object-cover rounded-2xl"
               />
               {/* Delete always available */}
               <button
