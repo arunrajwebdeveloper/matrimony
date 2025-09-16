@@ -22,7 +22,7 @@ const renderDay = (props: any, currentDate: any) => {
   const eventsForDay = events.filter((event) => event.date === formattedDate);
   const eventLength = eventsForDay?.length;
   if (eventLength > 0) {
-    classes += " has-event";
+    classes += " has-event group";
 
     // Check if the event date is in the past
     if (currentDate.isBefore(moment(), "day")) {
@@ -33,17 +33,21 @@ const renderDay = (props: any, currentDate: any) => {
   }
 
   return (
-    <td
-      key={key}
-      {...rest}
-      className={classes}
-      title={
-        eventLength > 0
-          ? `${eventLength} event${eventLength > 1 ? "s" : ""}`
-          : ""
-      }
-    >
+    <td key={key} {...rest} className={classes}>
       {currentDate.date()}
+      {eventLength !== 0 && (
+        <div
+          className="absolute bottom-full left-1/2 -translate-x-1/2 translate-y-1 mb-3
+              opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-0
+              bg-slate-700 text-white text-xs rounded py-2 px-4
+              transition-all duration-300 ease-in-out whitespace-nowrap z-50 select-none pointer-events-none"
+        >
+          <span className="relative z-10">{`${eventLength} event${
+            eventLength > 1 ? "s" : ""
+          }`}</span>
+          <div className="absolute w-3 h-3 bg-slate-700 transform rotate-45 rounded-xs -bottom-1 z-0 left-1/2 -translate-x-1/2"></div>
+        </div>
+      )}
     </td>
   );
 };
