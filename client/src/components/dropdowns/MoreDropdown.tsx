@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { Ellipsis } from "lucide-react";
 
 const MoreDropdown: React.FC = () => {
@@ -16,7 +16,7 @@ const MoreDropdown: React.FC = () => {
   };
 
   // useEffect hook to handle side effects like positioning and closing on outside clicks
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Function to calculate and set the menu's position
     const calculatePosition = () => {
       // Use optional chaining (?) to safely access current properties
