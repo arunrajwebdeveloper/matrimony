@@ -66,21 +66,60 @@ export class EmailService {
     }
   }
 
-  // @OnEvent('user.created')
-  // async handleUserCreatedEvent(payload: {
-  //   userId: string;
-  //   email: string;
-  //   firstName: string;
-  // }) {
-  //   const subject = 'Welcome to Matrimony App!';
-  //   const html = `
-  //     <p>Dear ${payload.firstName},</p>
-  //     <p>Welcome to our Matrimony App! We are thrilled to have you join our community.</p>
-  //     <p>Start building your profile and find your perfect match.</p>
-  //     <p>Best regards,<br/>The Matrimony Team</p>
-  //   `;
-  //   await this.sendMail(payload.email, subject, html);
-  // }
+  @OnEvent('user.created')
+  async handleUserCreatedEvent({ email }: { email: string }) {
+    const user = await this.userModel.findOne({ email }).exec();
+
+    if (!user) {
+      this.logger.warn(`User not found: ${email}`);
+      return;
+    }
+    const subject = 'Welcome to Matrimony App!';
+
+    await this.sendMail(user.email, subject, 'user-created', {
+      name: user.firstName || user.email,
+    });
+  }
+
+  @OnEvent('user.forgotPassword')
+  async handleUserForgotPassword({
+    email,
+    resetUrl,
+  }: {
+    email: string;
+    resetUrl: string;
+  }) {
+    const user = await this.userModel.findOne({ email }).exec();
+
+    if (!user) {
+      this.logger.warn(`User not found for send password rest link: ${email}`);
+      return;
+    }
+
+    const subject = 'Reset Your Matrimony Account Password';
+
+    await this.sendMail(user.email, subject, 'forgot-password', {
+      name: user.firstName || user.email,
+      resetUrl,
+    });
+  }
+
+  @OnEvent('user.resetPassword')
+  async handleUserResetPassword({ email }: { email: string }) {
+    const user = await this.userModel.findOne({ email }).exec();
+
+    if (!user) {
+      this.logger.warn(`User not found: ${email}`);
+      return;
+    }
+
+    const subject =
+      'Your Matrimony Account Password Has Been Reset Successfully';
+
+    await this.sendMail(user.email, subject, 'reset-password', {
+      name: user.firstName || user.email,
+    });
+  }
 
   // @OnEvent('user.passwordChanged')
   // async handlePasswordChangedEvent(payload: { userId: string; email: string }) {
@@ -271,44 +310,4 @@ export class EmailService {
   //   `;
   //   await this.sendMail(user.email, subject, html);
   // }
-
-  @OnEvent('user.forgotPassword')
-  async handleUserForgotPassword({
-    email,
-    resetUrl,
-  }: {
-    email: string;
-    resetUrl: string;
-  }) {
-    const user = await this.userModel.findOne({ email }).exec();
-
-    if (!user) {
-      this.logger.warn(`User not found for send password rest link: ${email}`);
-      return;
-    }
-
-    const subject = 'Reset Your Matrimony Account Password';
-
-    await this.sendMail(user.email, subject, 'forgot-password', {
-      name: user.firstName || user.email,
-      resetUrl,
-    });
-  }
-
-  @OnEvent('user.resetPassword')
-  async handleUserResetPassword({ email }: { email: string }) {
-    const user = await this.userModel.findOne({ email }).exec();
-
-    if (!user) {
-      this.logger.warn(`User not found for send password rest link: ${email}`);
-      return;
-    }
-
-    const subject =
-      'Your Matrimony Account Password Has Been Reset Successfully';
-
-    await this.sendMail(user.email, subject, 'reset-password', {
-      name: user.firstName || user.email,
-    });
-  }
 }
