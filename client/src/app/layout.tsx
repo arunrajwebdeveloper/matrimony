@@ -5,6 +5,7 @@ import "react-datetime/css/react-datetime.css";
 import AuthProviderWrapper from "@/components/auth/AuthProvider";
 import { ToastProvider } from "@/contexts/ToastScope";
 import ChatProviderWrapper from "@/components/chat/ChatProvider";
+import OfflineModal from "@/components/modal/OfflineModal";
 
 export const lexendDeca = Lexend_Deca({
   subsets: ["latin"], // Specify the desired subsets
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
             <ToastProvider>{children}</ToastProvider>
           </ChatProviderWrapper>
         </AuthProviderWrapper>
+        <OfflineModal />
       </body>
     </html>
   );
