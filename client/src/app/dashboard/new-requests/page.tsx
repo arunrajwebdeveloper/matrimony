@@ -65,7 +65,7 @@ const InboxPage: React.FC = () => {
 
       <div className="flex">
         <div className="w-[25%] px-2">
-          <div className="mt-5">
+          <div className="mt-5 sticky top-[70px]">
             <div className="py-4">
               <h3 className="font-semibold text-black text-md mb-6">Main</h3>
               <Navigation />

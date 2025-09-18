@@ -84,7 +84,7 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
 
       <div className="flex">
         <div className="w-[25%] px-2">
-          <div className="mt-5">
+          <div className="mt-5 sticky top-[70px]">
             <div className="py-4">
               <div className="mb-8">
                 <UserSummaryDisplay
