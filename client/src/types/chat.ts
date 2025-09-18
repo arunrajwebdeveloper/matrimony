@@ -1,4 +1,4 @@
-export interface User {
+export interface ChatUser {
   _id?: string;
   email: string;
   phoneNumber: string;
@@ -13,7 +13,7 @@ export interface User {
 }
 
 export interface ChatState {
-  user: User | null;
+  user: ChatUser | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -37,5 +37,5 @@ export enum ChatActionType {
 
 export type ChatAction =
   | { type: ChatActionType.LOGIN_START }
-  | { type: ChatActionType.LOGIN_SUCCESS; payload: { user: User } }
+  | { type: ChatActionType.LOGIN_SUCCESS; payload: { user: ChatUser } }
   | { type: ChatActionType.LOGIN_FAILURE; payload: string };
