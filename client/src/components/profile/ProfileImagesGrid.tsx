@@ -80,7 +80,7 @@ const ProfileImagesGrid = ({ mediaItems = [] }: { mediaItems?: string[] }) => {
                   <div className="flex-1 md:basis-1/2 relative">
                     {renderMedia(gridItems[2], 2)}
                     {remainingImages > 0 && (
-                      <div className="absolute py-2 px-4 bottom-3 right-3 select-none rounded-2xl pointer-events-none bg-slate-600/50 text-xs font-normal text-white z-20">
+                      <div className="absolute py-2 px-4 bottom-3 right-3 select-none rounded-2xl pointer-events-none bg-slate-600/50 text-xs font-medium text-white z-20">
                         {`${remainingImages} more ${
                           remainingImages > 1 ? `images` : `image`
                         }`}
