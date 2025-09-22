@@ -87,6 +87,17 @@ function EventsCalendar() {
         // isValidDate={isValidDate}
         onChange={handleDateChange}
       />
+      {/* Legends */}
+      <div className="flex items-center gap-4 mt-2 select-none">
+        <div className="text-xs text-gray-800 flex items-center gap-2">
+          <span className="w-[6px] h-[6px] block bg-gray-900 rounded-full"></span>
+          <span>Past</span>
+        </div>
+        <div className="text-xs text-gray-800 flex items-center gap-2">
+          <span className="w-[6px] h-[6px] block bg-rose-600 rounded-full"></span>
+          <span>Upcoming</span>
+        </div>
+      </div>
     </div>
   );
 }

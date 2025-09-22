@@ -75,7 +75,7 @@ export class MatchesService {
       this.profileModel
         .find(query)
         .select(
-          'firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
         )
         .sort({ createdAt: -1 })
         .skip(skip)
@@ -139,7 +139,7 @@ export class MatchesService {
       this.profileModel
         .find(query)
         .select(
-          'firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
         )
         .sort({ createdAt: -1 })
         .skip(skip)

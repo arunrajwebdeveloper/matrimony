@@ -13,6 +13,7 @@ import { EmailModule } from './modules/email/email.module';
 import { MatchesModule } from './modules/matches/matches.module';
 import { ActivitiesModule } from './modules/activities/activities.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { UserInteractionsModule } from './modules/user-interactions/user-interactions.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { UploadModule } from './modules/upload/upload.module';
     MatchesModule,
     ActivitiesModule,
     UploadModule,
+    UserInteractionsModule,
   ],
   controllers: [],
   providers: [],

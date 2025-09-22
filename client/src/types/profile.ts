@@ -86,6 +86,7 @@ export interface UserMatchType {
   motherTongue: string;
   isOnline?: boolean;
   profilePicture: string;
+  user: string;
 }
 
 export interface MatchCardActions {
