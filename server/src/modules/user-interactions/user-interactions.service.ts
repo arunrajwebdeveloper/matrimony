@@ -28,15 +28,6 @@ export class UserInteractionsService {
     return existingLists;
   }
 
-  // Get or create user interaction lists
-  private async getUserLists(userId: string) {
-    let lists = await this.interactionListsModel.findOne({ userId });
-    if (!lists) {
-      lists = await this.initializeUserLists(userId);
-    }
-    return lists;
-  }
-
   // SHORTLIST OPERATIONS
   async addToShortlist(fromUserId: string, toUserId: string) {
     if (fromUserId === toUserId) {
