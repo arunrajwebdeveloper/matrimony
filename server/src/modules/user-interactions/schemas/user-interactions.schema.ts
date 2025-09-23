@@ -55,6 +55,9 @@ export class UserInteractions extends Document {
 
   @Prop({ default: Date.now })
   updatedAt: Date;
+
+  @Prop({ default: null })
+  deletedAt: Date;
 }
 
 export const UserInteractionsSchema =
@@ -63,5 +66,11 @@ export const UserInteractionsSchema =
 // Create compound indexes for performance
 UserInteractionsSchema.index({ fromUserId: 1, interactionType: 1, status: 1 });
 UserInteractionsSchema.index({ toUserId: 1, interactionType: 1, status: 1 });
-UserInteractionsSchema.index({ fromUserId: 1, toUserId: 1 });
+UserInteractionsSchema.index(
+  { fromUserId: 1, toUserId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { status: 'active', deletedAt: null },
+  },
+);
 UserInteractionsSchema.index({ createdAt: -1 });
