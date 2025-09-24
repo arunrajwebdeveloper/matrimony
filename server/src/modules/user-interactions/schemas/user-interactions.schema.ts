@@ -1,22 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-
-export type InteractionType =
-  | 'shortlisted'
-  | 'blocked'
-  | 'match_request_sent'
-  | 'match_request_accepted'
-  | 'match_request_declined'
-  | 'view'
-  | 'unblocked'
-  | 'removed_from_shortlist';
-
-export type InteractionStatus =
-  | 'pending'
-  | 'accepted'
-  | 'declined'
-  | 'expired'
-  | 'active';
+import { InteractionType } from '../enums/interaction-type.enum';
+import { InteractionStatus } from '../enums/interaction-status.enum';
 
 @Schema({ timestamps: true })
 export class UserInteractions extends Document {
@@ -27,23 +12,14 @@ export class UserInteractions extends Document {
   toUserId: Types.ObjectId;
 
   @Prop({
-    enum: [
-      'shortlisted',
-      'blocked',
-      'match_request_sent',
-      'match_request_accepted',
-      'match_request_declined',
-      'view',
-      'unblocked',
-      'removed_from_shortlist',
-    ],
+    enum: InteractionType,
     required: true,
   })
   interactionType: InteractionType;
 
   @Prop({
-    enum: ['pending', 'accepted', 'declined', 'expired', 'active'],
-    default: 'active',
+    enum: InteractionStatus,
+    default: InteractionStatus.ACTIVE,
   })
   status: InteractionStatus;
 
@@ -70,7 +46,10 @@ UserInteractionsSchema.index(
   { fromUserId: 1, toUserId: 1 },
   {
     unique: true,
-    partialFilterExpression: { status: 'active', deletedAt: null },
+    partialFilterExpression: {
+      status: InteractionStatus.ACTIVE,
+      deletedAt: null,
+    },
   },
 );
 UserInteractionsSchema.index({ createdAt: -1 });

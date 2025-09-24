@@ -8,6 +8,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { UserInteractions } from './schemas/user-interactions.schema';
 import { UserInteractionLists } from './schemas/user-interaction-lists.schema';
+import { InteractionType } from './enums/interaction-type.enum';
+import { InteractionStatus } from './enums/interaction-status.enum';
 
 @Injectable()
 export class UserInteractionsService {
@@ -38,8 +40,8 @@ export class UserInteractionsService {
     const existing = await this.interactionModel.findOne({
       fromUserId: new Types.ObjectId(fromUserId),
       toUserId: new Types.ObjectId(toUserId),
-      interactionType: 'shortlisted',
-      status: 'active',
+      interactionType: InteractionType.SHORTLISTED,
+      status: InteractionStatus.ACTIVE,
     });
 
     if (existing) {
@@ -61,8 +63,8 @@ export class UserInteractionsService {
         const interaction = new this.interactionModel({
           fromUserId: new Types.ObjectId(fromUserId),
           toUserId: new Types.ObjectId(toUserId),
-          interactionType: 'shortlisted',
-          status: 'active',
+          interactionType: InteractionType.SHORTLISTED,
+          status: InteractionStatus.ACTIVE,
         });
         await interaction.save({ session });
 
@@ -93,10 +95,10 @@ export class UserInteractionsService {
           {
             fromUserId: new Types.ObjectId(fromUserId),
             toUserId: new Types.ObjectId(toUserId),
-            interactionType: 'shortlisted',
-            status: 'active',
+            interactionType: InteractionType.SHORTLISTED,
+            status: InteractionStatus.ACTIVE,
           },
-          { status: 'expired' },
+          { status: InteractionStatus.EXPIRED },
           { session },
         );
 
@@ -104,8 +106,8 @@ export class UserInteractionsService {
         const interaction = new this.interactionModel({
           fromUserId: new Types.ObjectId(fromUserId),
           toUserId: new Types.ObjectId(toUserId),
-          interactionType: 'removed_from_shortlist',
-          status: 'active',
+          interactionType: InteractionType.REMOVED_FROM_SHORTLIST,
+          status: InteractionStatus.ACTIVE,
         });
         await interaction.save({ session });
 
@@ -137,8 +139,8 @@ export class UserInteractionsService {
         const interaction = new this.interactionModel({
           fromUserId: new Types.ObjectId(fromUserId),
           toUserId: new Types.ObjectId(toUserId),
-          interactionType: 'blocked',
-          status: 'active',
+          interactionType: InteractionType.BLOCKED,
+          status: InteractionStatus.ACTIVE,
         });
         await interaction.save({ session });
 
@@ -186,11 +188,16 @@ export class UserInteractionsService {
               },
             ],
             interactionType: {
-              $in: ['match_request_sent', 'shortlisted'],
+              $in: [
+                InteractionType.MATCH_REQUEST_SENT,
+                InteractionType.SHORTLISTED,
+              ],
             },
-            status: { $in: ['active', 'pending'] },
+            status: {
+              $in: [InteractionStatus.ACTIVE, InteractionStatus.PENDING],
+            },
           },
-          { status: 'expired' },
+          { status: InteractionStatus.EXPIRED },
           { session },
         );
       });
@@ -211,10 +218,10 @@ export class UserInteractionsService {
           {
             fromUserId: new Types.ObjectId(fromUserId),
             toUserId: new Types.ObjectId(toUserId),
-            interactionType: 'blocked',
-            status: 'active',
+            interactionType: InteractionType.BLOCKED,
+            status: InteractionStatus.ACTIVE,
           },
-          { status: 'expired' },
+          { status: InteractionStatus.EXPIRED },
           { session },
         );
 
@@ -222,8 +229,8 @@ export class UserInteractionsService {
         const interaction = new this.interactionModel({
           fromUserId: new Types.ObjectId(fromUserId),
           toUserId: new Types.ObjectId(toUserId),
-          interactionType: 'unblocked',
-          status: 'active',
+          interactionType: InteractionType.UNBLOCKED,
+          status: InteractionStatus.ACTIVE,
         });
         await interaction.save({ session });
 
@@ -257,8 +264,8 @@ export class UserInteractionsService {
     const existingRequest = await this.interactionModel.findOne({
       fromUserId: new Types.ObjectId(fromUserId),
       toUserId: new Types.ObjectId(toUserId),
-      interactionType: 'match_request_sent',
-      status: 'pending',
+      interactionType: InteractionType.MATCH_REQUEST_SENT,
+      status: InteractionStatus.PENDING,
     });
 
     if (existingRequest) {
@@ -278,8 +285,8 @@ export class UserInteractionsService {
         const interaction = new this.interactionModel({
           fromUserId: new Types.ObjectId(fromUserId),
           toUserId: new Types.ObjectId(toUserId),
-          interactionType: 'match_request_sent',
-          status: 'pending',
+          interactionType: InteractionType.MATCH_REQUEST_SENT,
+          status: InteractionStatus.PENDING,
         });
         await interaction.save({ session });
 
@@ -322,10 +329,10 @@ export class UserInteractionsService {
           {
             fromUserId: new Types.ObjectId(toUserId), // Note: reversed
             toUserId: new Types.ObjectId(fromUserId),
-            interactionType: 'match_request_sent',
-            status: 'pending',
+            interactionType: InteractionType.MATCH_REQUEST_SENT,
+            status: InteractionStatus.PENDING,
           },
-          { status: 'accepted' },
+          { status: InteractionStatus.ACCEPTED },
           { session },
         );
 
@@ -337,8 +344,8 @@ export class UserInteractionsService {
         const interaction = new this.interactionModel({
           fromUserId: new Types.ObjectId(fromUserId),
           toUserId: new Types.ObjectId(toUserId),
-          interactionType: 'match_request_accepted',
-          status: 'active',
+          interactionType: InteractionType.MATCH_REQUEST_ACCEPTED,
+          status: InteractionStatus.ACTIVE,
         });
         await interaction.save({ session });
 
@@ -379,10 +386,10 @@ export class UserInteractionsService {
           {
             fromUserId: new Types.ObjectId(toUserId), // Note: reversed
             toUserId: new Types.ObjectId(fromUserId),
-            interactionType: 'match_request_sent',
-            status: 'pending',
+            interactionType: InteractionType.MATCH_REQUEST_SENT,
+            status: InteractionStatus.PENDING,
           },
-          { status: 'declined' },
+          { status: InteractionStatus.DECLINED },
           { session },
         );
 
@@ -394,8 +401,8 @@ export class UserInteractionsService {
         const interaction = new this.interactionModel({
           fromUserId: new Types.ObjectId(fromUserId),
           toUserId: new Types.ObjectId(toUserId),
-          interactionType: 'match_request_declined',
-          status: 'active',
+          interactionType: InteractionType.MATCH_REQUEST_DECLINED,
+          status: InteractionStatus.ACTIVE,
         });
         await interaction.save({ session });
 
@@ -431,8 +438,8 @@ export class UserInteractionsService {
         const interaction = new this.interactionModel({
           fromUserId: new Types.ObjectId(fromUserId),
           toUserId: new Types.ObjectId(toUserId),
-          interactionType: 'view',
-          status: 'active',
+          interactionType: InteractionType.VIEW,
+          status: InteractionStatus.ACTIVE,
         });
         await interaction.save({ session });
 
@@ -590,7 +597,7 @@ export class UserInteractionsService {
     const views = await this.interactionModel
       .find({
         toUserId: new Types.ObjectId(userId),
-        interactionType: 'view',
+        interactionType: InteractionType.VIEW,
       })
       .populate(
         'fromUserId',
@@ -602,7 +609,7 @@ export class UserInteractionsService {
 
     const total = await this.interactionModel.countDocuments({
       toUserId: new Types.ObjectId(userId),
-      interactionType: 'view',
+      interactionType: InteractionType.VIEW,
     });
 
     return {
@@ -623,14 +630,14 @@ export class UserInteractionsService {
         {
           fromUserId: new Types.ObjectId(userId1),
           toUserId: new Types.ObjectId(userId2),
-          interactionType: 'blocked',
-          status: 'active',
+          interactionType: InteractionType.BLOCKED,
+          status: InteractionStatus.ACTIVE,
         },
         {
           fromUserId: new Types.ObjectId(userId2),
           toUserId: new Types.ObjectId(userId1),
-          interactionType: 'blocked',
-          status: 'active',
+          interactionType: InteractionType.BLOCKED,
+          status: InteractionStatus.ACTIVE,
         },
       ],
     });
@@ -669,8 +676,8 @@ export class UserInteractionsService {
     const blockedByOther = await this.interactionModel.findOne({
       fromUserId: toUserObjectId,
       toUserId: new Types.ObjectId(fromUserId),
-      interactionType: 'blocked',
-      status: 'active',
+      interactionType: InteractionType.BLOCKED,
+      status: InteractionStatus.ACTIVE,
     });
 
     if (blockedByOther) {

@@ -1,11 +1,11 @@
 import { IsString, IsEnum, IsOptional, IsObject } from 'class-validator';
-import { InteractionType } from '../schemas/user-interactions.schema';
+import { InteractionType } from '../enums/interaction-type.enum';
 
 export class CreateInteractionDto {
   @IsString()
   toUserId: string;
 
-  @IsEnum(['shortlisted', 'blocked', 'match_request_sent', 'view'])
+  @IsEnum(InteractionType)
   interactionType: InteractionType;
 
   @IsOptional()
@@ -28,6 +28,6 @@ export class GetInteractionsQueryDto {
   limit?: string = '20';
 
   @IsOptional()
-  @IsEnum(['shortlisted', 'blocked', 'match_request_sent', 'view'])
+  @IsEnum(InteractionType)
   type?: InteractionType;
 }
