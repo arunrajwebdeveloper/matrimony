@@ -31,12 +31,6 @@ export const navItems: NavigationItemType[] = [
     count: 25,
     href: ROUTES.ACCEPTED,
   },
-  {
-    label: "Recently Viewed",
-    icon: Eye,
-    count: 54,
-    href: ROUTES.RECENTLY_VIEWED,
-  },
   { label: "Shortlisted", icon: Heart, count: 8, href: ROUTES.SHORTLISTED },
   { label: "Sent Requests", icon: Send, count: 17, href: ROUTES.SENT_REQUESTS },
   {

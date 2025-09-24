@@ -22,6 +22,9 @@ export class UserInteractionLists extends Document {
   @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
   acceptedRequests: Types.ObjectId[];
 
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  declinedRequests: Types.ObjectId[];
+
   // Counters for analytics
   @Prop({ default: 0 })
   totalProfileViews: number;
