@@ -31,6 +31,24 @@ export const API_ENDPOINTS = {
   ACTIVITY_RECENT_GET: "/api/activities/recent",
   ACTIVITY_ALL_GET: "/api/activities/all",
 
+  // INTERACTIONS
+
+  SHORTLIST: {
+    GET_LIST: "/api/user-interactions/shortlisted",
+    ADD: "/api/user-interactions/shortlist",
+    REMOVE: "/api/user-interactions/shortlist/remove",
+  },
+  BLOCKED: {
+    GET_LIST: "/api/user-interactions/blocked",
+    ADD: "/api/user-interactions/block",
+    REMOVE: "/api/user-interactions/block/remove",
+  },
+  MATCH_REQUEST: {
+    GET_NEW: "/api/user-interactions/match-requests/pending",
+    SENT: "/api/user-interactions/match-requests/sent",
+    ACCEPTED: "/api/user-interactions/accepted-requests",
+  },
+
   // FILE UPLOAD
 
   UPLOAD: {

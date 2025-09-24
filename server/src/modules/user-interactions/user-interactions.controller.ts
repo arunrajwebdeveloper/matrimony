@@ -23,7 +23,7 @@ export class UserInteractionsController {
     return this.interactionsService.addToShortlist(req.user._id, userId);
   }
 
-  @Post('shortlist/:userId/remove')
+  @Post('shortlist/remove/:userId')
   async removeFromShortlist(@Req() req: any, @Param('userId') userId: string) {
     return this.interactionsService.removeFromShortlist(req.user._id, userId);
   }
@@ -43,7 +43,7 @@ export class UserInteractionsController {
     return this.interactionsService.blockUser(req.user._id, userId);
   }
 
-  @Post('block/:userId/remove')
+  @Post('block/remove/:userId')
   async unblockUser(@Req() req: any, @Param('userId') userId: string) {
     return this.interactionsService.unblockUser(req.user._id, userId);
   }
@@ -63,12 +63,12 @@ export class UserInteractionsController {
     return this.interactionsService.sendMatchRequest(req.user._id, userId);
   }
 
-  @Post('match-request/:userId/accept')
+  @Post('match-request/accept/:userId')
   async acceptMatchRequest(@Req() req: any, @Param('userId') userId: string) {
     return this.interactionsService.acceptMatchRequest(req.user._id, userId);
   }
 
-  @Post('match-request/:userId/decline')
+  @Post('match-request/decline/:userId')
   async declineMatchRequest(@Req() req: any, @Param('userId') userId: string) {
     return this.interactionsService.declineMatchRequest(req.user._id, userId);
   }
