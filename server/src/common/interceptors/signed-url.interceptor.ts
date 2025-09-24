@@ -37,14 +37,14 @@ export class SignedUrlInterceptor implements NestInterceptor {
       entity = entity.toObject();
     }
 
-    // Handle list response with "result"
-    if (entity?.result && Array.isArray(entity?.result)) {
+    // Handle list response with "data" ( Pagination)
+    if (entity?.data && Array.isArray(entity?.data)) {
       const signedResult = await Promise.all(
-        entity.result.map((item: any) => this.addSignedUrls(item, userId)),
+        entity.data.map((item: any) => this.addSignedUrls(item, userId)),
       );
       return {
         ...entity,
-        result: signedResult,
+        data: signedResult,
       };
     }
 

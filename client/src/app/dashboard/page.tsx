@@ -36,13 +36,13 @@ const DashboardPage: React.FC = () => {
   const { user } = useAuth();
 
   const [newMatches, setNewMatches] = useState<MatchState>({
-    data: null,
+    result: null,
     isLoading: true,
     error: null,
   });
 
   const [preferredMatches, setPreferredMatches] = useState<MatchState>({
-    data: null,
+    result: null,
     isLoading: true,
     error: null,
   });
@@ -53,13 +53,13 @@ const DashboardPage: React.FC = () => {
         `${API_ENDPOINTS.PREFERRED_MATCHES_LIST}?limit=5`
       );
       setPreferredMatches({
-        data: response?.data?.result as MatchResult,
+        result: response?.data?.result as MatchResult,
         isLoading: false,
         error: null,
       });
     } catch (err: any) {
       setPreferredMatches({
-        data: null,
+        result: null,
         isLoading: false,
         error: "Failed to load Preferred matches data",
       });
@@ -73,13 +73,13 @@ const DashboardPage: React.FC = () => {
         `${API_ENDPOINTS.NEW_MATCHES_LIST}?limit=5`
       );
       setNewMatches({
-        data: response?.data?.result as MatchResult,
+        result: response?.data?.result as MatchResult,
         isLoading: false,
         error: null,
       });
     } catch (err: any) {
       setNewMatches({
-        data: null,
+        result: null,
         isLoading: false,
         error: "Failed to load New matches data",
       });
@@ -159,7 +159,7 @@ const DashboardPage: React.FC = () => {
               className="mb-5"
             >
               <MatchList
-                users={preferredMatches?.data?.result!}
+                users={preferredMatches?.result?.data!}
                 isLoading={preferredMatches?.isLoading}
                 error={preferredMatches?.error}
                 onAddToShortlist={(e) => {
@@ -180,7 +180,7 @@ const DashboardPage: React.FC = () => {
               className="mb-5"
             >
               <MatchList
-                users={newMatches?.data?.result!}
+                users={newMatches?.result?.data!}
                 isLoading={newMatches?.isLoading}
                 error={newMatches?.error}
                 onAddToShortlist={(e) => {

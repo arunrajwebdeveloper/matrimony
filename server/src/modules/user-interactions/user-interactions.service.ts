@@ -486,12 +486,12 @@ export class UserInteractionsService {
 
     return {
       data: userLists?.shortlisted || [],
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(total / limit),
-        total,
-        limit,
-      },
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      limit,
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
     };
   }
 
@@ -510,12 +510,12 @@ export class UserInteractionsService {
 
     return {
       data: userLists?.blocked || [],
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(total / limit),
-        total,
-        limit,
-      },
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      limit,
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
     };
   }
 
@@ -534,12 +534,12 @@ export class UserInteractionsService {
 
     return {
       data: userLists?.acceptedRequests || [],
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(total / limit),
-        total,
-        limit,
-      },
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      limit,
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
     };
   }
 
@@ -558,12 +558,12 @@ export class UserInteractionsService {
 
     return {
       data: userLists?.receivedMatchRequests || [],
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(total / limit),
-        total,
-        limit,
-      },
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      limit,
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
     };
   }
 
@@ -582,12 +582,12 @@ export class UserInteractionsService {
 
     return {
       data: userLists?.sentMatchRequests || [],
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(total / limit),
-        total,
-        limit,
-      },
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      limit,
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
     };
   }
 
@@ -614,12 +614,12 @@ export class UserInteractionsService {
 
     return {
       data: views,
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(total / limit),
-        total,
-        limit,
-      },
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      limit,
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
     };
   }
 
@@ -757,12 +757,12 @@ export class UserInteractionsService {
 
     return {
       data: interactions,
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(total / limit),
-        total,
-        limit,
-      },
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      limit,
+      hasNextPage: page * limit < total,
+      hasPrevPage: page > 1,
     };
   }
 

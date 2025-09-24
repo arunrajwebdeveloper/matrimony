@@ -106,11 +106,11 @@ export interface MatchResult {
   page: number;
   total: number;
   totalPages: number;
-  result: UserMatchType[];
+  data: UserMatchType[];
 }
 
 export interface MatchState {
-  data: MatchResult | null;
+  result: MatchResult | null;
   isLoading: boolean;
   error: string | null;
 }

@@ -25,7 +25,7 @@ const PreferredMatchesPage: React.FC = () => {
   const searchParams = useSearchParams();
 
   const [state, setState] = useState<MatchState>({
-    data: null,
+    result: null,
     isLoading: true,
     error: null,
   });
@@ -37,13 +37,13 @@ const PreferredMatchesPage: React.FC = () => {
         { params: searchParamsToObject(searchParams) }
       );
       setState({
-        data: response?.data?.result as MatchResult,
+        result: response?.data?.result as MatchResult,
         isLoading: false,
         error: null,
       });
     } catch (err: any) {
       setState({
-        data: null,
+        result: null,
         isLoading: false,
         error: "Failed to load Preferred matches data",
       });
@@ -79,7 +79,7 @@ const PreferredMatchesPage: React.FC = () => {
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
             <ProfileCard title="Preferred Matches" className="mb-5">
               <MatchList
-                users={state?.data?.result!}
+                users={state?.result?.data!}
                 isLoading={state?.isLoading}
                 error={state?.error}
                 onAddToShortlist={(e) => {
@@ -92,8 +92,8 @@ const PreferredMatchesPage: React.FC = () => {
             </ProfileCard>
             {!state?.isLoading && (
               <Pagination
-                page={state?.data?.page as number}
-                lastPage={state?.data?.totalPages as number}
+                page={state?.result?.page as number}
+                lastPage={state?.result?.totalPages as number}
                 path="/dashboard/preferred-matches"
               />
             )}

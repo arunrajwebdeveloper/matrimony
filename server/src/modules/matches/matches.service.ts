@@ -71,7 +71,7 @@ export class MatchesService {
     const skip = (page - 1) * limit;
 
     // Run queries in parallel for efficiency
-    const [result, total] = await Promise.all([
+    const [data, total] = await Promise.all([
       this.profileModel
         .find(query)
         .select(
@@ -85,7 +85,7 @@ export class MatchesService {
     ]);
 
     return {
-      result,
+      data,
       total,
       page,
       limit,
@@ -135,7 +135,7 @@ export class MatchesService {
     const skip = (page - 1) * limit;
 
     // Fetch results and count in parallel
-    const [result, total] = await Promise.all([
+    const [data, total] = await Promise.all([
       this.profileModel
         .find(query)
         .select(
@@ -149,7 +149,7 @@ export class MatchesService {
     ]);
 
     return {
-      result,
+      data,
       total,
       page,
       limit,

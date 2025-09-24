@@ -26,7 +26,7 @@ const NewMatchesPage: React.FC = () => {
   const searchParams = useSearchParams();
 
   const [state, setState] = useState<MatchState>({
-    data: null,
+    result: null,
     isLoading: true,
     error: null,
   });
@@ -38,13 +38,13 @@ const NewMatchesPage: React.FC = () => {
         { params: searchParamsToObject(searchParams) }
       );
       setState({
-        data: response?.data?.result as MatchResult,
+        result: response?.data?.result as MatchResult,
         isLoading: false,
         error: null,
       });
     } catch (err: any) {
       setState({
-        data: null,
+        result: null,
         isLoading: false,
         error: "Failed to load New matches data",
       });
@@ -81,7 +81,7 @@ const NewMatchesPage: React.FC = () => {
 
             <ProfileCard title="New Matches" className="mb-5">
               <MatchList
-                users={state?.data?.result!}
+                users={state?.result?.data!}
                 isLoading={state?.isLoading}
                 error={state?.error}
                 onAddToShortlist={(e) => {
@@ -94,8 +94,8 @@ const NewMatchesPage: React.FC = () => {
             </ProfileCard>
             {!state?.isLoading && (
               <Pagination
-                page={state?.data?.page as number}
-                lastPage={state?.data?.totalPages as number}
+                page={state?.result?.page as number}
+                lastPage={state?.result?.totalPages as number}
                 path="/dashboard/new-matches"
               />
             )}
