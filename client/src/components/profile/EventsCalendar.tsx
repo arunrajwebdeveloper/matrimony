@@ -7,10 +7,17 @@ const events = [
   { date: "16-09-2025", title: "Meeting with Sugunan" },
   { date: "24-09-2025", title: "Renewal of Premium Plan" },
   { date: "24-09-2025", title: "Car Insurance renewal" },
+  { date: "02-10-2025", title: "Lonappan's Wedding" },
+  { date: "02-10-2025", title: "Joppan's Wedding" },
+  { date: "04-10-2025", title: "Service Fee" },
   { date: "14-10-2025", title: "Ramanan's Wedding" },
   { date: "18-10-2025", title: "George's Engagement" },
   { date: "06-11-2025", title: "Scheduled meeting with John" },
   { date: "17-11-2025", title: "Update profile details" },
+  { date: "17-11-2025", title: "Update Plan" },
+  { date: "12-12-2025", title: "Remove unwanted contacts" },
+  { date: "12-12-2025", title: "Remove details" },
+  { date: "17-12-2025", title: "Contact update" },
 ];
 
 const renderDay = (props: any, currentDate: any) => {
