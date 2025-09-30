@@ -173,17 +173,19 @@ input[type="range"].range:hover::-moz-range-thumb {
 }
 .rdtPicker .rdtDay.has-event.upcoming-event {
   color: #ff0077;
-  background: #ffecf5;
+  background: #ffe4e6;
 }
 .rdtPicker .rdtDay.has-event.past-event {
   color: #414141;
-  background: #eaeaea;
+  background: #f3f4f6;
 }
 .rdtPicker .rdtToday {
-  color: #428bca !important;
-  background: #e9f5ff !important;
+  color: #155dfc !important;
+  background: #dbeafe !important;
 }
-
+.rdtPicker td.rdtToday:before {
+  border-bottom-color: #155dfc !important;
+}
 .rdtPicker td.rdtDay:not(.rdtToday):not(.rdtActive):not(.has-event):hover {
   background: #e5e7eb !important;
 }

@@ -88,14 +88,24 @@ function EventsCalendar() {
         onChange={handleDateChange}
       />
       {/* Legends */}
-      <div className="flex items-center gap-4 mt-2 select-none">
+      <div className="flex items-center gap-4 mt-3 select-none">
         <div className="text-xs text-gray-800 flex items-center gap-2">
-          <span className="w-[6px] h-[6px] block bg-gray-900 rounded-full"></span>
+          <div className="w-4 h-4 flex bg-gray-100 rounded-sm">
+            <span className="w-[6px] h-[6px] block bg-gray-900 rounded-full m-auto"></span>
+          </div>
           <span>Past</span>
         </div>
         <div className="text-xs text-gray-800 flex items-center gap-2">
-          <span className="w-[6px] h-[6px] block bg-rose-600 rounded-full"></span>
+          <div className="w-4 h-4 flex bg-rose-100 rounded-sm">
+            <span className="w-[6px] h-[6px] block bg-rose-600 rounded-full m-auto"></span>
+          </div>
           <span>Upcoming</span>
+        </div>
+        <div className="text-xs text-gray-800 flex items-center gap-2">
+          <div className="w-4 h-4 flex bg-blue-100 rounded-sm">
+            <span className="w-[6px] h-[6px] block bg-blue-600 rounded-full m-auto"></span>
+          </div>
+          <span>Today</span>
         </div>
       </div>
     </div>
