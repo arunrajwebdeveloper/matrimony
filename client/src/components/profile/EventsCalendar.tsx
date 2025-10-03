@@ -109,9 +109,7 @@ function EventsCalendar() {
           <span>Upcoming</span>
         </div>
         <div className="text-xs text-gray-800 flex items-center gap-2">
-          <div className="w-4 h-4 flex bg-blue-100 rounded-sm">
-            <span className="w-[6px] h-[6px] block bg-blue-600 rounded-full m-auto"></span>
-          </div>
+          <div className="w-4 h-4 flex bg-blue-100 rounded-sm relative after:absolute after:bottom-1 after:right-1 z-10 after:border-3 after:border-l-transparent after:border-t-transparent after:border-r-blue-600 after:border-b-blue-600"></div>
           <span>Today</span>
         </div>
       </div>
