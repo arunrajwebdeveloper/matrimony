@@ -8,14 +8,56 @@ import {
   UseGuards,
   ParseIntPipe,
   DefaultValuePipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserInteractionsService } from './user-interactions.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ProfileResponseDto } from './dto/profileResponseDto';
+import { SignedUrlInterceptor } from 'src/common/interceptors/signed-url.interceptor';
 
 @Controller('user-interactions')
 @UseGuards(JwtAuthGuard)
 export class UserInteractionsController {
   constructor(private interactionsService: UserInteractionsService) {}
+
+  // MATCHES
+  @UseInterceptors(SignedUrlInterceptor)
+  @Get('preferred')
+  @ApiOperation({ summary: 'Get preferred matches based on user preferences' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of profiles matching preferences',
+    type: [ProfileResponseDto],
+  })
+  async getPreferredMatches(
+    @Req() req: any,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+  ) {
+    // req.user._id would come from a real authentication guard
+    return this.interactionsService.getPreferredMatches(
+      req.user._id,
+      page,
+      limit,
+    );
+  }
+
+  @UseInterceptors(SignedUrlInterceptor)
+  @Get('new')
+  @ApiOperation({ summary: 'Get new matches not yet interacted with' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of new profiles',
+    type: [ProfileResponseDto],
+  })
+  async getNewMatches(
+    @Req() req: any,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+  ) {
+    return this.interactionsService.getNewMatches(req.user._id, page, limit);
+  }
 
   // SHORTLIST ENDPOINTS
   @Post('shortlist/:userId')
@@ -35,6 +77,33 @@ export class UserInteractionsController {
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
   ) {
     return this.interactionsService.getShortlisted(req.user._id, page, limit);
+  }
+
+  // DECLINE ENDPOINTS
+
+  @Post('decline/:userId')
+  async declinedUser(@Req() req: any, @Param('userId') userId: string) {
+    return this.interactionsService.addToDelinedlist(req.user._id, userId);
+  }
+
+  @Post('decline/remove/:userId')
+  async removeFromDeclinedlist(
+    @Req() req: any,
+    @Param('userId') userId: string,
+  ) {
+    return this.interactionsService.removeFromDeclinedlist(
+      req.user._id,
+      userId,
+    );
+  }
+
+  @Get('declined')
+  async getDeclined(
+    @Req() req: any,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+  ) {
+    return this.interactionsService.getDeclined(req.user._id, page, limit);
   }
 
   // BLOCK ENDPOINTS

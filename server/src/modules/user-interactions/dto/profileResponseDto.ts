@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
  * Data Transfer Object (DTO) for the Profile response.
  * This ensures a consistent structure for data returned by the API.
  */
-export class ProfileDto {
+export class ProfileResponseDto {
   @ApiProperty({ description: 'The unique ID of the profile' })
   _id: string;
 

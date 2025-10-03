@@ -14,8 +14,6 @@ export const API_ENDPOINTS = {
   ME: "/api/users/me",
   PROFILE: "/api/profiles/my-profile",
   USER_BY_PROFILE_ID: "/api/profiles",
-  PREFERRED_MATCHES_LIST: "/api/matches/preferred",
-  NEW_MATCHES_LIST: "/api/matches/new",
 
   PROFILE_PICTURE_UPLOAD: "/api/users/profile-picture",
   PROFILE_COVER_UPLOAD: "/api/users/profile-cover",
@@ -48,6 +46,13 @@ export const API_ENDPOINTS = {
     SENT: "/api/user-interactions/match-requests/sent",
     ACCEPTED: "/api/user-interactions/accepted-requests",
   },
+  DECLINED: {
+    GET_LIST: "/api/user-interactions/declined",
+    ADD: "/api/user-interactions/decline",
+    REMOVE: "/api/user-interactions/decline/remove",
+  },
+  PREFERRED_MATCHES_LIST: "/api/user-interactions/preferred",
+  NEW_MATCHES_LIST: "/api/user-interactions/new",
 
   // FILE UPLOAD
 
