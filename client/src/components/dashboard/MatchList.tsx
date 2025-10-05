@@ -42,7 +42,7 @@ function MatchList({
         users?.map((user) => {
           return (
             <UserCard
-              key={user.profileId}
+              key={user._id}
               {...user}
               onAddToShortlist={onAddToShortlist}
               onRemove={onRemove}

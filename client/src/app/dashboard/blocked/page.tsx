@@ -1,60 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useAuth } from "@/hooks/useAuth";
-import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
-import ProfileCard from "@/components/cards/ProfileCard";
 import Navigation from "@/components/navigation/Navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
-import SidebarCard from "@/components/cards/SidebarCard";
-import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
+import { API_ENDPOINTS } from "@/utils/constants";
 import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
-import MatchList from "@/components/dashboard/MatchList";
-import { ApiResponse, MatchResult, MatchState } from "@/types";
-import api from "@/lib/api";
-import Pagination from "@/components/ui/Pagination";
-import { useSearchParams } from "next/navigation";
-import { searchParamsToObject } from "@/utils/searchParamsToObject";
 import EventsCalendar from "@/components/profile/EventsCalendar";
+import InteractionList from "@/components/matchList/InteractionList";
 
 const NewMatchesPage: React.FC = () => {
   const { user } = useAuth();
-
-  const searchParams = useSearchParams();
-
-  const [state, setState] = useState<MatchState>({
-    result: null,
-    isLoading: true,
-    error: null,
-  });
-
-  const fetchNewMatches = async (): Promise<void> => {
-    try {
-      const response = await api.get<ApiResponse<MatchResult>>(
-        API_ENDPOINTS.BLOCKED.GET_LIST,
-        { params: searchParamsToObject(searchParams) }
-      );
-      setState({
-        result: response?.data?.result as MatchResult,
-        isLoading: false,
-        error: null,
-      });
-    } catch (err: any) {
-      setState({
-        result: null,
-        isLoading: false,
-        error: "Failed to load New matches data",
-      });
-      console.error("New matches fetch error:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchNewMatches();
-  }, []);
 
   return (
     <div className="main-container">
@@ -74,25 +32,14 @@ const NewMatchesPage: React.FC = () => {
         </div>
         <div className="w-[50%] px-2">
           <div className="mt-5">
-            {/* LISTS */}
-
-            <ProfileCard title="Blocked Users" className="mb-5">
-              <MatchList
-                users={state?.result?.data!}
-                isLoading={state?.isLoading}
-                error={state?.error}
-                onRemove={(e) => {
-                  console.log(e);
-                }}
-              />
-            </ProfileCard>
-            {!state?.isLoading && (
-              <Pagination
-                page={state?.result?.page as number}
-                lastPage={state?.result?.totalPages as number}
-                path="/dashboard/blocked"
-              />
-            )}
+            <InteractionList
+              title="Blocked Users"
+              endpoint={API_ENDPOINTS.BLOCKED.GET_LIST}
+              paginationPath="/dashboard/blocked"
+              onRemove={(e: any) => {
+                console.log(e);
+              }}
+            />
           </div>
         </div>
         <div className="w-[25%] px-2">

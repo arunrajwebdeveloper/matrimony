@@ -19,42 +19,10 @@ import Pagination from "@/components/ui/Pagination";
 import { useSearchParams } from "next/navigation";
 import { searchParamsToObject } from "@/utils/searchParamsToObject";
 import EventsCalendar from "@/components/profile/EventsCalendar";
+import InteractionList from "@/components/matchList/InteractionList";
 
-const InboxPage: React.FC = () => {
+const InboxPage = () => {
   const { user } = useAuth();
-
-  const searchParams = useSearchParams();
-
-  const [state, setState] = useState<MatchState>({
-    result: null,
-    isLoading: true,
-    error: null,
-  });
-
-  const fetchNewMatches = async (): Promise<void> => {
-    try {
-      const response = await api.get<ApiResponse<MatchResult>>(
-        API_ENDPOINTS.MATCH_REQUEST.GET_NEW,
-        { params: searchParamsToObject(searchParams) }
-      );
-      setState({
-        result: response?.data?.result as MatchResult,
-        isLoading: false,
-        error: null,
-      });
-    } catch (err: any) {
-      setState({
-        result: null,
-        isLoading: false,
-        error: "Failed to load New matches data",
-      });
-      console.error("New matches fetch error:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchNewMatches();
-  }, []);
 
   return (
     <div className="main-container">
@@ -74,28 +42,17 @@ const InboxPage: React.FC = () => {
         </div>
         <div className="w-[50%] px-2">
           <div className="mt-5">
-            {/* LISTS */}
-
-            <ProfileCard title="New Requests" className="mb-5">
-              <MatchList
-                users={state?.result?.data!}
-                isLoading={state?.isLoading}
-                error={state?.error}
-                onAcceptRequest={(e) => {
-                  console.log(e);
-                }}
-                onDeclineRequest={(e) => {
-                  console.log(e);
-                }}
-              />
-            </ProfileCard>
-            {!state?.isLoading && (
-              <Pagination
-                page={state?.result?.page as number}
-                lastPage={state?.result?.totalPages as number}
-                path="/dashboard/new-requests"
-              />
-            )}
+            <InteractionList
+              title="New Requests"
+              endpoint={API_ENDPOINTS.MATCH_REQUEST.GET_NEW}
+              paginationPath="/dashboard/new-requests"
+              onAcceptRequest={(e: any) => {
+                console.log(e);
+              }}
+              onDeclineRequest={(e: any) => {
+                console.log(e);
+              }}
+            />
           </div>
         </div>
         <div className="w-[25%] px-2">
