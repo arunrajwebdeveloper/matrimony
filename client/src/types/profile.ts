@@ -95,6 +95,7 @@ export interface MatchCardActions {
   onAddToShortlist?: (id: string) => void;
   onRemove?: (id: string) => void;
   onCancelRequest?: (id: string) => void;
+  onSendInterest?: (id: string) => void;
 }
 
 export interface MatchCardProps extends UserMatchType, MatchCardActions {}

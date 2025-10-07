@@ -39,6 +39,9 @@ const NewMatchesPage: React.FC = () => {
               title="New Matches"
               endpoint={API_ENDPOINTS.NEW_MATCHES_LIST}
               paginationPath="/dashboard/new-matches"
+              onSendInterest={(e: any) => {
+                console.log(e);
+              }}
               onAddToShortlist={(e: any) => {
                 console.log(e);
               }}

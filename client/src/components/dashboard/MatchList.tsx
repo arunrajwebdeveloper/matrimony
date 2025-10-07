@@ -7,11 +7,7 @@ function MatchList({
   users = [],
   isLoading = false,
   error = null,
-  onAddToShortlist,
-  onRemove,
-  onCancelRequest,
-  onAcceptRequest,
-  onDeclineRequest,
+  ...rest
 }: MatchListProps) {
   if (isLoading) {
     return (
@@ -40,17 +36,7 @@ function MatchList({
     <div className="space-y-6">
       {!isLoading && users?.length !== 0 ? (
         users?.map((user) => {
-          return (
-            <UserCard
-              key={user._id}
-              {...user}
-              onAddToShortlist={onAddToShortlist}
-              onRemove={onRemove}
-              onCancelRequest={onCancelRequest}
-              onAcceptRequest={onAcceptRequest}
-              onDeclineRequest={onDeclineRequest}
-            />
-          );
+          return <UserCard key={user._id} {...user} {...rest} />;
         })
       ) : (
         <p className="text-sm text-slate-500 m-0">No items found</p>

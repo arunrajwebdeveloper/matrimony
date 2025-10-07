@@ -39,6 +39,9 @@ const PreferredMatchesPage: React.FC = () => {
               title="Preferred Matches"
               endpoint={API_ENDPOINTS.PREFERRED_MATCHES_LIST}
               paginationPath="/dashboard/preferred-matches"
+              onSendInterest={(e: any) => {
+                console.log(e);
+              }}
               onAddToShortlist={(e: any) => {
                 console.log(e);
               }}

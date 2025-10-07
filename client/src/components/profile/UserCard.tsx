@@ -4,7 +4,7 @@ import { MatchCardProps } from "@/types";
 import OnlineStatusDot from "./OnlineStatusDot";
 import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import { ROUTES } from "@/utils/constants";
-import { Ban, Bookmark, CircleCheck, Eye, Trash2 } from "lucide-react";
+import { Ban, Bookmark, CircleCheck, Eye, Heart, Trash2 } from "lucide-react";
 import Avatar from "./Avatar";
 
 function UserCard(props: MatchCardProps) {
@@ -25,6 +25,7 @@ function UserCard(props: MatchCardProps) {
     onCancelRequest,
     onAcceptRequest,
     onDeclineRequest,
+    onSendInterest,
   } = props;
 
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
@@ -64,30 +65,13 @@ function UserCard(props: MatchCardProps) {
           occupation ?? ""
         }, ${city}, ${state}`}</p>
         <div className="flex items-center gap-2 mt-3">
-          {/* <Link
-            href={`${ROUTES.PROFILE}/${profileId}`}
-            className="flex items-center text-xs cursor-pointer py-1 px-2 bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors duration-300 rounded-sm gap-1"
-          >
-            <Eye size={14} className="flex-1" />
-            <span className="whitespace-nowrap">View</span>
-          </Link> */}
-
-          {onRemove && (
+          {onSendInterest && (
             <button
-              onClick={() => onRemove?.(_id!?.toString())}
-              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-200 text-red-800 hover:bg-red-300 transition-colors duration-300 rounded-sm gap-1"
+              onClick={() => onSendInterest?.(_id!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-green-200 text-green-800 hover:bg-green-300 transition-colors duration-300 rounded-sm gap-1"
             >
-              <Trash2 size={14} className="flex-1" />
-              <span className="whitespace-nowrap">Remove</span>
-            </button>
-          )}
-          {onCancelRequest && (
-            <button
-              onClick={() => onCancelRequest?.(_id!?.toString())}
-              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
-            >
-              <Ban size={14} className="flex-1" />
-              <span className="whitespace-nowrap">Cancel Request</span>
+              <Heart size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Send Interest</span>
             </button>
           )}
           {onAcceptRequest && (
@@ -106,6 +90,24 @@ function UserCard(props: MatchCardProps) {
             >
               <Ban size={14} className="flex-1" />
               <span className="whitespace-nowrap">Decline Request</span>
+            </button>
+          )}
+          {onRemove && (
+            <button
+              onClick={() => onRemove?.(_id!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-200 text-red-800 hover:bg-red-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Trash2 size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Remove</span>
+            </button>
+          )}
+          {onCancelRequest && (
+            <button
+              onClick={() => onCancelRequest?.(_id!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Ban size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Cancel Request</span>
             </button>
           )}
           {onAddToShortlist && (
