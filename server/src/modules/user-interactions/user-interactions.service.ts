@@ -591,13 +591,9 @@ export class UserInteractionsService {
       .findOne({ userId: new Types.ObjectId(userId) })
       .populate({
         path: 'shortlisted',
-        select: 'email firstName lastName',
+        select:
+          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
         options: { skip, limit },
-        populate: {
-          path: 'profile',
-          select:
-            'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        },
       });
 
     const total = userLists?.shortlisted?.length || 0;
@@ -620,7 +616,8 @@ export class UserInteractionsService {
       .findOne({ userId: new Types.ObjectId(userId) })
       .populate({
         path: 'blocked',
-        select: 'username email firstName lastName profilePicture',
+        select:
+          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
         options: { skip, limit },
       });
 
@@ -644,7 +641,8 @@ export class UserInteractionsService {
       .findOne({ userId: new Types.ObjectId(userId) })
       .populate({
         path: 'acceptedRequests',
-        select: 'username email firstName lastName profilePicture',
+        select:
+          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
         options: { skip, limit },
       });
 
@@ -668,7 +666,8 @@ export class UserInteractionsService {
       .findOne({ userId: new Types.ObjectId(userId) })
       .populate({
         path: 'receivedMatchRequests',
-        select: 'username email firstName lastName profilePicture',
+        select:
+          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
         options: { skip, limit },
       });
 
@@ -692,7 +691,8 @@ export class UserInteractionsService {
       .findOne({ userId: new Types.ObjectId(userId) })
       .populate({
         path: 'sentMatchRequests',
-        select: 'username email firstName lastName profilePicture',
+        select:
+          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
         options: { skip, limit },
       });
 
@@ -719,7 +719,7 @@ export class UserInteractionsService {
       })
       .populate(
         'fromUserId',
-        'username email firstName lastName profilePicture',
+        'username email firstName lastName profilePicture', // NEED REWRITE
       )
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -882,7 +882,8 @@ export class UserInteractionsService {
       .findOne({ userId: new Types.ObjectId(userId) })
       .populate({
         path: 'declinedRequests',
-        select: 'username email firstName lastName profilePicture',
+        select:
+          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
         options: { skip, limit },
       });
 

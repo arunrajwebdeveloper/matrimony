@@ -17,12 +17,13 @@ import { ProfileResponseDto } from './dto/profileResponseDto';
 import { SignedUrlInterceptor } from 'src/common/interceptors/signed-url.interceptor';
 
 @Controller('user-interactions')
+@UseInterceptors(SignedUrlInterceptor)
 @UseGuards(JwtAuthGuard)
 export class UserInteractionsController {
   constructor(private interactionsService: UserInteractionsService) {}
 
   // MATCHES
-  @UseInterceptors(SignedUrlInterceptor)
+  // @UseInterceptors(SignedUrlInterceptor)
   @Get('preferred')
   @ApiOperation({ summary: 'Get preferred matches based on user preferences' })
   @ApiResponse({
@@ -43,7 +44,7 @@ export class UserInteractionsController {
     );
   }
 
-  @UseInterceptors(SignedUrlInterceptor)
+  // @UseInterceptors(SignedUrlInterceptor)
   @Get('new')
   @ApiOperation({ summary: 'Get new matches not yet interacted with' })
   @ApiResponse({

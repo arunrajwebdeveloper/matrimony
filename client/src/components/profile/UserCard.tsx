@@ -71,15 +71,7 @@ function UserCard(props: MatchCardProps) {
             <Eye size={14} className="flex-1" />
             <span className="whitespace-nowrap">View</span>
           </Link> */}
-          {onAddToShortlist && (
-            <button
-              onClick={() => onAddToShortlist?.(_id!?.toString())}
-              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-yellow-200 text-yellow-800 hover:bg-yellow-300 transition-colors duration-300 rounded-sm gap-1"
-            >
-              <Bookmark size={14} className="flex-1" />
-              <span className="whitespace-nowrap">Add to Shortlist</span>
-            </button>
-          )}
+
           {onRemove && (
             <button
               onClick={() => onRemove?.(_id!?.toString())}
@@ -114,6 +106,15 @@ function UserCard(props: MatchCardProps) {
             >
               <Ban size={14} className="flex-1" />
               <span className="whitespace-nowrap">Decline Request</span>
+            </button>
+          )}
+          {onAddToShortlist && (
+            <button
+              onClick={() => onAddToShortlist?.(_id!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Bookmark size={14} className="flex-1" />
+              {/* <span className="whitespace-nowrap">Add to Shortlist</span> */}
             </button>
           )}
         </div>

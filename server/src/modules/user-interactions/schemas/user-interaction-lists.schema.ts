@@ -7,22 +7,22 @@ export class UserInteractionLists extends Document {
   userId: Types.ObjectId;
 
   // Quick access arrays for performance
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Profile' }], default: [] })
   shortlisted: Types.ObjectId[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Profile' }], default: [] })
   blocked: Types.ObjectId[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Profile' }], default: [] })
   sentMatchRequests: Types.ObjectId[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Profile' }], default: [] })
   receivedMatchRequests: Types.ObjectId[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Profile' }], default: [] })
   acceptedRequests: Types.ObjectId[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Profile' }], default: [] })
   declinedRequests: Types.ObjectId[];
 
   // Counters for analytics
