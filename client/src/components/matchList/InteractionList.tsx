@@ -8,17 +8,19 @@ function InteractionList({
   state,
   title,
   paginationPath,
+  hasPagination = true,
+  link,
   ...rest
 }: {
   state: any;
   title: string;
+  link?: string;
   paginationPath: string;
+  hasPagination?: boolean;
 }) {
   return (
-    <div>
-      {/* LISTS */}
-
-      <ProfileCard title={title} className="mb-5">
+    <>
+      <ProfileCard title={title} link={link} className="mb-5">
         <MatchList
           users={state?.result?.data!}
           isLoading={state?.isLoading}
@@ -26,14 +28,17 @@ function InteractionList({
           {...rest}
         />
       </ProfileCard>
-      {!state?.isLoading && (
-        <Pagination
-          page={state?.result?.page as number}
-          lastPage={state?.result?.totalPages as number}
-          path={paginationPath}
-        />
-      )}
-    </div>
+
+      {!state?.isLoading &&
+        hasPagination &&
+        (state?.result?.hasNextPage || state?.result?.hasPrevPage) && (
+          <Pagination
+            page={state?.result?.page as number}
+            lastPage={state?.result?.totalPages as number}
+            path={paginationPath}
+          />
+        )}
+    </>
   );
 }
 

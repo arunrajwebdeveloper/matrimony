@@ -2,26 +2,20 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import ProfileCard from "@/components/cards/ProfileCard";
-import UserCard from "@/components/profile/UserCard";
 import Navigation from "@/components/navigation/Navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
-import SidebarCard from "@/components/cards/SidebarCard";
-import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
-import Link from "next/link";
 import StatisticsCard from "@/components/dashboard/StatisticsCard";
 import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
-import MatchList from "@/components/dashboard/MatchList";
 import { ApiResponse, MatchResult, MatchState } from "@/types";
 import api from "@/lib/api";
 import Greeting from "@/components/dashboard/Greeting";
-import ActivityItem from "@/components/profile/ActivityFeedItem";
 import ActivityList from "@/components/dashboard/ActivityList";
 import EventsCalendar from "@/components/profile/EventsCalendar";
+import InteractionList from "@/components/matchList/InteractionList";
 
 const statUsers = [
   "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
@@ -153,44 +147,43 @@ const DashboardPage: React.FC = () => {
 
             {/* Preferred Matches: Highly compatible profiles (85%+ match) based on 
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
-            <ProfileCard
+
+            <InteractionList
               title="Preferred Matches"
+              endpoint={`${API_ENDPOINTS.PREFERRED_MATCHES_LIST}?limit=5`}
+              paginationPath="/dashboard/preferred-matches"
               link="/dashboard/preferred-matches"
-              className="mb-5"
-            >
-              <MatchList
-                users={preferredMatches?.result?.data!}
-                isLoading={preferredMatches?.isLoading}
-                error={preferredMatches?.error}
-                onAddToShortlist={(e) => {
-                  console.log(e);
-                }}
-                onRemove={(e) => {
-                  console.log(e);
-                }}
-              />
-            </ProfileCard>
+              hasPagination={false}
+              onSendInterest={(e: any) => {
+                console.log(e);
+              }}
+              onAddToShortlist={(e: any) => {
+                console.log(e);
+              }}
+              onRemove={(e: any) => {
+                console.log(e);
+              }}
+            />
 
             {/* New Matches: Recently joined profiles that meet 
             your basic criteria like age, location, and education. */}
 
-            <ProfileCard
+            <InteractionList
               title="New Matches"
+              endpoint={`${API_ENDPOINTS.NEW_MATCHES_LIST}?limit=5`}
+              paginationPath="/dashboard/new-matches"
               link="/dashboard/new-matches"
-              className="mb-5"
-            >
-              <MatchList
-                users={newMatches?.result?.data!}
-                isLoading={newMatches?.isLoading}
-                error={newMatches?.error}
-                onAddToShortlist={(e) => {
-                  console.log(e);
-                }}
-                onRemove={(e) => {
-                  console.log(e);
-                }}
-              />
-            </ProfileCard>
+              hasPagination={false}
+              onSendInterest={(e: any) => {
+                console.log(e);
+              }}
+              onAddToShortlist={(e: any) => {
+                console.log(e);
+              }}
+              onRemove={(e: any) => {
+                console.log(e);
+              }}
+            />
 
             <ProfileCard title=" Recent Activities" link="/" className="mb-5">
               <ActivityList />
