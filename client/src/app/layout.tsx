@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Lexend_Deca } from "next/font/google";
 import "./globals.css";
 import "react-datetime/css/react-datetime.css";
-import AuthProviderWrapper from "@/components/auth/AuthProvider";
 import { ToastProvider } from "@/contexts/ToastScope";
 import ChatProviderWrapper from "@/components/chat/ChatProvider";
 import OfflineModal from "@/components/modal/OfflineModal";
+import StoreProvider from "@/providers/StoreProvider";
 
 export const lexendDeca = Lexend_Deca({
   subsets: ["latin"], // Specify the desired subsets
@@ -26,11 +26,11 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <html lang="en">
       <body className={`${lexendDeca.variable} antialiased`}>
-        <AuthProviderWrapper>
+        <StoreProvider>
           <ChatProviderWrapper>
             <ToastProvider>{children}</ToastProvider>
           </ChatProviderWrapper>
-        </AuthProviderWrapper>
+        </StoreProvider>
         <OfflineModal />
       </body>
     </html>

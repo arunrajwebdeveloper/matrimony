@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import { ResetPasswordCredentials } from "@/types";
 import Link from "next/link";
@@ -10,6 +9,9 @@ import { useForm } from "react-hook-form";
 import CircleSpinner from "../ui/CircleSpinner";
 import { Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/contexts/ToastScope";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { resetPasswordThunk } from "@/features/auth/authThunks";
+import { clearError } from "@/features/auth/authSlice";
 
 type PasswordField = "password" | "confirmPassword";
 
@@ -28,7 +30,11 @@ const ResetPasswordForm: React.FC = () => {
     },
   });
 
-  const { resetPassword, isLoading, error, clearError } = useAuth();
+  const dispatch = useAppDispatch();
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -52,16 +58,16 @@ const ResetPasswordForm: React.FC = () => {
 
   useEffect(() => {
     if ((error && passwordValue) || confirmPasswordValue) {
-      clearError();
+      dispatch(clearError());
     }
   }, [passwordValue, confirmPasswordValue]);
 
   const onSubmit = async (payload: any): Promise<void> => {
     if (!token) throw Error("Token missing");
     const { confirmPassword, ...rest } = payload;
-    const result = await resetPassword({ ...rest, token });
+    const result = await dispatch(resetPasswordThunk({ ...rest, token }));
 
-    if (result.success) {
+    if (resetPasswordThunk.fulfilled.match(result)) {
       showSuccess("Password reset successfully!");
       reset();
       setTimeout(() => router.push(ROUTES.LOGIN), 1000);

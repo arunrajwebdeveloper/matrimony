@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import api from "@/lib/api";
 import { ApiResponse, UserProfile } from "@/types";
@@ -13,6 +12,7 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import UploadSinglePage from "@/components/media/UploadSingle";
 import UploadMultiplePage from "@/components/media/UploadMultiple";
 import CoverImageUploader from "@/components/media/CoverImageUploader";
+import { useAppSelector } from "@/hooks";
 
 // --- DTO Interfaces (Copied from user's DTOs for a self-contained component) ---
 interface PartnerPreferencesDto {
@@ -187,7 +187,9 @@ const settingsMenu = [
 ];
 
 const Page: React.FC = () => {
-  const { user } = useAuth();
+  const { isLoading, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");

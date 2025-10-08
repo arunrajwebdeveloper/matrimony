@@ -2,13 +2,16 @@
 
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import RegisterForm from "@/components/auth/RegisterForm";
 import { ROUTES } from "@/utils/constants";
+import { useAppSelector } from "@/hooks";
 
 const LoginPage: React.FC = () => {
-  const { isAuthenticated } = useAuth();
   const router = useRouter();
+
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     if (isAuthenticated) {

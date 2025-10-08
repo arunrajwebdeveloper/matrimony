@@ -2,16 +2,21 @@
 
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
-import { ROUTES } from "@/utils/constants";
-import { AuthResult, EmailField } from "@/types";
+import { EmailField } from "@/types";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import CircleSpinner from "../ui/CircleSpinner";
 import { useToast } from "@/contexts/ToastScope";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { clearError } from "@/features/auth/authSlice";
+import { forgotPasswordThunk } from "@/features/auth/authThunks";
 
 const ForgotPasswordForm: React.FC = () => {
-  const { showSuccess } = useToast();
+  const dispatch = useAppDispatch();
+  const { showSuccess, showError } = useToast();
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   const {
     register,
@@ -25,9 +30,6 @@ const ForgotPasswordForm: React.FC = () => {
     },
   });
 
-  const { forgotPassword, isLoading, error, clearError } = useAuth();
-  const router = useRouter();
-
   const emailValue = watch("email");
 
   useEffect(() => {
@@ -37,10 +39,14 @@ const ForgotPasswordForm: React.FC = () => {
   }, [emailValue]);
 
   const onSubmit = async (payload: any): Promise<void> => {
-    const result = await forgotPassword(payload);
-    if (result.success) {
+    const result = await dispatch(forgotPasswordThunk(payload));
+
+    if (forgotPasswordThunk.fulfilled.match(result)) {
       showSuccess("Password reset link sent to your registered email.");
       reset();
+    } else if (forgotPasswordThunk.rejected.match(result)) {
+      const errorMsg = result.payload || "Failed to send reset link.";
+      showError(errorMsg);
     }
   };
 

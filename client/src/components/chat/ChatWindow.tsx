@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import Avatar from "@/components/profile/Avatar";
 import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
 import { useChat } from "@/hooks/useChat";
 import { ChatModal } from "../ui/ChatModal";
+import { useAppSelector } from "@/hooks";
 
 const ChatWindow: React.FC = () => {
-  const { user } = useAuth();
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
   const { isOpenChat, setIsOpenChat } = useChat();
 
   return (

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import { RegisterPayloads } from "@/types";
 import Link from "next/link";
@@ -12,6 +11,9 @@ import CircleSpinner from "../ui/CircleSpinner";
 import moment from "moment";
 import { useToast } from "@/contexts/ToastScope";
 import Datetime from "react-datetime";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { clearError } from "@/features/auth/authSlice";
+import { registerThunk } from "@/features/auth/authThunks";
 
 type PasswordField = "password" | "confirmPassword";
 
@@ -59,8 +61,11 @@ const RegisterForm: React.FC = () => {
     }));
   };
 
-  const { register: createUser, isLoading, error, clearError } = useAuth();
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   const emailValue = watch("email");
   const passwordValue = watch("password");
@@ -83,7 +88,7 @@ const RegisterForm: React.FC = () => {
         dateOfBirthValue ||
         phoneNumberValue)
     ) {
-      clearError();
+      dispatch(clearError());
     }
   }, [
     emailValue,
@@ -98,9 +103,9 @@ const RegisterForm: React.FC = () => {
 
   const onSubmit = async (payload: any): Promise<void> => {
     const { confirmPassword, ...rest } = payload;
-    const result = await createUser(rest);
+    const result = await dispatch(registerThunk(rest));
 
-    if (result.success) {
+    if (registerThunk.fulfilled.match(result)) {
       showSuccess("User created successfully!");
       reset();
       setTimeout(() => router.push(ROUTES.LOGIN), 1000);

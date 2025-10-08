@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import api from "@/lib/api";
 import { ApiResponse, UserProfile } from "@/types";
@@ -24,6 +23,7 @@ import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import Link from "next/link";
+import { useAppSelector } from "@/hooks";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -42,7 +42,9 @@ const settingsMenu = [
 ];
 
 export default function SettingsLayout({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { isLoading, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
   const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

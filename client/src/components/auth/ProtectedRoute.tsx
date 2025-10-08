@@ -2,19 +2,20 @@
 
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { ProtectedRouteProps } from "@/types";
+import { useAppSelector } from "@/hooks";
+import { ROUTES } from "@/utils/constants";
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
+  const { isAuthenticated, isLoading } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push("/login");
+      router.replace(ROUTES.LOGIN);
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isLoading, isAuthenticated, router]);
 
   // Show loading spinner while checking authentication
   if (isLoading) {

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useAuth } from "@/hooks/useAuth";
 import Navigation from "@/components/navigation/Navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { API_ENDPOINTS } from "@/utils/constants";
@@ -10,9 +9,12 @@ import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import EventsCalendar from "@/components/profile/EventsCalendar";
 import InteractionList from "@/components/matchList/InteractionList";
+import { useAppSelector } from "@/hooks";
 
 const NewMatchesPage: React.FC = () => {
-  const { user } = useAuth();
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   return (
     <div className="main-container">

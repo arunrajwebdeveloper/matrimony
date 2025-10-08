@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import api from "@/lib/api";
 import { ApiResponse, UserProfile } from "@/types";
@@ -15,8 +14,6 @@ import {
   Pill,
   ShieldCheck,
   BookOpen,
-  Verified,
-  ShieldAlert,
 } from "lucide-react";
 import Navigation from "@/components/navigation/Navigation";
 import UserSummaryDisplay from "@/components/profile/UserSummaryDisplay";
@@ -25,10 +22,9 @@ import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import ProfileUserCard from "@/components/profile/ProfileUserCard";
-import SidebarCard from "@/components/cards/SidebarCard";
-import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
 import VerificationLabelBadge from "@/components/profile/VerificationLabelBadge";
 import EventsCalendar from "@/components/profile/EventsCalendar";
+import { useAppSelector } from "@/hooks";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -41,7 +37,9 @@ const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
 );
 
 const ProfilePage: React.FC = () => {
-  const { user } = useAuth();
+  const { isLoading, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
   const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

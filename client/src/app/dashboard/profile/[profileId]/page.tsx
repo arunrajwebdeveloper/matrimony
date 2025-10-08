@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import api from "@/lib/api";
 import { ApiResponse, UserProfile } from "@/types";
@@ -27,6 +26,7 @@ import SidebarCard from "@/components/cards/SidebarCard";
 import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
 import useActivityLogger from "@/hooks/useActivityLogger";
 import { ActivityVerb } from "@/utils/activity.enum";
+import { useAppSelector } from "@/hooks";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -44,7 +44,9 @@ const ProfilePage: React.FC = () => {
   const logActivity = useActivityLogger();
   const { profileId } = useParams<{ profileId: string }>();
 
-  const { user } = useAuth();
+  const { isLoading, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
   const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

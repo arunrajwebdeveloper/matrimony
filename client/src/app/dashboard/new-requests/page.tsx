@@ -1,28 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
-import ProfileCard from "@/components/cards/ProfileCard";
+import React from "react";
 import Navigation from "@/components/navigation/Navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
-import SidebarCard from "@/components/cards/SidebarCard";
-import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
 import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
-import MatchList from "@/components/dashboard/MatchList";
-import { ApiResponse, MatchResult, MatchState } from "@/types";
-import api from "@/lib/api";
-import Pagination from "@/components/ui/Pagination";
-import { useSearchParams } from "next/navigation";
-import { searchParamsToObject } from "@/utils/searchParamsToObject";
 import EventsCalendar from "@/components/profile/EventsCalendar";
 import InteractionList from "@/components/matchList/InteractionList";
+import { useAppSelector } from "@/hooks";
 
 const InboxPage = () => {
-  const { user } = useAuth();
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   return (
     <div className="main-container">

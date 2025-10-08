@@ -9,10 +9,11 @@ import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 import { ImageSingleUpload } from "@/types/imageUpload";
 import { ApiResponse, AuthActionType } from "@/types";
 import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
-import { useAuth } from "@/hooks/useAuth";
 import { authService } from "@/lib/auth";
 import CircleSpinner from "../ui/CircleSpinner";
 import ConfirmModal from "../modal/ConfirmModal";
+import { useAppDispatch } from "@/hooks";
+import { setUser } from "@/features/auth/authSlice";
 
 type ImageItem = {
   id: string;
@@ -30,7 +31,8 @@ export default function UploadSinglePage({
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { dispatch } = useAuth();
+  const dispatch = useAppDispatch();
+
   const [image, setImage] = useState<ImageItem | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [cropPixels, setCropPixels] = useState<any>(null);
@@ -130,7 +132,7 @@ export default function UploadSinglePage({
         });
 
         const user = await authService.getMe();
-        dispatch({ type: AuthActionType.SET_USER, payload: user });
+        dispatch(setUser(user));
 
         setImage({
           id: "source",
@@ -159,7 +161,7 @@ export default function UploadSinglePage({
         });
 
         const user = await authService.getMe();
-        dispatch({ type: AuthActionType.SET_USER, payload: user });
+        dispatch(setUser(user));
 
         console.log("✅ Profile image remove:", res.data?.result?.message);
       } catch (err) {

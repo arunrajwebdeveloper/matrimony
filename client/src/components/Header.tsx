@@ -16,21 +16,33 @@ import {
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import UserDropdown from "./dropdowns/UserDropdown";
 import { UserDropdownMenuType } from "@/types/menu";
 import { useChat } from "@/hooks/useChat";
 import LiveClock from "./liveClock";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { logoutThunk } from "@/features/auth/authThunks";
+import { useToast } from "@/contexts/ToastScope";
 
 function Header() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const dispatch = useAppDispatch();
+  const { showError } = useToast();
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
   const { setIsOpenChat } = useChat();
   const router = useRouter();
 
   const handleLogout = async (): Promise<void> => {
-    await logout();
-    router.push(ROUTES.LOGIN);
+    const result = await dispatch(logoutThunk());
+
+    if (logoutThunk.fulfilled.match(result)) {
+      router.push(ROUTES.LOGIN);
+    } else if (logoutThunk.rejected.match(result)) {
+      const errorMsg = result?.payload || "Failed to logout.";
+      showError(errorMsg);
+    }
   };
 
   const navItems: UserDropdownMenuType[] = [

@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import React from "react";
 import ProfileCard from "@/components/cards/ProfileCard";
 import Navigation from "@/components/navigation/Navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -10,12 +9,11 @@ import StatisticsCard from "@/components/dashboard/StatisticsCard";
 import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
-import { ApiResponse, MatchResult, MatchState } from "@/types";
-import api from "@/lib/api";
 import Greeting from "@/components/dashboard/Greeting";
 import ActivityList from "@/components/dashboard/ActivityList";
 import EventsCalendar from "@/components/profile/EventsCalendar";
 import InteractionList from "@/components/matchList/InteractionList";
+import { useAppSelector } from "@/hooks";
 
 const statUsers = [
   "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
@@ -27,64 +25,9 @@ const statUsers = [
 ];
 
 const DashboardPage: React.FC = () => {
-  const { user } = useAuth();
-
-  const [newMatches, setNewMatches] = useState<MatchState>({
-    result: null,
-    isLoading: true,
-    error: null,
-  });
-
-  const [preferredMatches, setPreferredMatches] = useState<MatchState>({
-    result: null,
-    isLoading: true,
-    error: null,
-  });
-
-  const fetchPreferredMatches = async (): Promise<void> => {
-    try {
-      const response = await api.get<ApiResponse<MatchResult>>(
-        `${API_ENDPOINTS.PREFERRED_MATCHES_LIST}?limit=5`
-      );
-      setPreferredMatches({
-        result: response?.data?.result as MatchResult,
-        isLoading: false,
-        error: null,
-      });
-    } catch (err: any) {
-      setPreferredMatches({
-        result: null,
-        isLoading: false,
-        error: "Failed to load Preferred matches data",
-      });
-      console.error("Preferred matches fetch error:", err);
-    }
-  };
-
-  const fetchNewMatches = async (): Promise<void> => {
-    try {
-      const response = await api.get<ApiResponse<MatchResult>>(
-        `${API_ENDPOINTS.NEW_MATCHES_LIST}?limit=5`
-      );
-      setNewMatches({
-        result: response?.data?.result as MatchResult,
-        isLoading: false,
-        error: null,
-      });
-    } catch (err: any) {
-      setNewMatches({
-        result: null,
-        isLoading: false,
-        error: "Failed to load New matches data",
-      });
-      console.error("New matches fetch error:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchPreferredMatches();
-    fetchNewMatches();
-  }, []);
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   return (
     <div className="main-container">
