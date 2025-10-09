@@ -36,7 +36,7 @@ const InboxPage = () => {
           <div className="mt-5">
             <InteractionList
               title="New Requests"
-              endpoint={API_ENDPOINTS.MATCH_REQUEST.GET_NEW}
+              endpoint={API_ENDPOINTS.GET_NEW_REQUESTS}
               paginationPath="/dashboard/new-requests"
               onAcceptRequest={(e: any) => {
                 console.log(e);

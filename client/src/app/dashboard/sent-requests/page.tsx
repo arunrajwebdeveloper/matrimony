@@ -36,7 +36,7 @@ const NewMatchesPage: React.FC = () => {
           <div className="mt-5">
             <InteractionList
               title="Sent Requests"
-              endpoint={API_ENDPOINTS.MATCH_REQUEST.SENT}
+              endpoint={API_ENDPOINTS.GET_SENT_REQUESTS}
               paginationPath="/dashboard/sent-requests"
               onCancelRequest={(e: any) => {
                 console.log(e);

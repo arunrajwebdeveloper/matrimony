@@ -50,16 +50,17 @@ export class UserInteractionsService {
     const userProfile = await this.profileModel
       .findOne({ user: userId })
       .exec();
+
     if (!userProfile) {
       throw new NotFoundException('User profile not found.');
     }
 
     const userInteractions = await this.interactionListsModel
-      .findOne({ user: userId })
+      .findOne({ userId })
       .exec();
 
     const excludedIds = [
-      userProfile._id, // Exclude the user's own profile
+      userProfile.user, // Exclude the user's own profile
       ...(userInteractions?.shortlisted || []),
       ...(userInteractions?.declinedRequests || []),
       ...(userInteractions?.blocked || []),
@@ -69,7 +70,7 @@ export class UserInteractionsService {
 
     // Build the query based on the user's preferences
     const query: any = {
-      _id: { $nin: excludedIds }, // Exclude interacted profiles
+      user: { $nin: excludedIds }, // Exclude interacted profiles
       gender: { $ne: userProfile.gender }, // Find the opposite gender
     };
 
@@ -136,12 +137,12 @@ export class UserInteractionsService {
 
     // Handle the case where user interactions might not exist yet
     const userInteractions = await this.interactionListsModel
-      .findOne({ user: userId })
+      .findOne({ userId })
       .exec();
 
     // Build excluded profile IDs
     const excludedIds = [
-      userProfile._id, // Exclude the user's own profile
+      userProfile.user, // Exclude the user's own profile
       ...(userInteractions?.shortlisted || []),
       ...(userInteractions?.declinedRequests || []),
       ...(userInteractions?.blocked || []),
@@ -151,7 +152,7 @@ export class UserInteractionsService {
 
     // Build query
     const query = {
-      _id: { $nin: excludedIds },
+      user: { $nin: excludedIds },
       gender: { $ne: userProfile.gender },
     };
 
@@ -387,6 +388,7 @@ export class UserInteractionsService {
 
     // Check if already matched
     const areMatched = await this.areUsersMatched(fromUserId, toUserId);
+
     if (areMatched) {
       throw new ConflictException('Users are already matched');
     }
@@ -687,19 +689,44 @@ export class UserInteractionsService {
   async getSentMatchRequests(userId: string, page = 1, limit = 20) {
     const skip = (page - 1) * limit;
 
-    const userLists = await this.interactionListsModel
-      .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'sentMatchRequests',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
-      });
+    // Find the user's interaction list
+    const userList = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
 
-    const total = userLists?.sentMatchRequests?.length || 0;
+    if (!userList) {
+      throw new NotFoundException('Interaction list not found');
+    }
 
+    const sentUserIds = userList.sentMatchRequests || [];
+
+    const total = sentUserIds.length;
+
+    if (total === 0) {
+      return {
+        data: [],
+        page,
+        totalPages: 0,
+        total: 0,
+        limit,
+        hasNextPage: false,
+        hasPrevPage: false,
+      };
+    }
+
+    // Find all profiles whose 'user' field matches any of those sent userIds
+    const profiles = await this.profileModel
+      .find({ user: { $in: sentUserIds } })
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    // Return paginated response
     return {
-      data: userLists?.sentMatchRequests || [],
+      data: profiles,
       page,
       totalPages: Math.ceil(total / limit),
       total,

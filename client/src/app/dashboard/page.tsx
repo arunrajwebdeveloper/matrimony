@@ -13,7 +13,8 @@ import Greeting from "@/components/dashboard/Greeting";
 import ActivityList from "@/components/dashboard/ActivityList";
 import EventsCalendar from "@/components/profile/EventsCalendar";
 import InteractionList from "@/components/matchList/InteractionList";
-import { useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { sendInterestThunk } from "@/features/interactions/interactionThunks";
 
 const statUsers = [
   "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
@@ -25,9 +26,15 @@ const statUsers = [
 ];
 
 const DashboardPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+
   const { isLoading, error, user, isAuthenticated } = useAppSelector(
     (state) => state.auth
   );
+
+  const handleSendInterest = (userId: string) => {
+    dispatch(sendInterestThunk(userId));
+  };
 
   return (
     <div className="main-container">
@@ -97,8 +104,8 @@ const DashboardPage: React.FC = () => {
               paginationPath="/dashboard/preferred-matches"
               link="/dashboard/preferred-matches"
               hasPagination={false}
-              onSendInterest={(e: any) => {
-                console.log(e);
+              onSendInterest={(id: string) => {
+                handleSendInterest(id);
               }}
               onAddToShortlist={(e: any) => {
                 console.log(e);
@@ -117,8 +124,8 @@ const DashboardPage: React.FC = () => {
               paginationPath="/dashboard/new-matches"
               link="/dashboard/new-matches"
               hasPagination={false}
-              onSendInterest={(e: any) => {
-                console.log(e);
+              onSendInterest={(id: string) => {
+                handleSendInterest(id);
               }}
               onAddToShortlist={(e: any) => {
                 console.log(e);

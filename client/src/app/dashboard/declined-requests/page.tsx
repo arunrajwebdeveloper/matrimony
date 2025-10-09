@@ -36,7 +36,7 @@ const NewMatchesPage: React.FC = () => {
           <div className="mt-5">
             <InteractionList
               title="Declined Requests"
-              endpoint={API_ENDPOINTS.DECLINED.GET_LIST}
+              endpoint={API_ENDPOINTS.GET_DECLINEDLIST}
               paginationPath="/dashboard/declined-requests"
               onRemove={(e: any) => {
                 console.log(e);

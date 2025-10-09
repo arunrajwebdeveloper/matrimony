@@ -31,26 +31,25 @@ export const API_ENDPOINTS = {
 
   // INTERACTIONS
 
-  SHORTLIST: {
-    GET_LIST: "/api/user-interactions/shortlisted",
-    ADD: "/api/user-interactions/shortlist",
-    REMOVE: "/api/user-interactions/shortlist/remove",
-  },
-  BLOCKED: {
-    GET_LIST: "/api/user-interactions/blocked",
-    ADD: "/api/user-interactions/block",
-    REMOVE: "/api/user-interactions/block/remove",
-  },
-  MATCH_REQUEST: {
-    GET_NEW: "/api/user-interactions/match-requests/pending",
-    SENT: "/api/user-interactions/match-requests/sent",
-    ACCEPTED: "/api/user-interactions/accepted-requests",
-  },
-  DECLINED: {
-    GET_LIST: "/api/user-interactions/declined",
-    ADD: "/api/user-interactions/decline",
-    REMOVE: "/api/user-interactions/decline/remove",
-  },
+  GET_SHORTLIST: "/api/user-interactions/shortlisted",
+  ADD_TO_SHORTLIST: "/api/user-interactions/shortlist",
+  REMOVE_FROM_SHORTLIST: "/api/user-interactions/shortlist/remove",
+
+  GET_BLOCKED_LIST: "/api/user-interactions/blocked",
+  ADD_TO_BLOCKLIST: "/api/user-interactions/block",
+  REMOVE_FROM_BLOCKEDLIST: "/api/user-interactions/block/remove",
+
+  GET_NEW_REQUESTS: "/api/user-interactions/request/pending",
+  GET_SENT_REQUESTS: "/api/user-interactions/request/sent",
+  GET_ACCEPTED_REQUESTS: "/api/user-interactions/accepted-requests",
+
+  GET_DECLINEDLIST: "/api/user-interactions/declined",
+  ADD_TO_DECLINEDLIST: "/api/user-interactions/decline",
+  REMOVE_FROM_DECLINEDLIST: "/api/user-interactions/decline/remove",
+
+  SEND_INTEREST: "/api/user-interactions/request/send",
+  CANCEL_INTEREST_REQUEST: "",
+
   PREFERRED_MATCHES_LIST: "/api/user-interactions/preferred",
   NEW_MATCHES_LIST: "/api/user-interactions/new",
 

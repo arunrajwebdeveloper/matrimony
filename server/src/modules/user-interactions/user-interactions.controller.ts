@@ -23,7 +23,6 @@ export class UserInteractionsController {
   constructor(private interactionsService: UserInteractionsService) {}
 
   // MATCHES
-  // @UseInterceptors(SignedUrlInterceptor)
   @Get('preferred')
   @ApiOperation({ summary: 'Get preferred matches based on user preferences' })
   @ApiResponse({
@@ -44,7 +43,6 @@ export class UserInteractionsController {
     );
   }
 
-  // @UseInterceptors(SignedUrlInterceptor)
   @Get('new')
   @ApiOperation({ summary: 'Get new matches not yet interacted with' })
   @ApiResponse({
@@ -128,22 +126,22 @@ export class UserInteractionsController {
   }
 
   // MATCH REQUEST ENDPOINTS
-  @Post('match-request/:userId')
+  @Post('request/send/:userId')
   async sendMatchRequest(@Req() req: any, @Param('userId') userId: string) {
     return this.interactionsService.sendMatchRequest(req.user._id, userId);
   }
 
-  @Post('match-request/accept/:userId')
+  @Post('request/accept/:userId')
   async acceptMatchRequest(@Req() req: any, @Param('userId') userId: string) {
     return this.interactionsService.acceptMatchRequest(req.user._id, userId);
   }
 
-  @Post('match-request/decline/:userId')
+  @Post('request/decline/:userId')
   async declineMatchRequest(@Req() req: any, @Param('userId') userId: string) {
     return this.interactionsService.declineMatchRequest(req.user._id, userId);
   }
 
-  @Get('match-requests/pending')
+  @Get('request/pending')
   async getPendingMatchRequests(
     @Req() req: any,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
@@ -156,7 +154,7 @@ export class UserInteractionsController {
     );
   }
 
-  @Get('match-requests/sent')
+  @Get('request/sent')
   async getSentMatchRequests(
     @Req() req: any,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,

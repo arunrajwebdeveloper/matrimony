@@ -36,7 +36,7 @@ const NewMatchesPage: React.FC = () => {
           <div className="mt-5">
             <InteractionList
               title="Blocked Users"
-              endpoint={API_ENDPOINTS.BLOCKED.GET_LIST}
+              endpoint={API_ENDPOINTS.GET_BLOCKED_LIST}
               paginationPath="/dashboard/blocked"
               onRemove={(e: any) => {
                 console.log(e);

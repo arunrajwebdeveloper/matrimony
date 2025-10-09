@@ -6,10 +6,16 @@ import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import { ROUTES } from "@/utils/constants";
 import { Ban, Bookmark, CircleCheck, Eye, Heart, Trash2 } from "lucide-react";
 import Avatar from "./Avatar";
+import { useAppSelector } from "@/hooks";
+
+export const useActionLoading = (userId: string, action: string) => {
+  const loadingMap = useAppSelector((state) => state.interaction.loadingMap);
+  return loadingMap[userId] === action;
+};
 
 function UserCard(props: MatchCardProps) {
   const {
-    _id,
+    user: userId,
     firstName,
     lastName,
     profileId,
@@ -29,6 +35,8 @@ function UserCard(props: MatchCardProps) {
   } = props;
 
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
+
+  const isSending = useActionLoading(userId as string, "sending");
 
   return (
     <div className="flex overflow-hidden group">
@@ -67,16 +75,19 @@ function UserCard(props: MatchCardProps) {
         <div className="flex items-center gap-2 mt-3">
           {onSendInterest && (
             <button
-              onClick={() => onSendInterest?.(_id!?.toString())}
+              onClick={() => onSendInterest?.(userId!?.toString())}
+              disabled={isSending}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-green-200 text-green-800 hover:bg-green-300 transition-colors duration-300 rounded-sm gap-1"
             >
               <Heart size={14} className="flex-1" />
-              <span className="whitespace-nowrap">Send Interest</span>
+              <span className="whitespace-nowrap">
+                {isSending ? "Sending..." : "Send Interest"}
+              </span>
             </button>
           )}
           {onAcceptRequest && (
             <button
-              onClick={() => onAcceptRequest?.(_id!?.toString())}
+              onClick={() => onAcceptRequest?.(userId!?.toString())}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-green-200 text-green-800 hover:bg-green-300 transition-colors duration-300 rounded-sm gap-1"
             >
               <CircleCheck size={14} className="flex-1" />
@@ -85,7 +96,7 @@ function UserCard(props: MatchCardProps) {
           )}
           {onDeclineRequest && (
             <button
-              onClick={() => onDeclineRequest?.(_id!?.toString())}
+              onClick={() => onDeclineRequest?.(userId!?.toString())}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
             >
               <Ban size={14} className="flex-1" />
@@ -94,7 +105,7 @@ function UserCard(props: MatchCardProps) {
           )}
           {onRemove && (
             <button
-              onClick={() => onRemove?.(_id!?.toString())}
+              onClick={() => onRemove?.(userId!?.toString())}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-200 text-red-800 hover:bg-red-300 transition-colors duration-300 rounded-sm gap-1"
             >
               <Trash2 size={14} className="flex-1" />
@@ -103,7 +114,7 @@ function UserCard(props: MatchCardProps) {
           )}
           {onCancelRequest && (
             <button
-              onClick={() => onCancelRequest?.(_id!?.toString())}
+              onClick={() => onCancelRequest?.(userId!?.toString())}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
             >
               <Ban size={14} className="flex-1" />
@@ -112,7 +123,7 @@ function UserCard(props: MatchCardProps) {
           )}
           {onAddToShortlist && (
             <button
-              onClick={() => onAddToShortlist?.(_id!?.toString())}
+              onClick={() => onAddToShortlist?.(userId!?.toString())}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors duration-300 rounded-sm gap-1"
             >
               <Bookmark size={14} className="flex-1" />

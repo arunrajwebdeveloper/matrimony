@@ -36,7 +36,7 @@ const NewMatchesPage: React.FC = () => {
           <div className="mt-5">
             <InteractionList
               title="Shortlisted"
-              endpoint={API_ENDPOINTS.SHORTLIST.GET_LIST}
+              endpoint={API_ENDPOINTS.GET_SHORTLIST}
               paginationPath="/dashboard/shortlisted"
               onRemove={(e: any) => {
                 console.log(e);

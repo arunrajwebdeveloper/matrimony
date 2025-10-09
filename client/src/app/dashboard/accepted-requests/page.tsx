@@ -36,7 +36,7 @@ const NewMatchesPage: React.FC = () => {
           <div className="mt-5">
             <InteractionList
               title="Accepted Requests"
-              endpoint={API_ENDPOINTS.MATCH_REQUEST.ACCEPTED}
+              endpoint={API_ENDPOINTS.GET_ACCEPTED_REQUESTS}
               paginationPath="/dashboard/accepted-requests"
               onRemove={(e: any) => {
                 console.log(e);
