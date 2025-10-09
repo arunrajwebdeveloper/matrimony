@@ -60,6 +60,13 @@ export interface UserProfile {
   updatedAt?: string;
 }
 
+export interface UserDetailState {
+  data: UserProfile | null;
+  isLoading: boolean;
+  error: string | null;
+  notFound: boolean;
+}
+
 export interface ProfileCardProps {
   title?: string | null;
   className?: string;
