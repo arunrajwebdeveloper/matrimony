@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { authService } from "@/lib/auth";
+import { authService } from "@/features/auth/api";
 import Storage from "@/lib/storage";
 import { TOKEN_KEYS } from "@/utils/constants";
 import {

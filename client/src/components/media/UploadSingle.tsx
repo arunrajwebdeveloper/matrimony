@@ -9,7 +9,7 @@ import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 import { ImageSingleUpload } from "@/types/imageUpload";
 import { ApiResponse, AuthActionType } from "@/types";
 import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
-import { authService } from "@/lib/auth";
+import { authService } from "@/features/auth/api";
 import CircleSpinner from "../ui/CircleSpinner";
 import ConfirmModal from "../modal/ConfirmModal";
 import { useAppDispatch } from "@/hooks";

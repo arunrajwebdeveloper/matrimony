@@ -1,6 +1,4 @@
 import { AxiosError } from "axios";
-import api from "./api";
-import Storage from "./storage";
 import { API_ENDPOINTS } from "@/utils/constants";
 import {
   LoginCredentials,
@@ -14,6 +12,8 @@ import {
   ResetPasswordResponse,
 } from "@/types";
 import { TOKEN_KEYS } from "@/utils/constants";
+import Storage from "@/lib/storage";
+import api from "@/lib/api";
 
 export const authService = {
   // Login function
