@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserDetailState } from "@/types";
-import { fetchProfileById } from "./profileThunks";
+import { fetchProfileById, getMyProfile } from "./profileThunks";
 
 const initialState: UserDetailState = {
   data: null,
@@ -37,6 +37,26 @@ const usersSlice = createSlice({
           state.notFound = true;
         } else {
           state.error = action.payload || "Failed to fetch user";
+        }
+      });
+
+    builder
+      .addCase(getMyProfile.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.notFound = false;
+        state.data = null;
+      })
+      .addCase(getMyProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.data = action.payload;
+      })
+      .addCase(getMyProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.payload === "NOT_FOUND") {
+          state.notFound = true;
+        } else {
+          state.error = action.payload || "Failed to fetch profile";
         }
       });
   },
