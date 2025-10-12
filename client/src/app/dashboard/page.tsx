@@ -95,9 +95,10 @@ const DashboardPage: React.FC = () => {
 
             <InteractionList
               title="Preferred Matches"
-              endpoint={`${API_ENDPOINTS.PREFERRED_MATCHES_LIST}?limit=5`}
+              endpoint={API_ENDPOINTS.PREFERRED_MATCHES_LIST}
               paginationPath="/dashboard/preferred-matches"
               link="/dashboard/preferred-matches"
+              itemPerPage={5}
               hasPagination={false}
               onSendInterest={true}
               onAddToShortlist={(e: any) => {
@@ -113,9 +114,10 @@ const DashboardPage: React.FC = () => {
 
             <InteractionList
               title="New Matches"
-              endpoint={`${API_ENDPOINTS.NEW_MATCHES_LIST}?limit=5`}
+              endpoint={API_ENDPOINTS.NEW_MATCHES_LIST}
               paginationPath="/dashboard/new-matches"
               link="/dashboard/new-matches"
+              itemPerPage={5}
               hasPagination={false}
               onSendInterest={true}
               onAddToShortlist={(e: any) => {
