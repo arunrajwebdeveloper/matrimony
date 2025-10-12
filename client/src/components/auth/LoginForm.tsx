@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import CircleSpinner from "../ui/CircleSpinner";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { loginThunk } from "@/features/auth/authThunks";
 import { clearError } from "@/features/auth/authSlice";
 

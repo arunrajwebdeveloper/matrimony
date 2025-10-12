@@ -12,9 +12,8 @@ import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import Greeting from "@/components/dashboard/Greeting";
 import ActivityList from "@/components/dashboard/ActivityList";
 import EventsCalendar from "@/components/profile/EventsCalendar";
-import InteractionList from "@/components/matchList/InteractionList";
-import { useAppDispatch, useAppSelector } from "@/hooks";
-import { sendInterestThunk } from "@/features/interactions/interactionThunks";
+import InteractionList from "@/components/matchList/ProfileList";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 const statUsers = [
   "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
@@ -31,10 +30,6 @@ const DashboardPage: React.FC = () => {
   const { isLoading, error, user, isAuthenticated } = useAppSelector(
     (state) => state.auth
   );
-
-  const handleSendInterest = (userId: string) => {
-    dispatch(sendInterestThunk(userId));
-  };
 
   return (
     <div className="main-container">
@@ -104,9 +99,7 @@ const DashboardPage: React.FC = () => {
               paginationPath="/dashboard/preferred-matches"
               link="/dashboard/preferred-matches"
               hasPagination={false}
-              onSendInterest={(id: string) => {
-                handleSendInterest(id);
-              }}
+              onSendInterest={true}
               onAddToShortlist={(e: any) => {
                 console.log(e);
               }}
@@ -124,9 +117,7 @@ const DashboardPage: React.FC = () => {
               paginationPath="/dashboard/new-matches"
               link="/dashboard/new-matches"
               hasPagination={false}
-              onSendInterest={(id: string) => {
-                handleSendInterest(id);
-              }}
+              onSendInterest={true}
               onAddToShortlist={(e: any) => {
                 console.log(e);
               }}

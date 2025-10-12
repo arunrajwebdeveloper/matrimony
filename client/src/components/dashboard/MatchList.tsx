@@ -1,7 +1,6 @@
 import React from "react";
 import UserCard from "../profile/UserCard";
 import { MatchListProps } from "@/types";
-import UserListSkeleton from "../skeleton/UserListSkeleton";
 
 function MatchList({
   users = [],
@@ -9,21 +8,6 @@ function MatchList({
   error = null,
   ...rest
 }: MatchListProps) {
-  if (isLoading) {
-    return (
-      <div className="space-y-3">
-        <UserListSkeleton />
-        <UserListSkeleton />
-        <UserListSkeleton />
-        <UserListSkeleton />
-        <UserListSkeleton />
-        <UserListSkeleton />
-        <UserListSkeleton />
-        <UserListSkeleton />
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="p-3 text-sm bg-red-100 border border-red-400 text-red-700 rounded">

@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { ProtectedRouteProps } from "@/types";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector } from "@/hooks/hooks";
 import { ROUTES } from "@/utils/constants";
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {

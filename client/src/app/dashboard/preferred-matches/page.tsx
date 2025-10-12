@@ -8,9 +8,8 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import EventsCalendar from "@/components/profile/EventsCalendar";
-import InteractionList from "@/components/matchList/InteractionList";
-import { useAppDispatch, useAppSelector } from "@/hooks";
-import { sendInterestThunk } from "@/features/interactions/interactionThunks";
+import InteractionList from "@/components/matchList/ProfileList";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 const PreferredMatchesPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -18,10 +17,6 @@ const PreferredMatchesPage: React.FC = () => {
   const { isLoading, error, user, isAuthenticated } = useAppSelector(
     (state) => state.auth
   );
-
-  const handleSendInterest = (userId: string) => {
-    dispatch(sendInterestThunk(userId));
-  };
 
   return (
     <div className="main-container">
@@ -48,9 +43,7 @@ const PreferredMatchesPage: React.FC = () => {
               title="Preferred Matches"
               endpoint={API_ENDPOINTS.PREFERRED_MATCHES_LIST}
               paginationPath="/dashboard/preferred-matches"
-              onSendInterest={(id: string) => {
-                handleSendInterest(id);
-              }}
+              onSendInterest={true}
               onAddToShortlist={(e: any) => {
                 console.log(e);
               }}

@@ -4,17 +4,21 @@ import MatchList from "@/components/dashboard/MatchList";
 import Pagination from "@/components/ui/Pagination";
 import WithInteractionApi from "./WithInteractionApi";
 
-function InteractionList({
-  state,
+function ProfileList({
+  data,
+  isLoading,
   title,
   paginationPath,
   hasPagination = true,
   link,
+  error,
   ...rest
 }: {
-  state: any;
+  data: any;
+  isLoading: boolean;
   title: string;
   link?: string;
+  error?: any;
   paginationPath: string;
   hasPagination?: boolean;
 }) {
@@ -22,19 +26,19 @@ function InteractionList({
     <>
       <ProfileCard title={title} link={link} className="mb-5">
         <MatchList
-          users={state?.result?.data!}
-          isLoading={state?.isLoading}
-          error={state?.error}
+          users={data?.data!}
+          isLoading={isLoading}
+          error={error}
           {...rest}
         />
       </ProfileCard>
 
-      {!state?.isLoading &&
+      {!isLoading &&
         hasPagination &&
-        (state?.result?.hasNextPage || state?.result?.hasPrevPage) && (
+        (data?.hasNextPage || data?.hasPrevPage) && (
           <Pagination
-            page={state?.result?.page as number}
-            lastPage={state?.result?.totalPages as number}
+            page={data?.page as number}
+            lastPage={data?.totalPages as number}
             path={paginationPath}
           />
         )}
@@ -42,4 +46,4 @@ function InteractionList({
   );
 }
 
-export default WithInteractionApi(InteractionList);
+export default WithInteractionApi(ProfileList);

@@ -12,7 +12,7 @@ import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
 import { authService } from "@/features/auth/api";
 import CircleSpinner from "../ui/CircleSpinner";
 import ConfirmModal from "../modal/ConfirmModal";
-import { useAppDispatch } from "@/hooks";
+import { useAppDispatch } from "@/hooks/hooks";
 import { setUser } from "@/features/auth/authSlice";
 
 type ImageItem = {

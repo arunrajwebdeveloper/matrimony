@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import CircleSpinner from "../ui/CircleSpinner";
 import { Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/contexts/ToastScope";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { resetPasswordThunk } from "@/features/auth/authThunks";
 import { clearError } from "@/features/auth/authSlice";
 

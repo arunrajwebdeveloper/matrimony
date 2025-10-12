@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import Link from "next/link";
 import { ROUTES } from "@/utils/constants";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector } from "@/hooks/hooks";
 
 const HomePage: React.FC = () => {
   const router = useRouter();

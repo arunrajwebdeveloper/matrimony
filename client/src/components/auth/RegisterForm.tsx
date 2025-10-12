@@ -11,7 +11,7 @@ import CircleSpinner from "../ui/CircleSpinner";
 import moment from "moment";
 import { useToast } from "@/contexts/ToastScope";
 import Datetime from "react-datetime";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { clearError } from "@/features/auth/authSlice";
 import { registerThunk } from "@/features/auth/authThunks";
 

@@ -23,7 +23,7 @@ import ProfileImagesGrid from "@/components/profile/ProfileImagesGrid";
 import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import Link from "next/link";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector } from "@/hooks/hooks";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,

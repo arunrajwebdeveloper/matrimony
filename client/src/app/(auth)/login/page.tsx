@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import LoginForm from "@/components/auth/LoginForm";
 import { ROUTES } from "@/utils/constants";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector } from "@/hooks/hooks";
 
 const LoginPage: React.FC = () => {
   const router = useRouter();

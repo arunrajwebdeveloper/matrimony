@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/utils/constants";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector } from "@/hooks/hooks";
 
 const ResetPasswordPage: React.FC = () => {
   const router = useRouter();

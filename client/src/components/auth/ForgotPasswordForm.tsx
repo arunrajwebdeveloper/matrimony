@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import CircleSpinner from "../ui/CircleSpinner";
 import { useToast } from "@/contexts/ToastScope";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { clearError } from "@/features/auth/authSlice";
 import { forgotPasswordThunk } from "@/features/auth/authThunks";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import AuthBanner from "@/components/auth/AuthBanner";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector } from "@/hooks/hooks";
 import { ROUTES } from "@/utils/constants";
 import Link from "next/link";
 

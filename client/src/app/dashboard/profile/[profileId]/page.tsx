@@ -21,9 +21,8 @@ import { useParams } from "next/navigation";
 import ProfileUserCard from "@/components/profile/ProfileUserCard";
 import useActivityLogger from "@/hooks/useActivityLogger";
 import { ActivityVerb } from "@/utils/activity.enum";
-import { useAppDispatch, useAppSelector } from "@/hooks";
-import { fetchProfileById } from "@/features/profile/profileThunks";
-import { clearUserDetail } from "@/features/profile/profileSlice";
+import { useAppSelector } from "@/hooks/hooks";
+import { useProfile } from "@/features/profile/useProfile";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -36,24 +35,17 @@ const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
 );
 
 const ProfilePage: React.FC = () => {
-  const dispatch = useAppDispatch();
   const logActivity = useActivityLogger();
   const { profileId } = useParams<{ profileId: string }>();
 
   const { user } = useAppSelector((state) => state.auth);
+
   const {
     data: profileData,
     isLoading,
+    isError,
     error,
-    notFound,
-  } = useAppSelector((state) => state.profile);
-
-  useEffect(() => {
-    if (profileId) dispatch(fetchProfileById(profileId as string));
-    return () => {
-      dispatch(clearUserDetail());
-    };
-  }, [dispatch, profileId]);
+  } = useProfile(profileId);
 
   useEffect(() => {
     if (profileData) {
@@ -103,14 +95,9 @@ const ProfilePage: React.FC = () => {
         </div>
         <div className="w-[50%] px-2">
           <div className="mt-5">
-            {error && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                {error}
-              </div>
-            )}
-            {notFound && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                User not found
+            {isError && (
+              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-center">
+                {error?.message}
               </div>
             )}
 

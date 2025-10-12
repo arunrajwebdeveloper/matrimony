@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { ROUTES } from "@/utils/constants";
 import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector } from "@/hooks/hooks";
 
 const ForgotPasswordPage: React.FC = () => {
   const router = useRouter();

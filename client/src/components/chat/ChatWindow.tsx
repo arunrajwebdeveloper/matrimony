@@ -5,7 +5,7 @@ import Avatar from "@/components/profile/Avatar";
 import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
 import { useChat } from "@/hooks/useChat";
 import { ChatModal } from "../ui/ChatModal";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector } from "@/hooks/hooks";
 
 const ChatWindow: React.FC = () => {
   const { isLoading, error, user, isAuthenticated } = useAppSelector(

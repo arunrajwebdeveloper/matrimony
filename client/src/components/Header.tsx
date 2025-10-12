@@ -21,7 +21,7 @@ import UserDropdown from "./dropdowns/UserDropdown";
 import { UserDropdownMenuType } from "@/types/menu";
 import { useChat } from "@/hooks/useChat";
 import LiveClock from "./liveClock";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { logoutThunk } from "@/features/auth/authThunks";
 import { useToast } from "@/contexts/ToastScope";
 

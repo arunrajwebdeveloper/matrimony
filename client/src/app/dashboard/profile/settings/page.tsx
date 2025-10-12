@@ -12,7 +12,8 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import UploadSinglePage from "@/components/media/UploadSingle";
 import UploadMultiplePage from "@/components/media/UploadMultiple";
 import CoverImageUploader from "@/components/media/CoverImageUploader";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector } from "@/hooks/hooks";
+import { useMyProfile } from "@/features/profile/useMyProfile";
 
 // --- DTO Interfaces (Copied from user's DTOs for a self-contained component) ---
 interface PartnerPreferencesDto {
@@ -187,39 +188,18 @@ const settingsMenu = [
 ];
 
 const Page: React.FC = () => {
-  const { isLoading, user, isAuthenticated } = useAppSelector(
-    (state) => state.auth
-  );
+  const { user } = useAppSelector((state) => state.auth);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [activeTab, setActiveTab] = useState<string>(settingsMenu[0]?.tab);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSwitcgTab = (name: string): void => {
     setActiveTab(name);
   };
 
-  useEffect(() => {
-    const fetchProfile = async (): Promise<void> => {
-      try {
-        const response = await api.get<ApiResponse<UserProfile>>(
-          API_ENDPOINTS.PROFILE
-        );
-        setProfileData(response?.data?.result);
-      } catch (err: any) {
-        setError("Failed to load profile data");
-        console.error("Profile fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, []);
+  const { data: profileData, isLoading, isError, error } = useMyProfile();
 
   const {
     register,
@@ -314,7 +294,7 @@ const Page: React.FC = () => {
     </div>
   );
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center fixed top-0 left-0 z-[1000] w-full h-full">
         <LoadingSpinner size="md" />

@@ -1,10 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import api from "@/lib/api";
-import { ApiResponse, UserProfile } from "@/types";
-import { API_ENDPOINTS } from "@/utils/constants";
 import {
   User,
   Home,
@@ -24,9 +21,8 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import ProfileUserCard from "@/components/profile/ProfileUserCard";
 import VerificationLabelBadge from "@/components/profile/VerificationLabelBadge";
 import EventsCalendar from "@/components/profile/EventsCalendar";
-import { useAppDispatch, useAppSelector } from "@/hooks";
-import { getMyProfile } from "@/features/profile/profileThunks";
-import { clearUserDetail } from "@/features/profile/profileSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useMyProfile } from "@/features/profile/useMyProfile";
 
 const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
   label,
@@ -39,22 +35,9 @@ const DetailRow: React.FC<{ label: string; value: React.ReactNode }> = ({
 );
 
 const ProfilePage: React.FC = () => {
-  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
 
-  const {
-    data: profileData,
-    isLoading,
-    error,
-    notFound,
-  } = useAppSelector((state) => state.profile);
-
-  useEffect(() => {
-    dispatch(getMyProfile());
-    return () => {
-      dispatch(clearUserDetail());
-    };
-  }, [dispatch]);
+  const { data: profileData, isLoading, isError, error } = useMyProfile();
 
   if (isLoading) {
     return (
@@ -106,16 +89,12 @@ const ProfilePage: React.FC = () => {
         </div>
         <div className="w-[50%] px-2">
           <div className="mt-5">
-            {error && (
-              <div className="p-3 text-sm bg-red-100 border border-red-400 text-red-700 rounded">
-                {error}
+            {isError && (
+              <div className="p-3 text-sm bg-red-100 border border-red-400 text-red-700 rounded text-center">
+                {error?.message}
               </div>
             )}
-            {notFound && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                User not found
-              </div>
-            )}
+
             {profileData && (
               <div className="space-y-2">
                 <div className="px-6 py-4">

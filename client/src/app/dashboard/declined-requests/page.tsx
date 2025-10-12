@@ -8,8 +8,8 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import EventsCalendar from "@/components/profile/EventsCalendar";
-import InteractionList from "@/components/matchList/InteractionList";
-import { useAppSelector } from "@/hooks";
+import InteractionList from "@/components/matchList/ProfileList";
+import { useAppSelector } from "@/hooks/hooks";
 
 const NewMatchesPage: React.FC = () => {
   const { isLoading, error, user, isAuthenticated } = useAppSelector(

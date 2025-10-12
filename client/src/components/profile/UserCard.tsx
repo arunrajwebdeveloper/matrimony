@@ -6,12 +6,13 @@ import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import { ROUTES } from "@/utils/constants";
 import { Ban, Bookmark, CircleCheck, Eye, Heart, Trash2 } from "lucide-react";
 import Avatar from "./Avatar";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector } from "@/hooks/hooks";
+import { useInteraction } from "@/features/interactions/useInteraction";
 
-export const useActionLoading = (userId: string, action: string) => {
-  const loadingMap = useAppSelector((state) => state.interaction.loadingMap);
-  return loadingMap[userId] === action;
-};
+// export const useActionLoading = (userId: string, action: string) => {
+//   const loadingMap = useAppSelector((state) => state.interaction.loadingMap);
+//   return loadingMap[userId] === action;
+// };
 
 function UserCard(props: MatchCardProps) {
   const {
@@ -36,7 +37,15 @@ function UserCard(props: MatchCardProps) {
 
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
 
-  const isSending = useActionLoading(userId as string, "sending");
+  const send = useInteraction("sendInterest");
+  const block = useInteraction("blockUser");
+  const decline = useInteraction("declineInterest");
+
+  const isSending = send.isPending && send.variables === userId;
+  const isBlockLoading = block.isPending && block.variables === userId;
+  const isDeclineLoading = decline.isPending && decline.variables === userId;
+
+  // const isSending = useActionLoading(userId as string, "sending");
 
   return (
     <div className="flex overflow-hidden group">
@@ -75,7 +84,8 @@ function UserCard(props: MatchCardProps) {
         <div className="flex items-center gap-2 mt-3">
           {onSendInterest && (
             <button
-              onClick={() => onSendInterest?.(userId!?.toString())}
+              // onClick={() => onSendInterest?.(userId!?.toString())}
+              onClick={() => send.mutate(userId!?.toString())}
               disabled={isSending}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-green-200 text-green-800 hover:bg-green-300 transition-colors duration-300 rounded-sm gap-1"
             >
