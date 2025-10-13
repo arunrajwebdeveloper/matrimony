@@ -14,6 +14,8 @@ import ActivityList from "@/components/dashboard/ActivityList";
 import EventsCalendar from "@/components/profile/EventsCalendar";
 import ProfileList from "@/components/profileList/ProfileList";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import ProfileListTeaser from "@/components/profileList/ProfileListTeaser";
+import Link from "next/link";
 
 const statUsers = [
   "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
@@ -93,13 +95,11 @@ const DashboardPage: React.FC = () => {
             {/* Preferred Matches: Highly compatible profiles (85%+ match) based on 
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
 
-            <ProfileList
+            <ProfileListTeaser
               title="Preferred Matches"
               endpoint={API_ENDPOINTS.PREFERRED_MATCHES_LIST}
-              paginationPath="/dashboard/preferred-matches"
-              link="/dashboard/preferred-matches"
+              viewMoreLink="/dashboard/preferred-matches"
               itemPerPage={5}
-              hasPagination={false}
               showSendInterest={true}
               showAddToShortlist={true}
               showRemove={true}
@@ -108,20 +108,26 @@ const DashboardPage: React.FC = () => {
             {/* New Matches: Recently joined profiles that meet 
             your basic criteria like age, location, and education. */}
 
-            <ProfileList
+            <ProfileListTeaser
               title="New Matches"
               endpoint={API_ENDPOINTS.NEW_MATCHES_LIST}
-              paginationPath="/dashboard/new-matches"
-              link="/dashboard/new-matches"
+              viewMoreLink="/dashboard/new-matches"
               itemPerPage={5}
-              hasPagination={false}
               showSendInterest={true}
               showAddToShortlist={true}
               showRemove={true}
             />
 
-            <ProfileCard title=" Recent Activities" link="/" className="mb-5">
+            <ProfileCard title="Recent Activities" className="mb-5">
               <ActivityList />
+              <div className="mt-4 pt-4 text-center">
+                <Link
+                  href={"/"}
+                  className="text-slate-500 font-medium text-xs py-2 px-6 rounded-4xl inline-block bg-slate-100 hover:bg-slate-200 transition duration-300"
+                >
+                  View All Activities
+                </Link>
+              </div>
             </ProfileCard>
           </div>
         </div>

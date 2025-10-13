@@ -1,5 +1,5 @@
 import api from "@/lib/api";
-import { ApiResponse, MatchResult, UserProfile } from "@/types";
+import { ApiResponse, ProfileListResult, UserProfile } from "@/types";
 import { API_ENDPOINTS } from "@/utils/constants";
 
 export const profileApi = {
@@ -44,10 +44,10 @@ export const profileApi = {
     page?: number;
     limit?: number;
     filters?: Record<string, any>;
-  }): Promise<MatchResult> => {
+  }): Promise<ProfileListResult> => {
     try {
       const params = { page, limit };
-      const response = await api.get<ApiResponse<MatchResult>>(endpoint, {
+      const response = await api.get<ApiResponse<ProfileListResult>>(endpoint, {
         params,
       });
       return response.data.result;

@@ -36,11 +36,9 @@ function ActivityList() {
     <div>
       {loading && (
         <div className="space-y-3">
-          <ActivityListSkeleton />
-          <ActivityListSkeleton />
-          <ActivityListSkeleton />
-          <ActivityListSkeleton />
-          <ActivityListSkeleton />
+          {[...Array(5)].map((_, index) => (
+            <ActivityListSkeleton key={`initial-activities-skel-${index}`} />
+          ))}
         </div>
       )}
 

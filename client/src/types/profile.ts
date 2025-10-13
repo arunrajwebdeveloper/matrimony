@@ -1,3 +1,4 @@
+import { InfiniteData } from "@tanstack/react-query";
 import { LucideIcon } from "lucide-react";
 
 export interface UserProfile {
@@ -70,7 +71,6 @@ export interface UserDetailState {
 export interface ProfileCardProps {
   title?: string | null;
   className?: string;
-  link?: string | null;
   children: React.ReactNode;
 }
 
@@ -96,7 +96,7 @@ export interface UserMatchType {
   user: string;
 }
 
-export interface MatchCardActionsVisibility {
+export interface MatchListBaseProps {
   showAcceptRequest?: boolean;
   showDeclineRequest?: boolean;
   showAddToShortlist?: boolean;
@@ -105,11 +105,9 @@ export interface MatchCardActionsVisibility {
   showSendInterest?: boolean;
 }
 
-export interface MatchCardProps
-  extends UserMatchType,
-    MatchCardActionsVisibility {}
+export interface MatchCardProps extends UserMatchType, MatchListBaseProps {}
 
-export interface MatchResult {
+export interface ProfileListResult {
   hasNextPage: boolean;
   hasPrevPage: boolean;
   limit: number;
@@ -120,15 +118,36 @@ export interface MatchResult {
 }
 
 export interface MatchState {
-  result: MatchResult | null;
+  result: ProfileListResult | null;
   isLoading: boolean;
   error: string | null;
 }
 
-export interface MatchListProps extends MatchCardActionsVisibility {
-  users: UserMatchType[];
+export interface InfiniteMatchListProps extends MatchListBaseProps {
+  // Data comes in TanStack's InfiniteData structure
+  data: InfiniteData<ProfileListResult, number> | undefined;
   isLoading: boolean;
   error: Error | null;
+  fetchNextPage: () => void;
+  hasNextPage: boolean | undefined;
+  isFetchingNextPage: boolean;
+}
+
+export interface ProfileListProps extends MatchListBaseProps {
+  title: string;
+  link?: string;
+  itemPerPage?: number;
+  // paginationPath is no longer strictly needed for infinite scroll
+  paginationPath: string;
+  hasPagination?: boolean; // Set to false for infinite scroll
+  endpoint: string;
+}
+
+export interface ProfileListTeaserProps extends MatchListBaseProps {
+  title: string;
+  viewMoreLink: string; // The URL for the full list page
+  endpoint: string;
+  itemPerPage: number; // The limit per page for the API
 }
 
 export interface UserCardSidebarItemType {
