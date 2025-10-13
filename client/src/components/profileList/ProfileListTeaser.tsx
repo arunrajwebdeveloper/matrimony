@@ -9,7 +9,7 @@ import ProfileCard from "../cards/ProfileCard";
 import UserCard from "../profile/UserCard";
 
 // Define fixed number of items for the teaser
-const TEASER_LIMIT = 5;
+const TEASER_LIMIT = 3;
 
 function ProfileListTeaser({
   title,
