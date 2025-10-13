@@ -39,7 +39,6 @@ export const profileApi = {
     endpoint,
     page = 1,
     limit = 10,
-    filters = {},
   }: {
     endpoint: string;
     page?: number;
@@ -47,7 +46,7 @@ export const profileApi = {
     filters?: Record<string, any>;
   }): Promise<MatchResult> => {
     try {
-      const params = { page, limit, ...filters };
+      const params = { page, limit };
       const response = await api.get<ApiResponse<MatchResult>>(endpoint, {
         params,
       });

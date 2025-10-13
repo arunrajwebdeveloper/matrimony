@@ -73,15 +73,10 @@ function ProfileList({
 }) {
   const searchParams = useSearchParams();
 
-  // const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(itemPerPage || 10);
 
-  const { data, isLoading, error } = useProfiles(
-    endpoint,
-    1,
-    limit,
-    searchParams
-  );
+  const { data, isLoading, error } = useProfiles(endpoint, page, limit);
   const showPagination =
     !isLoading &&
     data?.data?.length !== 0 &&
