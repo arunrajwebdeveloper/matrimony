@@ -587,21 +587,35 @@ export class UserInteractionsService {
 
   // GET OPERATIONS
   async getShortlisted(userId: string, page = 1, limit = 20) {
-    const skip = (page - 1) * limit;
-
-    const userLists = await this.interactionListsModel
+    const userInteractions = await this.interactionListsModel
       .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'shortlisted',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
-      });
+      .exec();
 
-    const total = userLists?.shortlisted?.length || 0;
+    if (!userInteractions) {
+      throw new NotFoundException('Interaction list not found');
+    }
+
+    const skip = (page - 1) * limit;
+    const total = userInteractions?.shortlisted?.length || 0;
+    const shortlistedIds = userInteractions?.shortlisted || [];
+
+    const query: any = {
+      user: { $in: shortlistedIds }, // include interacted profiles
+    };
+
+    // Run queries in parallel for efficiency
+    const profiles = await this.profileModel
+      .find(query)
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
 
     return {
-      data: userLists?.shortlisted || [],
+      data: profiles,
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -612,21 +626,34 @@ export class UserInteractionsService {
   }
 
   async getBlocked(userId: string, page = 1, limit = 20) {
+    const userInteractions = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
+
+    if (!userInteractions) {
+      throw new NotFoundException('Interaction list not found');
+    }
+
     const skip = (page - 1) * limit;
+    const blockedIds = userInteractions?.blocked || [];
+    const total = blockedIds?.length || 0;
 
-    const userLists = await this.interactionListsModel
-      .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'blocked',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
-      });
+    const query: any = {
+      user: { $in: blockedIds },
+    };
 
-    const total = userLists?.blocked?.length || 0;
+    // Find all profiles whose 'user' field matches any of those sent userIds
+    const profiles = await this.profileModel
+      .find(query)
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
     return {
-      data: userLists?.blocked || [],
+      data: profiles || [],
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -636,22 +663,35 @@ export class UserInteractionsService {
     };
   }
 
-  async getMatches(userId: string, page = 1, limit = 20) {
+  async getAcceptedRequests(userId: string, page = 1, limit = 20) {
+    const userInteractions = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
+
+    if (!userInteractions) {
+      throw new NotFoundException('Interaction list not found');
+    }
+
     const skip = (page - 1) * limit;
+    const acceptedRequestIds = userInteractions?.acceptedRequests || [];
+    const total = acceptedRequestIds?.length || 0;
 
-    const userLists = await this.interactionListsModel
-      .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'acceptedRequests',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
-      });
+    const query: any = {
+      user: { $in: acceptedRequestIds },
+    };
 
-    const total = userLists?.acceptedRequests?.length || 0;
+    // Find all profiles whose 'user' field matches any of those sent userIds
+    const profiles = await this.profileModel
+      .find(query)
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
     return {
-      data: userLists?.acceptedRequests || [],
+      data: profiles || [],
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -661,22 +701,35 @@ export class UserInteractionsService {
     };
   }
 
-  async getPendingMatchRequests(userId: string, page = 1, limit = 20) {
+  async getReceivedMatchRequests(userId: string, page = 1, limit = 20) {
+    const userInteractions = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
+
+    if (!userInteractions) {
+      throw new NotFoundException('Interaction list not found');
+    }
+
     const skip = (page - 1) * limit;
+    const receivedRequestIds = userInteractions?.receivedMatchRequests || [];
+    const total = receivedRequestIds?.length || 0;
 
-    const userLists = await this.interactionListsModel
-      .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'receivedMatchRequests',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
-      });
+    const query: any = {
+      user: { $in: receivedRequestIds },
+    };
 
-    const total = userLists?.receivedMatchRequests?.length || 0;
+    // Find all profiles whose 'user' field matches any of those sent userIds
+    const profiles = await this.profileModel
+      .find(query)
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
     return {
-      data: userLists?.receivedMatchRequests || [],
+      data: profiles || [],
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -690,33 +743,24 @@ export class UserInteractionsService {
     const skip = (page - 1) * limit;
 
     // Find the user's interaction list
-    const userList = await this.interactionListsModel.findOne({
+    const userInteractions = await this.interactionListsModel.findOne({
       userId: new Types.ObjectId(userId),
     });
 
-    if (!userList) {
+    if (!userInteractions) {
       throw new NotFoundException('Interaction list not found');
     }
 
-    const sentUserIds = userList.sentMatchRequests || [];
+    const sentUserIds = userInteractions?.sentMatchRequests || [];
+    const total = sentUserIds.length || 0;
 
-    const total = sentUserIds.length;
-
-    if (total === 0) {
-      return {
-        data: [],
-        page,
-        totalPages: 0,
-        total: 0,
-        limit,
-        hasNextPage: false,
-        hasPrevPage: false,
-      };
-    }
+    const query: any = {
+      user: { $in: sentUserIds },
+    };
 
     // Find all profiles whose 'user' field matches any of those sent userIds
     const profiles = await this.profileModel
-      .find({ user: { $in: sentUserIds } })
+      .find(query)
       .select(
         'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
       )
@@ -726,7 +770,7 @@ export class UserInteractionsService {
 
     // Return paginated response
     return {
-      data: profiles,
+      data: profiles || [],
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -903,21 +947,34 @@ export class UserInteractionsService {
   }
 
   async getDeclined(userId: string, page = 1, limit = 20) {
+    const userInteractions = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
+
+    if (!userInteractions) {
+      throw new NotFoundException('Interaction list not found');
+    }
+
     const skip = (page - 1) * limit;
+    const declinedRequestIds = userInteractions?.declinedRequests || [];
+    const total = declinedRequestIds?.length || 0;
 
-    const userLists = await this.interactionListsModel
-      .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'declinedRequests',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
-      });
+    const query: any = {
+      user: { $in: declinedRequestIds },
+    };
 
-    const total = userLists?.declinedRequests?.length || 0;
+    // Find all profiles whose 'user' field matches any of those sent userIds
+    const profiles = await this.profileModel
+      .find(query)
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
     return {
-      data: userLists?.declinedRequests || [],
+      data: profiles || [],
       page,
       totalPages: Math.ceil(total / limit),
       total,

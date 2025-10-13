@@ -8,11 +8,7 @@ import { Ban, Bookmark, CircleCheck, Eye, Heart, Trash2 } from "lucide-react";
 import Avatar from "./Avatar";
 import { useAppSelector } from "@/hooks/hooks";
 import { useInteraction } from "@/features/interactions/useInteraction";
-
-// export const useActionLoading = (userId: string, action: string) => {
-//   const loadingMap = useAppSelector((state) => state.interaction.loadingMap);
-//   return loadingMap[userId] === action;
-// };
+import CircleSpinner from "../ui/CircleSpinner";
 
 function UserCard(props: MatchCardProps) {
   const {
@@ -33,19 +29,32 @@ function UserCard(props: MatchCardProps) {
     showAcceptRequest,
     showDeclineRequest,
     showSendInterest,
+    showIgnore,
   } = props;
 
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
 
   const send = useInteraction("sendInterest");
+  const cancelRequest = useInteraction("cancelSentInterest");
+  const accept = useInteraction("acceptInterest");
   const block = useInteraction("blockUser");
   const decline = useInteraction("declineInterest");
+  const shortlist = useInteraction("shortlistUser");
+  const removeBlock = useInteraction("removeBlockedUser");
+  const removeShortlist = useInteraction("removeShortlistUser");
 
   const isSending = send.isPending && send.variables === userId;
+  const isCancellingRequest =
+    cancelRequest.isPending && cancelRequest.variables === userId;
+  const isAccepting = accept.isPending && accept.variables === userId;
   const isBlockLoading = block.isPending && block.variables === userId;
   const isDeclineLoading = decline.isPending && decline.variables === userId;
-
-  // const isSending = useActionLoading(userId as string, "sending");
+  const isShortlistLoading =
+    shortlist.isPending && shortlist.variables === userId;
+  const isRemoveBlockLoading =
+    removeBlock.isPending && removeBlock.variables === userId;
+  const isRemoveShortlistLoading =
+    removeShortlist.isPending && removeShortlist.variables === userId;
 
   return (
     <div className="flex overflow-hidden group">
@@ -88,7 +97,11 @@ function UserCard(props: MatchCardProps) {
               disabled={isSending}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-green-200 text-green-800 hover:bg-green-300 transition-colors duration-300 rounded-sm gap-1"
             >
-              <Heart size={14} className="flex-1" />
+              {isSending ? (
+                <CircleSpinner size={14} />
+              ) : (
+                <Heart size={14} className="flex-1" />
+              )}
               <span className="whitespace-nowrap">
                 {isSending ? "Sending..." : "Send Interest"}
               </span>
@@ -123,19 +136,38 @@ function UserCard(props: MatchCardProps) {
           )}
           {showCancelRequest && (
             <button
+              // onClick={() => cancelRequest.mutate(userId!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              {isCancellingRequest ? (
+                <CircleSpinner size={14} />
+              ) : (
+                <Ban size={14} className="flex-1" />
+              )}
+              <span className="whitespace-nowrap">
+                {isCancellingRequest ? "Cancelling..." : "Cancel Request"}
+              </span>
+            </button>
+          )}
+          {showIgnore && (
+            <button
               // onClick={() => onCancelRequest?.(userId!?.toString())}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
             >
               <Ban size={14} className="flex-1" />
-              <span className="whitespace-nowrap">Cancel Request</span>
+              <span className="whitespace-nowrap">Ignore</span>
             </button>
           )}
           {showAddToShortlist && (
             <button
-              // onClick={() => onAddToShortlist?.(userId!?.toString())}
+              onClick={() => shortlist.mutate(userId!?.toString())}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors duration-300 rounded-sm gap-1"
             >
-              <Bookmark size={14} className="flex-1" />
+              {isShortlistLoading ? (
+                <CircleSpinner size={14} />
+              ) : (
+                <Bookmark size={14} className="flex-1" />
+              )}
               {/* <span className="whitespace-nowrap">Add to Shortlist</span> */}
             </button>
           )}

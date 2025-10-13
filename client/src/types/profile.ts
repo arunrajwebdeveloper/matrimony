@@ -103,6 +103,7 @@ export interface MatchListBaseProps {
   showRemove?: boolean;
   showCancelRequest?: boolean;
   showSendInterest?: boolean;
+  showIgnore?: boolean;
 }
 
 export interface MatchCardProps extends UserMatchType, MatchListBaseProps {}

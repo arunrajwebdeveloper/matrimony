@@ -31,24 +31,26 @@ export const API_ENDPOINTS = {
 
   // INTERACTIONS
 
-  GET_SHORTLIST: "/api/user-interactions/shortlisted",
   ADD_TO_SHORTLIST: "/api/user-interactions/shortlist",
   REMOVE_FROM_SHORTLIST: "/api/user-interactions/shortlist/remove",
 
-  GET_BLOCKED_LIST: "/api/user-interactions/blocked",
   ADD_TO_BLOCKLIST: "/api/user-interactions/block",
   REMOVE_FROM_BLOCKEDLIST: "/api/user-interactions/block/remove",
 
+  IGNORE_PROFILE: "/api/user-interactions/decline",
+
+  GET_SHORTLIST: "/api/user-interactions/shortlisted",
+  GET_BLOCKED_LIST: "/api/user-interactions/blocked",
   GET_NEW_REQUESTS: "/api/user-interactions/request/pending",
   GET_SENT_REQUESTS: "/api/user-interactions/request/sent",
   GET_ACCEPTED_REQUESTS: "/api/user-interactions/accepted-requests",
-
   GET_DECLINEDLIST: "/api/user-interactions/declined",
-  ADD_TO_DECLINEDLIST: "/api/user-interactions/decline",
-  REMOVE_FROM_DECLINEDLIST: "/api/user-interactions/decline/remove",
 
   SEND_INTEREST: "/api/user-interactions/request/send",
   CANCEL_INTEREST_REQUEST: "",
+  ACCEPT_INTEREST: "/api/user-interactions/request/accept",
+  DECLINE_INTEREST_REQUEST: "/api/user-interactions/request/decline",
+  REMOVE_FROM_DECLINEDLIST: "/api/user-interactions/decline/remove",
 
   PREFERRED_MATCHES_LIST: "/api/user-interactions/preferred",
   NEW_MATCHES_LIST: "/api/user-interactions/new",
