@@ -12,7 +12,7 @@ import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import Greeting from "@/components/dashboard/Greeting";
 import ActivityList from "@/components/dashboard/ActivityList";
 import EventsCalendar from "@/components/profile/EventsCalendar";
-import InteractionList from "@/components/matchList/ProfileList";
+import ProfileList from "@/components/profileList/ProfileList";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 const statUsers = [
@@ -93,39 +93,31 @@ const DashboardPage: React.FC = () => {
             {/* Preferred Matches: Highly compatible profiles (85%+ match) based on 
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
 
-            <InteractionList
+            <ProfileList
               title="Preferred Matches"
               endpoint={API_ENDPOINTS.PREFERRED_MATCHES_LIST}
               paginationPath="/dashboard/preferred-matches"
               link="/dashboard/preferred-matches"
               itemPerPage={5}
               hasPagination={false}
-              onSendInterest={true}
-              onAddToShortlist={(e: any) => {
-                console.log(e);
-              }}
-              onRemove={(e: any) => {
-                console.log(e);
-              }}
+              showSendInterest={true}
+              showAddToShortlist={true}
+              showRemove={true}
             />
 
             {/* New Matches: Recently joined profiles that meet 
             your basic criteria like age, location, and education. */}
 
-            <InteractionList
+            <ProfileList
               title="New Matches"
               endpoint={API_ENDPOINTS.NEW_MATCHES_LIST}
               paginationPath="/dashboard/new-matches"
               link="/dashboard/new-matches"
               itemPerPage={5}
               hasPagination={false}
-              onSendInterest={true}
-              onAddToShortlist={(e: any) => {
-                console.log(e);
-              }}
-              onRemove={(e: any) => {
-                console.log(e);
-              }}
+              showSendInterest={true}
+              showAddToShortlist={true}
+              showRemove={true}
             />
 
             <ProfileCard title=" Recent Activities" link="/" className="mb-5">

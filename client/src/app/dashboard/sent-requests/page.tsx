@@ -8,7 +8,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import EventsCalendar from "@/components/profile/EventsCalendar";
-import InteractionList from "@/components/matchList/ProfileList";
+import ProfileList from "@/components/profileList/ProfileList";
 import { useAppSelector } from "@/hooks/hooks";
 
 const NewMatchesPage: React.FC = () => {
@@ -34,13 +34,11 @@ const NewMatchesPage: React.FC = () => {
         </div>
         <div className="w-[50%] px-2">
           <div className="mt-5">
-            <InteractionList
+            <ProfileList
               title="Sent Requests"
               endpoint={API_ENDPOINTS.GET_SENT_REQUESTS}
               paginationPath="/dashboard/sent-requests"
-              onCancelRequest={(e: any) => {
-                console.log(e);
-              }}
+              showCancelRequest={true}
             />
           </div>
         </div>

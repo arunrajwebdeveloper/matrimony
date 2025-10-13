@@ -8,7 +8,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import EventsCalendar from "@/components/profile/EventsCalendar";
-import InteractionList from "@/components/matchList/ProfileList";
+import ProfileList from "@/components/profileList/ProfileList";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 const NewMatchesPage: React.FC = () => {
@@ -35,17 +35,13 @@ const NewMatchesPage: React.FC = () => {
             {/* New Matches: Recently joined profiles that meet 
             your basic criteria like age, location, and education. */}
 
-            <InteractionList
+            <ProfileList
               title="New Matches"
               endpoint={API_ENDPOINTS.NEW_MATCHES_LIST}
               paginationPath="/dashboard/new-matches"
-              onSendInterest={true}
-              onAddToShortlist={(e: any) => {
-                console.log(e);
-              }}
-              onRemove={(e: any) => {
-                console.log(e);
-              }}
+              showSendInterest={true}
+              showAddToShortlist={true}
+              showRemove={true}
             />
           </div>
         </div>

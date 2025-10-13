@@ -8,7 +8,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import EventsCalendar from "@/components/profile/EventsCalendar";
-import InteractionList from "@/components/matchList/ProfileList";
+import ProfileList from "@/components/profileList/ProfileList";
 import { useAppSelector } from "@/hooks/hooks";
 
 const InboxPage = () => {
@@ -34,16 +34,12 @@ const InboxPage = () => {
         </div>
         <div className="w-[50%] px-2">
           <div className="mt-5">
-            <InteractionList
+            <ProfileList
               title="New Requests"
               endpoint={API_ENDPOINTS.GET_NEW_REQUESTS}
               paginationPath="/dashboard/new-requests"
-              onAcceptRequest={(e: any) => {
-                console.log(e);
-              }}
-              onDeclineRequest={(e: any) => {
-                console.log(e);
-              }}
+              showAcceptRequest={true}
+              showDeclineRequest={true}
             />
           </div>
         </div>

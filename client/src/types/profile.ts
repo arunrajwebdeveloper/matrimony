@@ -96,16 +96,18 @@ export interface UserMatchType {
   user: string;
 }
 
-export interface MatchCardActions {
-  onAcceptRequest?: (id: string) => void;
-  onDeclineRequest?: (id: string) => void;
-  onAddToShortlist?: (id: string) => void;
-  onRemove?: (id: string) => void;
-  onCancelRequest?: (id: string) => void;
-  onSendInterest?: boolean;
+export interface MatchCardActionsVisibility {
+  showAcceptRequest?: boolean;
+  showDeclineRequest?: boolean;
+  showAddToShortlist?: boolean;
+  showRemove?: boolean;
+  showCancelRequest?: boolean;
+  showSendInterest?: boolean;
 }
 
-export interface MatchCardProps extends UserMatchType, MatchCardActions {}
+export interface MatchCardProps
+  extends UserMatchType,
+    MatchCardActionsVisibility {}
 
 export interface MatchResult {
   hasNextPage: boolean;
@@ -123,10 +125,10 @@ export interface MatchState {
   error: string | null;
 }
 
-export interface MatchListProps extends MatchCardActions {
+export interface MatchListProps extends MatchCardActionsVisibility {
   users: UserMatchType[];
   isLoading: boolean;
-  error: string | null;
+  error: Error | null;
 }
 
 export interface UserCardSidebarItemType {

@@ -8,7 +8,7 @@ import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
 import EventsCalendar from "@/components/profile/EventsCalendar";
-import InteractionList from "@/components/matchList/ProfileList";
+import ProfileList from "@/components/profileList/ProfileList";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 
 const PreferredMatchesPage: React.FC = () => {
@@ -39,17 +39,13 @@ const PreferredMatchesPage: React.FC = () => {
             {/* Preferred Matches: Highly compatible profiles (85%+ match) based on 
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
 
-            <InteractionList
+            <ProfileList
               title="Preferred Matches"
               endpoint={API_ENDPOINTS.PREFERRED_MATCHES_LIST}
               paginationPath="/dashboard/preferred-matches"
-              onSendInterest={true}
-              onAddToShortlist={(e: any) => {
-                console.log(e);
-              }}
-              onRemove={(e: any) => {
-                console.log(e);
-              }}
+              showSendInterest={true}
+              showAddToShortlist={true}
+              showRemove={true}
             />
           </div>
         </div>
