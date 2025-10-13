@@ -2,13 +2,16 @@
 
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
+import { useAppSelector } from "@/hooks/hooks";
 
 const ResetPasswordPage: React.FC = () => {
-  const { isAuthenticated } = useAuth();
   const router = useRouter();
+
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     if (isAuthenticated) {

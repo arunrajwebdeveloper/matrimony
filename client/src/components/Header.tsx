@@ -9,24 +9,40 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  MailOpen,
   Settings2,
   UserRound,
   Users,
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import UserDropdown from "./dropdowns/UserDropdown";
 import { UserDropdownMenuType } from "@/types/menu";
+import { useChat } from "@/hooks/useChat";
+import LiveClock from "./liveClock";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { logoutThunk } from "@/features/auth/authThunks";
+import { useToast } from "@/contexts/ToastScope";
 
 function Header() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const dispatch = useAppDispatch();
+  const { showError } = useToast();
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
+  const { setIsOpenChat } = useChat();
   const router = useRouter();
 
   const handleLogout = async (): Promise<void> => {
-    await logout();
-    router.push(ROUTES.LOGIN);
+    const result = await dispatch(logoutThunk());
+
+    if (logoutThunk.fulfilled.match(result)) {
+      router.push(ROUTES.LOGIN);
+    } else if (logoutThunk.rejected.match(result)) {
+      const errorMsg = result?.payload || "Failed to logout.";
+      showError(errorMsg);
+    }
   };
 
   const navItems: UserDropdownMenuType[] = [
@@ -66,6 +82,9 @@ function Header() {
 
         {isAuthenticated ? (
           <div className="flex items-center gap-4">
+            {/* Clock */}
+            <LiveClock />
+
             {user?.profile?.isPremium ? (
               <div className="flex items-center gap-2 border-1 border-amber-500 px-2.5 py-1.5 rounded-full font-medium select-none">
                 <CrownIcon size={16} color="#fe9a00" fill="#fe9a00" />
@@ -80,23 +99,26 @@ function Header() {
               </Link>
             )}
             <Link
-              href="/"
-              className="w-[30px] h-[30px] flex items-center justify-center"
+              href={ROUTES.NEW_REQUESTS}
+              className="w-[30px] h-[30px] flex items-center justify-center relative"
             >
+              <span className="w-1.5 h-1.5 bg-red-600 rounded-full absolute top-0.5 right-0.5 z-20 pointer-events-none"></span>
               <Users size={18} />
             </Link>
-            <Link
-              href="/"
-              className="w-[30px] h-[30px] flex items-center justify-center"
+
+            <button
+              onClick={() => setIsOpenChat(true)}
+              className="w-[30px] h-[30px] flex items-center justify-center relative  cursor-pointer"
             >
+              {/* <span className="w-1.5 h-1.5 bg-red-600 rounded-full absolute top-0.5 right-0.5 z-20 pointer-events-none"></span> */}
+              <MailOpen size={18} />
+            </button>
+
+            <button className="w-[30px] h-[30px] flex items-center justify-center relative cursor-pointer">
+              <span className="w-1.5 h-1.5 bg-red-600 rounded-full absolute top-0.5 right-0.5 z-20 pointer-events-none"></span>
               <Bell size={18} />
-            </Link>
-            <Link
-              href="/"
-              className="w-[30px] h-[30px] flex items-center justify-center"
-            >
-              <Mail size={18} />
-            </Link>
+            </button>
+
             <div className="ms-4">
               <UserDropdown
                 menu={navItems}

@@ -2,14 +2,14 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/hooks/hooks";
 
 const HomePage: React.FC = () => {
   const router = useRouter();
 
-  const { isAuthenticated, user } = useAuth();
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (isAuthenticated) {

@@ -138,21 +138,57 @@ input[type="range"].range:hover::-moz-range-thumb {
 
 .rdtPicker {
   min-width: 100% !important;
+  user-select: none;
 }
 .rdtPicker td,
 .rdtPicker th {
   height: 38px !important;
   vertical-align: middle !important;
 }
-.rdtDay.rdtActive {
+
+.rdtPicker .rdtDay {
+  position: relative;
+  border-radius: 5px;
+}
+.rdtPicker .rdtDay.has-event::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  z-index: 5;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.rdtPicker .rdtDay.has-event.past-event::after {
+  background-color: #414141;
+}
+.rdtPicker .rdtDay.has-event.upcoming-event::after {
+  background-color: #ff0077;
+}
+.rdtPicker .rdtDay.rdtActive {
   background-color: #00bc7d !important;
   color: white !important;
 }
-
-.rdtDay:not(.rdtActive):hover {
-  background-color: #e5e7eb !important;
+.rdtPicker .rdtDay.has-event.upcoming-event {
+  color: #ff0077;
+  background: #ffe4e6;
 }
-
+.rdtPicker .rdtDay.has-event.past-event {
+  color: #414141;
+  background: #f3f4f6;
+}
+.rdtPicker .rdtToday {
+  color: #155dfc !important;
+  background: #dbeafe !important;
+}
+.rdtPicker td.rdtToday:before {
+  border-bottom-color: #155dfc !important;
+}
+.rdtPicker td.rdtDay:not(.rdtToday):not(.rdtActive):not(.has-event):hover {
+  background: #e5e7eb !important;
+}
 /* PAGINATION */
 
 .pagination-element {

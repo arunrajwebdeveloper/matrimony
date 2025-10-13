@@ -1,7 +1,7 @@
 "use client";
 
 import AuthBanner from "@/components/auth/AuthBanner";
-import { useAuth } from "@/hooks/useAuth";
+import { useAppSelector } from "@/hooks/hooks";
 import { ROUTES } from "@/utils/constants";
 import Link from "next/link";
 
@@ -10,7 +10,9 @@ export default function AuthLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isAuthenticated } = useAuth();
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   return (
     <div className="flex h-dvh">

@@ -1,59 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
-import ProfileCard from "@/components/cards/ProfileCard";
+import React from "react";
 import Navigation from "@/components/navigation/Navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
-import SidebarCard from "@/components/cards/SidebarCard";
-import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
+import { API_ENDPOINTS } from "@/utils/constants";
 import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
-import MatchList from "@/components/dashboard/MatchList";
-import { ApiResponse, MatchResult, MatchState } from "@/types";
-import api from "@/lib/api";
-import Pagination from "@/components/ui/Pagination";
-import { useSearchParams } from "next/navigation";
-import { searchParamsToObject } from "@/utils/searchParamsToObject";
+import EventsCalendar from "@/components/profile/EventsCalendar";
+import ProfileList from "@/components/profileList/ProfileList";
+import { useAppSelector } from "@/hooks/hooks";
 
 const NewMatchesPage: React.FC = () => {
-  const { user } = useAuth();
-
-  const searchParams = useSearchParams();
-
-  const [state, setState] = useState<MatchState>({
-    data: null,
-    isLoading: true,
-    error: null,
-  });
-
-  const fetchNewMatches = async (): Promise<void> => {
-    try {
-      const response = await api.get<ApiResponse<MatchResult>>(
-        API_ENDPOINTS.NEW_MATCHES_LIST,
-        { params: searchParamsToObject(searchParams) }
-      );
-      setState({
-        data: response?.data?.result as MatchResult,
-        isLoading: false,
-        error: null,
-      });
-    } catch (err: any) {
-      setState({
-        data: null,
-        isLoading: false,
-        error: "Failed to load New matches data",
-      });
-      console.error("New matches fetch error:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchNewMatches();
-  }, []);
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   return (
     <div className="main-container">
@@ -64,7 +25,7 @@ const NewMatchesPage: React.FC = () => {
 
       <div className="flex">
         <div className="w-[25%] px-2">
-          <div className="mt-5">
+          <div className="mt-5 sticky top-[70px]">
             <div className="py-4">
               <h3 className="font-semibold text-black text-md mb-6">Main</h3>
               <Navigation />
@@ -73,25 +34,12 @@ const NewMatchesPage: React.FC = () => {
         </div>
         <div className="w-[50%] px-2">
           <div className="mt-5">
-            {/* LISTS */}
-
-            {/* New Matches: Recently joined profiles that meet 
-            your basic criteria like age, location, and education. */}
-
-            <ProfileCard title="New Matches" className="mb-5">
-              <MatchList
-                users={state?.data?.result!}
-                isLoading={state?.isLoading}
-                error={state?.error}
-              />
-            </ProfileCard>
-            {!state?.isLoading && (
-              <Pagination
-                page={state?.data?.page as number}
-                lastPage={state?.data?.totalPages as number}
-                path="/dashboard/declined-requests"
-              />
-            )}
+            <ProfileList
+              title="Declined Requests"
+              endpoint={API_ENDPOINTS.GET_DECLINEDLIST}
+              paginationPath="/dashboard/declined-requests"
+              showRemove={true}
+            />
           </div>
         </div>
         <div className="w-[25%] px-2">
@@ -100,15 +48,21 @@ const NewMatchesPage: React.FC = () => {
               <ProfileCompletionCard />
             </div> */}
 
-            <div className="mb-3">
-              <UpgradePremiumCard />
+            <div className="mb-6">
+              <EventsCalendar />
             </div>
 
-            <div className="mb-3">
+            {!user?.profile?.isPremium && (
+              <div className="mb-6">
+                <UpgradePremiumCard />
+              </div>
+            )}
+
+            <div className="mb-6">
               <InfoSidebarCard />
             </div>
 
-            <div className="mb-3">
+            <div className="mb-6">
               <SafeTipsSidebarCard />
             </div>
 

@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
 import { Profile, ProfileSchema } from '../profiles/schemas/profile.schema';
 import { UploadModule } from '../upload/upload.module';
+import { UserInteractionsModule } from '../user-interactions/user-interactions.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UploadModule } from '../upload/upload.module';
       { name: Profile.name, schema: ProfileSchema }, // Also register Profile schema here for population
     ]),
     forwardRef(() => UploadModule), // 👈 handle circular dep
+    UserInteractionsModule,
   ],
   providers: [UsersService],
   controllers: [UsersController],

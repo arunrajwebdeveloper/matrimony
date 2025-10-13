@@ -14,8 +14,6 @@ export const API_ENDPOINTS = {
   ME: "/api/users/me",
   PROFILE: "/api/profiles/my-profile",
   USER_BY_PROFILE_ID: "/api/profiles",
-  PREFERRED_MATCHES_LIST: "/api/matches/preferred",
-  NEW_MATCHES_LIST: "/api/matches/new",
 
   PROFILE_PICTURE_UPLOAD: "/api/users/profile-picture",
   PROFILE_COVER_UPLOAD: "/api/users/profile-cover",
@@ -30,6 +28,30 @@ export const API_ENDPOINTS = {
   ACTIVITY_LOG: "/api/activities/log",
   ACTIVITY_RECENT_GET: "/api/activities/recent",
   ACTIVITY_ALL_GET: "/api/activities/all",
+
+  // INTERACTIONS
+
+  GET_SHORTLIST: "/api/user-interactions/shortlisted",
+  ADD_TO_SHORTLIST: "/api/user-interactions/shortlist",
+  REMOVE_FROM_SHORTLIST: "/api/user-interactions/shortlist/remove",
+
+  GET_BLOCKED_LIST: "/api/user-interactions/blocked",
+  ADD_TO_BLOCKLIST: "/api/user-interactions/block",
+  REMOVE_FROM_BLOCKEDLIST: "/api/user-interactions/block/remove",
+
+  GET_NEW_REQUESTS: "/api/user-interactions/request/pending",
+  GET_SENT_REQUESTS: "/api/user-interactions/request/sent",
+  GET_ACCEPTED_REQUESTS: "/api/user-interactions/accepted-requests",
+
+  GET_DECLINEDLIST: "/api/user-interactions/declined",
+  ADD_TO_DECLINEDLIST: "/api/user-interactions/decline",
+  REMOVE_FROM_DECLINEDLIST: "/api/user-interactions/decline/remove",
+
+  SEND_INTEREST: "/api/user-interactions/request/send",
+  CANCEL_INTEREST_REQUEST: "",
+
+  PREFERRED_MATCHES_LIST: "/api/user-interactions/preferred",
+  NEW_MATCHES_LIST: "/api/user-interactions/new",
 
   // FILE UPLOAD
 
@@ -69,7 +91,7 @@ export const ROUTES = {
     NOTIFICATION: "/dashboard/settings/notification",
     DELETE_ACCOUNT: "/dashboard/settings/delete-account",
   },
-  INBOX: "/dashboard/inbox",
+  NEW_REQUESTS: "/dashboard/new-requests",
   ACCEPTED: "/dashboard/accepted-requests",
   RECENTLY_VIEWED: "/dashboard/recently-viewed",
   SHORTLISTED: "/dashboard/shortlisted",

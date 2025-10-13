@@ -149,9 +149,7 @@ export class AuthService {
     await newUser.save();
 
     this.eventEmitter.emit('user.created', {
-      userId: newUser?._id,
       email: newUser?.email,
-      firstName: newUser?.firstName,
     });
 
     return {

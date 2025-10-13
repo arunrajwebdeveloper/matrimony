@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { fileToObjectURL, processImagePipeline } from "@/lib/image";
+import { fileToObjectURL, processImagePipeline } from "@/utils/image";
 import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
 import api from "@/lib/api";
@@ -9,10 +9,11 @@ import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
 import { ImageSingleUpload } from "@/types/imageUpload";
 import { ApiResponse, AuthActionType } from "@/types";
 import { getFileNameFromUrl } from "@/utils/getFilenameFromUrl";
-import { useAuth } from "@/hooks/useAuth";
-import { authService } from "@/lib/auth";
+import { authService } from "@/features/auth/api";
 import CircleSpinner from "../ui/CircleSpinner";
 import ConfirmModal from "../modal/ConfirmModal";
+import { useAppDispatch } from "@/hooks/hooks";
+import { setUser } from "@/features/auth/authSlice";
 
 type ImageItem = {
   id: string;
@@ -30,7 +31,8 @@ export default function UploadSinglePage({
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { dispatch } = useAuth();
+  const dispatch = useAppDispatch();
+
   const [image, setImage] = useState<ImageItem | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [cropPixels, setCropPixels] = useState<any>(null);
@@ -130,7 +132,7 @@ export default function UploadSinglePage({
         });
 
         const user = await authService.getMe();
-        dispatch({ type: AuthActionType.SET_USER, payload: user });
+        dispatch(setUser(user));
 
         setImage({
           id: "source",
@@ -159,7 +161,7 @@ export default function UploadSinglePage({
         });
 
         const user = await authService.getMe();
-        dispatch({ type: AuthActionType.SET_USER, payload: user });
+        dispatch(setUser(user));
 
         console.log("✅ Profile image remove:", res.data?.result?.message);
       } catch (err) {
@@ -209,17 +211,17 @@ export default function UploadSinglePage({
       <main className="space-y-4">
         <div className="space-y-2">
           {image?.processedUrl ? (
-            <div className="relative w-50 h-50 overflow-hidden rounded group">
+            <div className="relative w-50 h-50 overflow-hidden rounded-2xl group">
               <img
                 src={image.processedUrl}
                 alt="preview"
-                className="w-50 h-50 object-cover rounded"
+                className="h-full w-full object-cover rounded-2xl"
               />
               {/* Remove button */}
               <button
                 type="button"
                 onClick={handleRemoveImage}
-                className="absolute top-1 right-1 bg-red-600 rounded z-20 cursor-pointer w-7 h-7 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 bg-red-600 rounded-full z-20 cursor-pointer w-10 h-10 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <Trash2 size={18} color="white" />
               </button>
@@ -245,7 +247,7 @@ export default function UploadSinglePage({
               )}
             </div>
           ) : (
-            <label className="w-50 h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
+            <label className="w-50 h-50 group rounded-2xl bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
               <input
                 ref={fileInputRef}
                 type="file"

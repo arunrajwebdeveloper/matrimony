@@ -7,6 +7,7 @@ import { User, UserDocument } from './schemas/user.schema';
 import { Profile, ProfileDocument } from '../profiles/schemas/profile.schema';
 import { UploadService } from '../upload/upload.service';
 import { FOLDER_TYPES, FolderType } from 'src/common/constants/folder.type';
+import { UserInteractionsService } from '../user-interactions/user-interactions.service';
 
 @Injectable()
 export class UsersService {
@@ -16,11 +17,19 @@ export class UsersService {
     private readonly profileModel: Model<ProfileDocument>,
     @Inject(forwardRef(() => UploadService)) // 👈 needed for circular dep
     private readonly uploadService: UploadService,
+    private userInteractionsService: UserInteractionsService,
   ) {}
 
   async create(user: Partial<User>): Promise<UserDocument> {
     const newUser = new this.userModel(user);
-    return newUser.save();
+    const savedUser = await newUser.save();
+
+    // Initialize user interaction lists
+    await this.userInteractionsService.initializeUserLists(
+      savedUser._id.toString(),
+    );
+
+    return savedUser;
   }
 
   async findByEmail(email: string): Promise<UserDocument | null> {

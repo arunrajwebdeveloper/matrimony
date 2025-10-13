@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { fileToObjectURL, processImagePipeline } from "@/lib/image";
+import { fileToObjectURL, processImagePipeline } from "@/utils/image";
 import { Crop, Plus, Trash2 } from "lucide-react";
 import ImageCropModal from "./ImageCropModal";
 import { API_ENDPOINTS, FOLDER_TYPES } from "@/utils/constants";
@@ -215,22 +215,22 @@ export default function UploadMultiplePage({
     <>
       <main className="space-y-4">
         {/* Upload area (dynamic slots) */}
-        <div className="flex gap-6 flex-wrap">
+        <div className="flex gap-4 flex-wrap">
           {/* Show previews */}
           {processedImages?.map((img) => (
             <div
               key={img.id}
-              className="relative aspect-[4/3] h-50 overflow-hidden rounded group "
+              className="relative aspect-[4/3] w-[calc(50%-8px)] overflow-hidden rounded-2xl group "
             >
               <img
                 src={img.processedUrl}
                 alt="preview"
-                className="aspect-[4/3] h-50 object-cover rounded"
+                className="h-full w-full object-cover rounded-2xl"
               />
               {/* Delete always available */}
               <button
                 type="button"
-                className="absolute top-1 right-1 bg-red-600 rounded z-20 cursor-pointer w-7 h-7 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 bg-red-600 rounded-full z-20 cursor-pointer w-10 h-10 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"
                 // onClick={() => removeImage(img.id)}
                 onClick={() => handleRemoveImage(img)}
               >
@@ -253,7 +253,7 @@ export default function UploadMultiplePage({
 
               {/* Loader */}
 
-              {isPending && (
+              {isPending && !img.source && (
                 <div className="absolute inset-0 w-full h-full bg-blue-600/50 text-white p-1 z-10 flex items-center justify-center opacity-50">
                   <CircleSpinner size={50} />
                 </div>
@@ -262,7 +262,7 @@ export default function UploadMultiplePage({
           ))}
 
           {processedImages?.length !== MAX_SLOTS && (
-            <label className="aspect-[4/3] h-50 group rounded-md bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
+            <label className="aspect-[4/3] h-50 group rounded-2xl bg-slate-50 hover:bg-slate-100 flex select-none border-2 border-dashed border-slate-400 hover:border-slate-500 cursor-pointer p-1 transition duration-300">
               <input
                 ref={fileInputRef}
                 type="file"

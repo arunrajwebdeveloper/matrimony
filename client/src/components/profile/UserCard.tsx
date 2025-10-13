@@ -1,29 +1,55 @@
 import React from "react";
 import Link from "next/link";
-import { UserCardType } from "@/types";
+import { MatchCardProps } from "@/types";
 import OnlineStatusDot from "./OnlineStatusDot";
 import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import { ROUTES } from "@/utils/constants";
-import { Ban, Bookmark, Eye } from "lucide-react";
+import { Ban, Bookmark, CircleCheck, Eye, Heart, Trash2 } from "lucide-react";
 import Avatar from "./Avatar";
+import { useAppSelector } from "@/hooks/hooks";
+import { useInteraction } from "@/features/interactions/useInteraction";
 
-function UserCard({
-  firstName,
-  lastName,
-  profileId,
-  dateOfBirth,
-  occupation,
-  city,
-  state,
-  motherTongue,
-  isOnline = false,
-  profilePicture,
-}: UserCardType) {
+// export const useActionLoading = (userId: string, action: string) => {
+//   const loadingMap = useAppSelector((state) => state.interaction.loadingMap);
+//   return loadingMap[userId] === action;
+// };
+
+function UserCard(props: MatchCardProps) {
+  const {
+    user: userId,
+    firstName,
+    lastName,
+    profileId,
+    dateOfBirth,
+    occupation,
+    city,
+    state,
+    motherTongue,
+    isOnline = false,
+    profilePicture,
+    showAddToShortlist,
+    showRemove,
+    showCancelRequest,
+    showAcceptRequest,
+    showDeclineRequest,
+    showSendInterest,
+  } = props;
+
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
 
+  const send = useInteraction("sendInterest");
+  const block = useInteraction("blockUser");
+  const decline = useInteraction("declineInterest");
+
+  const isSending = send.isPending && send.variables === userId;
+  const isBlockLoading = block.isPending && block.variables === userId;
+  const isDeclineLoading = decline.isPending && decline.variables === userId;
+
+  // const isSending = useActionLoading(userId as string, "sending");
+
   return (
-    <div className="flex overflow-hidden">
-      <div className="w-[130px] relative flex-none group rounded-full">
+    <div className="flex overflow-hidden group">
+      <div className="w-[130px] relative flex-none rounded-full">
         <Avatar
           src={profilePicture!}
           firstname={`${firstName || ""}`}
@@ -34,7 +60,7 @@ function UserCard({
         />
         <Link
           href={`${ROUTES.PROFILE}/${profileId}`}
-          className="absolute rounded-full inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute rounded-full inset-0 w-full h-full bg-blue-600/50 text-white font-normal text-xs p-1 z-10 cursor-pointer flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         >
           <Eye size={16} />
           <span>View</span>
@@ -56,21 +82,63 @@ function UserCard({
           occupation ?? ""
         }, ${city}, ${state}`}</p>
         <div className="flex items-center gap-2 mt-3">
-          <Link
-            href={`${ROUTES.PROFILE}/${profileId}`}
-            className="flex items-center text-xs cursor-pointer py-1 px-2 bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors duration-300 rounded-sm gap-1"
-          >
-            <Eye size={14} />
-            <span>View</span>
-          </Link>
-          <button className="flex items-center text-xs cursor-pointer py-1 px-2 bg-yellow-100 text-yellow-600 hover:bg-yellow-200 transition-colors duration-300 rounded-sm gap-1">
-            <Bookmark size={14} />
-            <span>Add to Shortlist</span>
-          </button>
-          <button className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-300 rounded-sm gap-1">
-            <Ban size={14} />
-            <span>Remove</span>
-          </button>
+          {showSendInterest && (
+            <button
+              onClick={() => send.mutate(userId!?.toString())}
+              disabled={isSending}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-green-200 text-green-800 hover:bg-green-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Heart size={14} className="flex-1" />
+              <span className="whitespace-nowrap">
+                {isSending ? "Sending..." : "Send Interest"}
+              </span>
+            </button>
+          )}
+          {showAcceptRequest && (
+            <button
+              // onClick={() => onAcceptRequest?.(userId!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-green-200 text-green-800 hover:bg-green-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <CircleCheck size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Accept Request</span>
+            </button>
+          )}
+          {showDeclineRequest && (
+            <button
+              // onClick={() => onDeclineRequest?.(userId!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Ban size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Decline Request</span>
+            </button>
+          )}
+          {showRemove && (
+            <button
+              // onClick={() => onRemove?.(userId!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-200 text-red-800 hover:bg-red-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Trash2 size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Remove</span>
+            </button>
+          )}
+          {showCancelRequest && (
+            <button
+              // onClick={() => onCancelRequest?.(userId!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Ban size={14} className="flex-1" />
+              <span className="whitespace-nowrap">Cancel Request</span>
+            </button>
+          )}
+          {showAddToShortlist && (
+            <button
+              // onClick={() => onAddToShortlist?.(userId!?.toString())}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors duration-300 rounded-sm gap-1"
+            >
+              <Bookmark size={14} className="flex-1" />
+              {/* <span className="whitespace-nowrap">Add to Shortlist</span> */}
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -27,7 +27,13 @@ export class UploadController {
   @UseGuards(JwtAuthGuard) // require authentication
   @Post('profile-picture')
   @UseInterceptors(
-    FileInterceptor('file', multerConfig(FOLDER_TYPES.PROFILE_PICTURES)),
+    FileInterceptor(
+      'file',
+      multerConfig(FOLDER_TYPES.PROFILE_PICTURES, {
+        allowedMimeTypes: ['image/jpeg', 'image/png'],
+        maxSize: 1 * 1024 * 1024, // 1MB
+      }),
+    ),
   )
   async uploadProfilePicture(@UploadedFile() file: Express.Multer.File) {
     return {
@@ -40,7 +46,13 @@ export class UploadController {
   @UseGuards(JwtAuthGuard) // require authentication
   @Post('cover-image')
   @UseInterceptors(
-    FileInterceptor('file', multerConfig(FOLDER_TYPES.COVER_IMAGES)),
+    FileInterceptor(
+      'file',
+      multerConfig(FOLDER_TYPES.COVER_IMAGES, {
+        allowedMimeTypes: ['image/jpeg', 'image/png'],
+        maxSize: 1 * 1024 * 1024, // 1MB
+      }),
+    ),
   )
   async uploadCoverImages(@UploadedFile() file: Express.Multer.File) {
     return {
@@ -53,7 +65,14 @@ export class UploadController {
   @UseGuards(JwtAuthGuard) // require authentication
   @Post('profile-photos')
   @UseInterceptors(
-    FilesInterceptor('files', 6, multerConfig(FOLDER_TYPES.PROFILE_PHOTOS)),
+    FilesInterceptor(
+      'files',
+      6,
+      multerConfig(FOLDER_TYPES.PROFILE_PHOTOS, {
+        allowedMimeTypes: ['image/jpeg', 'image/png'],
+        maxSize: 1 * 1024 * 1024, // 1MB per file
+      }),
+    ),
   )
   async uploadProfileImages(@UploadedFiles() files: Express.Multer.File[]) {
     return {

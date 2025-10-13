@@ -1,4 +1,5 @@
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import ChatWindow from "@/components/chat/ChatWindow";
 import Header from "@/components/Header";
 import NextTopLoader from "nextjs-toploader";
 
@@ -23,6 +24,9 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
       />
       <Header />
       <div className="mt-[70px] mb-10">{children}</div>
+
+      {/* CHAT WINDOW */}
+      <ChatWindow />
     </ProtectedRoute>
   );
 }

@@ -62,7 +62,7 @@ const SecuritySettings: React.FC = () => {
   };
 
   return (
-    <div className="ps-4">
+    <div>
       <h1 className="text-xl font-semibold text-gray-800 mb-6">
         Security Settings
       </h1>

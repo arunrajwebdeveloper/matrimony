@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import api from "@/lib/api";
 import { ApiResponse, UserProfile } from "@/types";
@@ -13,6 +12,8 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import UploadSinglePage from "@/components/media/UploadSingle";
 import UploadMultiplePage from "@/components/media/UploadMultiple";
 import CoverImageUploader from "@/components/media/CoverImageUploader";
+import { useAppSelector } from "@/hooks/hooks";
+import { useMyProfile } from "@/features/profile/useMyProfile";
 
 // --- DTO Interfaces (Copied from user's DTOs for a self-contained component) ---
 interface PartnerPreferencesDto {
@@ -187,37 +188,18 @@ const settingsMenu = [
 ];
 
 const Page: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAppSelector((state) => state.auth);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [activeTab, setActiveTab] = useState<string>(settingsMenu[0]?.tab);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSwitcgTab = (name: string): void => {
     setActiveTab(name);
   };
 
-  useEffect(() => {
-    const fetchProfile = async (): Promise<void> => {
-      try {
-        const response = await api.get<ApiResponse<UserProfile>>(
-          API_ENDPOINTS.PROFILE
-        );
-        setProfileData(response?.data?.result);
-      } catch (err: any) {
-        setError("Failed to load profile data");
-        console.error("Profile fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, []);
+  const { data: profileData, isLoading, isError, error } = useMyProfile();
 
   const {
     register,
@@ -312,7 +294,7 @@ const Page: React.FC = () => {
     </div>
   );
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center fixed top-0 left-0 z-[1000] w-full h-full">
         <LoadingSpinner size="md" />
@@ -329,7 +311,7 @@ const Page: React.FC = () => {
 
       <div className="flex">
         <div className="w-[25%] px-2">
-          <div className="mt-5">
+          <div className="mt-5 sticky top-[70px]">
             <div className="py-4">
               <div className="mb-8">
                 <UserSummaryDisplay
@@ -371,15 +353,15 @@ const Page: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-[70%]">
-                <div className="ps-4">
+              <div className="w-[70%] ps-6">
+                <div>
                   {/* <h1 className="text-xl font-semibold text-gray-800 mb-6">
                     Image Uploads
                   </h1> */}
 
                   {activeTab === "image-uploads" && (
                     <section className="mb-6 space-y-4">
-                      <div>
+                      <div className="mb-6">
                         <h2 className="font-semibold text-black text-md mb-4">
                           Upload profile image
                         </h2>
@@ -393,7 +375,7 @@ const Page: React.FC = () => {
                           sourceImage={profileData?.profilePicture}
                         />
                       </div>
-                      <div>
+                      <div className="mb-6">
                         <h2 className="font-semibold text-black text-md mb-4">
                           Upload cover photo
                         </h2>
@@ -431,7 +413,7 @@ const Page: React.FC = () => {
                     {activeTab === "personal-details" && (
                       <section className="mb-6">
                         <h2 className="font-semibold text-black text-md mb-4">
-                          Profile Picture
+                          Personal Details
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {renderTextField("First Name", "firstName", "John")}

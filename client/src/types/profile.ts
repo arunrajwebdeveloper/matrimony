@@ -1,3 +1,4 @@
+import { InfiniteData } from "@tanstack/react-query";
 import { LucideIcon } from "lucide-react";
 
 export interface UserProfile {
@@ -60,10 +61,16 @@ export interface UserProfile {
   updatedAt?: string;
 }
 
+export interface UserDetailState {
+  data: UserProfile | null;
+  isLoading: boolean;
+  error: string | null;
+  notFound: boolean;
+}
+
 export interface ProfileCardProps {
   title?: string | null;
   className?: string;
-  link?: string | null;
   children: React.ReactNode;
 }
 
@@ -74,7 +81,7 @@ export interface SidebarCardProps {
   children: React.ReactNode;
 }
 
-export interface UserCardType {
+export interface UserMatchType {
   _id?: string;
   firstName: string;
   lastName: string;
@@ -86,28 +93,61 @@ export interface UserCardType {
   motherTongue: string;
   isOnline?: boolean;
   profilePicture: string;
+  user: string;
 }
 
-export interface MatchResult {
+export interface MatchListBaseProps {
+  showAcceptRequest?: boolean;
+  showDeclineRequest?: boolean;
+  showAddToShortlist?: boolean;
+  showRemove?: boolean;
+  showCancelRequest?: boolean;
+  showSendInterest?: boolean;
+}
+
+export interface MatchCardProps extends UserMatchType, MatchListBaseProps {}
+
+export interface ProfileListResult {
   hasNextPage: boolean;
   hasPrevPage: boolean;
   limit: number;
   page: number;
   total: number;
   totalPages: number;
-  result: UserCardType[];
+  data: UserMatchType[];
 }
 
 export interface MatchState {
-  data: MatchResult | null;
+  result: ProfileListResult | null;
   isLoading: boolean;
   error: string | null;
 }
 
-export interface MatchListProps {
-  users: UserCardType[];
+export interface InfiniteMatchListProps extends MatchListBaseProps {
+  // Data comes in TanStack's InfiniteData structure
+  data: InfiniteData<ProfileListResult, number> | undefined;
   isLoading: boolean;
-  error: string | null;
+  error: Error | null;
+  fetchNextPage: () => void;
+  hasNextPage: boolean | undefined;
+  isFetchingNextPage: boolean;
+}
+
+export interface ProfileListProps extends MatchListBaseProps {
+  title: string;
+  link?: string;
+  itemPerPage?: number;
+  // paginationPath is no longer strictly needed for infinite scroll
+  paginationPath: string;
+  hasPagination?: boolean; // Set to false for infinite scroll
+  endpoint: string;
+}
+
+export interface ProfileListTeaserProps extends MatchListBaseProps {
+  title: string;
+  viewMoreLink: string; // The URL for the full list page
+  endpoint: string;
+  itemPerPage: number; // The limit per page for the API
 }
 
 export interface UserCardSidebarItemType {

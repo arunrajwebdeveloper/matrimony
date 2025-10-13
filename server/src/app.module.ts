@@ -5,14 +5,13 @@ import { EventEmitterModule } from '@nestjs/event-emitter'; // Import EventEmitt
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { ProfilesModule } from './modules/profiles/profiles.module';
-import { MatchRequestsModule } from './modules/match-requests/match-requests.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { EmailModule } from './modules/email/email.module';
-import { MatchesModule } from './modules/matches/matches.module';
 import { ActivitiesModule } from './modules/activities/activities.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { UserInteractionsModule } from './modules/user-interactions/user-interactions.module';
 
 @Module({
   imports: [
@@ -33,14 +32,13 @@ import { UploadModule } from './modules/upload/upload.module';
     AuthModule,
     UsersModule,
     ProfilesModule,
-    MatchRequestsModule,
     ChatModule,
     SubscriptionsModule,
     AdminModule,
     EmailModule,
-    MatchesModule,
     ActivitiesModule,
     UploadModule,
+    UserInteractionsModule,
   ],
   controllers: [],
   providers: [],

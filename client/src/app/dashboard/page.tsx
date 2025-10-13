@@ -1,26 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import ProfileCompletionCard from "@/components/profile/ProfileCompletionCard";
+import React from "react";
 import ProfileCard from "@/components/cards/ProfileCard";
-import UserCard from "@/components/profile/UserCard";
 import Navigation from "@/components/navigation/Navigation";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { API_ENDPOINTS, ROUTES } from "@/utils/constants";
-import SidebarCard from "@/components/cards/SidebarCard";
-import UserCardSidebarItem from "@/components/profile/UserCardSidebarItem";
-import Link from "next/link";
 import StatisticsCard from "@/components/dashboard/StatisticsCard";
 import UpgradePremiumCard from "@/components/profile/UpgradePremiumCard";
 import InfoSidebarCard from "@/components/profile/InfoSidebarCard";
 import SafeTipsSidebarCard from "@/components/profile/SafeTipsSidebarCard";
-import MatchList from "@/components/dashboard/MatchList";
-import { ApiResponse, MatchResult, MatchState, UserCardType } from "@/types";
-import api from "@/lib/api";
 import Greeting from "@/components/dashboard/Greeting";
-import ActivityItem from "@/components/profile/ActivityFeedItem";
 import ActivityList from "@/components/dashboard/ActivityList";
+import EventsCalendar from "@/components/profile/EventsCalendar";
+import ProfileList from "@/components/profileList/ProfileList";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import ProfileListTeaser from "@/components/profileList/ProfileListTeaser";
+import Link from "next/link";
 
 const statUsers = [
   "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
@@ -32,64 +27,11 @@ const statUsers = [
 ];
 
 const DashboardPage: React.FC = () => {
-  const { user } = useAuth();
+  const dispatch = useAppDispatch();
 
-  const [newMatches, setNewMatches] = useState<MatchState>({
-    data: null,
-    isLoading: true,
-    error: null,
-  });
-
-  const [preferredMatches, setPreferredMatches] = useState<MatchState>({
-    data: null,
-    isLoading: true,
-    error: null,
-  });
-
-  const fetchPreferredMatches = async (): Promise<void> => {
-    try {
-      const response = await api.get<ApiResponse<MatchResult>>(
-        `${API_ENDPOINTS.PREFERRED_MATCHES_LIST}?limit=5`
-      );
-      setPreferredMatches({
-        data: response?.data?.result as MatchResult,
-        isLoading: false,
-        error: null,
-      });
-    } catch (err: any) {
-      setPreferredMatches({
-        data: null,
-        isLoading: false,
-        error: "Failed to load Preferred matches data",
-      });
-      console.error("Preferred matches fetch error:", err);
-    }
-  };
-
-  const fetchNewMatches = async (): Promise<void> => {
-    try {
-      const response = await api.get<ApiResponse<MatchResult>>(
-        `${API_ENDPOINTS.NEW_MATCHES_LIST}?limit=5`
-      );
-      setNewMatches({
-        data: response?.data?.result as MatchResult,
-        isLoading: false,
-        error: null,
-      });
-    } catch (err: any) {
-      setNewMatches({
-        data: null,
-        isLoading: false,
-        error: "Failed to load New matches data",
-      });
-      console.error("New matches fetch error:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchPreferredMatches();
-    fetchNewMatches();
-  }, []);
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   return (
     <div className="main-container">
@@ -100,7 +42,7 @@ const DashboardPage: React.FC = () => {
 
       <div className="flex">
         <div className="w-[25%] px-2">
-          <div className="mt-5">
+          <div className="mt-5 sticky top-[70px]">
             <div className="py-4">
               <h3 className="font-semibold text-black text-md mb-6">Main</h3>
               <Navigation />
@@ -152,35 +94,40 @@ const DashboardPage: React.FC = () => {
 
             {/* Preferred Matches: Highly compatible profiles (85%+ match) based on 
             advanced algorithms considering lifestyle, values, interests, and detailed preferences. */}
-            <ProfileCard
+
+            <ProfileListTeaser
               title="Preferred Matches"
-              link="/dashboard/preferred-matches"
-              className="mb-5"
-            >
-              <MatchList
-                users={preferredMatches?.data?.result!}
-                isLoading={preferredMatches?.isLoading}
-                error={preferredMatches?.error}
-              />
-            </ProfileCard>
+              endpoint={API_ENDPOINTS.PREFERRED_MATCHES_LIST}
+              viewMoreLink="/dashboard/preferred-matches"
+              itemPerPage={5}
+              showSendInterest={true}
+              showAddToShortlist={true}
+              showRemove={true}
+            />
 
             {/* New Matches: Recently joined profiles that meet 
             your basic criteria like age, location, and education. */}
 
-            <ProfileCard
+            <ProfileListTeaser
               title="New Matches"
-              link="/dashboard/new-matches"
-              className="mb-5"
-            >
-              <MatchList
-                users={newMatches?.data?.result!}
-                isLoading={newMatches?.isLoading}
-                error={newMatches?.error}
-              />
-            </ProfileCard>
+              endpoint={API_ENDPOINTS.NEW_MATCHES_LIST}
+              viewMoreLink="/dashboard/new-matches"
+              itemPerPage={5}
+              showSendInterest={true}
+              showAddToShortlist={true}
+              showRemove={true}
+            />
 
-            <ProfileCard title=" Recent Activities" link="/" className="mb-5">
+            <ProfileCard title="Recent Activities" className="mb-5">
               <ActivityList />
+              <div className="mt-4 pt-4 text-center">
+                <Link
+                  href={"/"}
+                  className="text-slate-500 font-medium text-xs py-2 px-6 rounded-4xl inline-block bg-slate-100 hover:bg-slate-200 transition duration-300"
+                >
+                  View All Activities
+                </Link>
+              </div>
             </ProfileCard>
           </div>
         </div>
@@ -190,17 +137,21 @@ const DashboardPage: React.FC = () => {
               <ProfileCompletionCard />
             </div> */}
 
+            <div className="mb-6">
+              <EventsCalendar />
+            </div>
+
             {!user?.profile?.isPremium && (
-              <div className="mb-3">
+              <div className="mb-6">
                 <UpgradePremiumCard />
               </div>
             )}
 
-            <div className="mb-3">
+            <div className="mb-6">
               <InfoSidebarCard />
             </div>
 
-            <div className="mb-3">
+            <div className="mb-6">
               <SafeTipsSidebarCard />
             </div>
 

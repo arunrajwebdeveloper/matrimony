@@ -2,13 +2,15 @@
 
 import React, { useState, FormEvent, ChangeEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/utils/constants";
 import { LoginCredentials } from "@/types";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import CircleSpinner from "../ui/CircleSpinner";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { loginThunk } from "@/features/auth/authThunks";
+import { clearError } from "@/features/auth/authSlice";
 
 const LoginForm: React.FC = () => {
   const {
@@ -26,21 +28,30 @@ const LoginForm: React.FC = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const { login, isLoading, error, clearError } = useAuth();
+  const dispatch = useAppDispatch();
+  const { isLoading, error, user, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
 
   const emailValue = watch("email");
   const passwordValue = watch("password");
 
   useEffect(() => {
     if (error && (emailValue || passwordValue)) {
-      clearError();
+      dispatch(clearError());
     }
   }, [emailValue, passwordValue]);
 
-  const onSubmit = async (payload: any): Promise<void> => {
-    const result = await login(payload);
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push(ROUTES.DASHBOARD);
+    }
+  }, [isAuthenticated, router]);
 
-    if (result.success) {
+  const onSubmit = async (payload: any): Promise<void> => {
+    const result = await dispatch(loginThunk(payload));
+
+    if (loginThunk.fulfilled.match(result)) {
       router.push(ROUTES.DASHBOARD);
     }
   };
