@@ -220,10 +220,15 @@ export class UserInteractionsController {
     return this.interactionsService.getRelationshipStatus(req.user._id, userId);
   }
 
-  @Get('summary')
+  @Get('interaction-summary')
   async getUserInteractionSummary(@Req() req: any) {
     return this.interactionsService.getUserInteractionSummary(req.user._id);
   }
+
+  // @Get('summary')
+  // async getUserInteractionSummary(@Req() req: any) {
+  //   return this.interactionsService.getUserInteractionSummary(req.user._id);
+  // }
 
   @Get('history')
   async getInteractionHistory(

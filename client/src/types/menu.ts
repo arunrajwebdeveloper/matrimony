@@ -19,4 +19,5 @@ export interface NavigationItemType {
   icon: LucideIcon;
   count: number;
   href: string;
+  key: string;
 }

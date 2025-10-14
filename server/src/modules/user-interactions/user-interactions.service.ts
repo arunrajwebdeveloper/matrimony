@@ -1148,24 +1148,18 @@ export class UserInteractionsService {
 
     if (!userLists) {
       return {
-        shortlisted: 0,
-        blocked: 0,
+        newRequests: 0,
         acceptedRequests: 0,
-        sentMatchRequests: 0,
-        receivedMatchRequests: 0,
-        totalProfileViews: 0,
-        totalProfileViewsGiven: 0,
+        shortlisted: 0,
+        sentRequests: 0,
       };
     }
 
     return {
-      shortlisted: userLists.shortlisted?.length || 0,
-      blocked: userLists.blocked?.length || 0,
-      acceptedRequests: userLists.acceptedRequests?.length || 0,
-      sentMatchRequests: userLists.sentMatchRequests?.length || 0,
-      receivedMatchRequests: userLists.receivedMatchRequests?.length || 0,
-      totalProfileViews: userLists.totalProfileViews || 0,
-      totalProfileViewsGiven: userLists.totalProfileViewsGiven || 0,
+      newRequests: userLists.receivedMatchRequests.length || 0,
+      acceptedRequests: userLists.acceptedRequests.length || 0,
+      shortlisted: userLists.shortlisted.length || 0,
+      sentRequests: userLists.sentMatchRequests.length || 0,
     };
   }
 
