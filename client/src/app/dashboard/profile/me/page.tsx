@@ -66,13 +66,13 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="main-container">
       {/* Breadcrumb */}
-      <div className="py-2">
+      <div className="py-2 sticky top-[70px]">
         <Breadcrumb />
       </div>
 
       <div className="flex">
         <div className="w-[25%] px-2">
-          <div className="mt-5 sticky top-[70px]">
+          <div className="mt-5 sticky top-[122px] sidebar-scroller">
             <div className="py-4">
               {/* <h3 className="font-semibold text-black text-md mb-6">Profile</h3> */}
               <div className="mb-8">
@@ -395,7 +395,7 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
         <div className="w-[25%] px-2">
-          <div className="mt-5">
+          <div className="mt-5 sticky top-[122px] sidebar-scroller">
             {profileData && (
               <div className="mb-3">
                 <ProfileCompletionCard

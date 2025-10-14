@@ -305,13 +305,13 @@ const Page: React.FC = () => {
   return (
     <div className="main-container">
       {/* Breadcrumb */}
-      <div className="py-2">
+      <div className="py-2 sticky top-[70px]">
         <Breadcrumb />
       </div>
 
       <div className="flex">
         <div className="w-[25%] px-2">
-          <div className="mt-5 sticky top-[70px]">
+          <div className="mt-5 sticky top-[122px] sidebar-scroller">
             <div className="py-4">
               <div className="mb-8">
                 <UserSummaryDisplay
