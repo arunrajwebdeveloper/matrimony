@@ -4,6 +4,9 @@ export type InteractionType =
   | "acceptInterest"
   | "declineInterest"
   | "blockUser"
+  | "ignoreUser"
   | "shortlistUser"
   | "removeBlockedUser"
-  | "removeShortlistUser";
+  | "removeShortlistUser"
+  | "removeDeclinedlistUser"
+  | "removeAcceptedlistUser";

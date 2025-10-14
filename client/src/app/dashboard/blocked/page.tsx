@@ -38,7 +38,7 @@ const NewMatchesPage: React.FC = () => {
               title="Blocked Users"
               endpoint={API_ENDPOINTS.GET_BLOCKED_LIST}
               paginationPath="/dashboard/blocked"
-              showRemove={true}
+              showRemoveFromBlocked={true}
             />
           </div>
         </div>

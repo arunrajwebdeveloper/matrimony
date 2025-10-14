@@ -38,7 +38,7 @@ const NewMatchesPage: React.FC = () => {
               title="Accepted Requests"
               endpoint={API_ENDPOINTS.GET_ACCEPTED_REQUESTS}
               paginationPath="/dashboard/accepted-requests"
-              showRemove={true}
+              showRemoveFromAccepted={true}
             />
           </div>
         </div>

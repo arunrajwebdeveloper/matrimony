@@ -81,8 +81,8 @@ export class UserInteractionsController {
   // IGNORE ENDPOINTS
 
   @Post('ignore/:userId')
-  async declinedUser(@Req() req: any, @Param('userId') userId: string) {
-    return this.interactionsService.addToDelinedlist(req.user._id, userId);
+  async ignoreUser(@Req() req: any, @Param('userId') userId: string) {
+    return this.interactionsService.ignoreUser(req.user._id, userId);
   }
 
   // BLOCK ENDPOINTS
@@ -121,6 +121,11 @@ export class UserInteractionsController {
     return this.interactionsService.declineMatchRequest(req.user._id, userId);
   }
 
+  @Post('request/cancel/:userId')
+  async cancelMatchRequest(@Req() req: any, @Param('userId') userId: string) {
+    return this.interactionsService.cancelMatchRequest(req.user._id, userId);
+  }
+
   @Get('request/pending')
   async getReceivedMatchRequests(
     @Req() req: any,
@@ -140,6 +145,17 @@ export class UserInteractionsController {
     @Param('userId') userId: string,
   ) {
     return this.interactionsService.removeFromDeclinedlist(
+      req.user._id,
+      userId,
+    );
+  }
+
+  @Post('accepted/remove/:userId')
+  async removeFromAcceptedlist(
+    @Req() req: any,
+    @Param('userId') userId: string,
+  ) {
+    return this.interactionsService.removeFromAcceptedlist(
       req.user._id,
       userId,
     );

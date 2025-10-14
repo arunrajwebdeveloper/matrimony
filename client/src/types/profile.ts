@@ -100,7 +100,10 @@ export interface MatchListBaseProps {
   showAcceptRequest?: boolean;
   showDeclineRequest?: boolean;
   showAddToShortlist?: boolean;
-  showRemove?: boolean;
+  showRemoveFromDeclined?: boolean;
+  showRemoveFromAccepted?: boolean;
+  showRemoveFromShortlisted?: boolean;
+  showRemoveFromBlocked?: boolean;
   showCancelRequest?: boolean;
   showSendInterest?: boolean;
   showIgnore?: boolean;

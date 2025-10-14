@@ -38,7 +38,7 @@ const NewMatchesPage: React.FC = () => {
               title="Declined Requests"
               endpoint={API_ENDPOINTS.GET_DECLINEDLIST}
               paginationPath="/dashboard/declined-requests"
-              showRemove={true}
+              showRemoveFromDeclined={true}
             />
           </div>
         </div>

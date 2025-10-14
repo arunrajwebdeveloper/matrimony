@@ -32,6 +32,6 @@ export const useInfiniteProfiles = (endpoint: string, limit: number) => {
       return undefined;
     },
 
-    staleTime: 1000 * 60 * 5,
+    // staleTime: 1000 * 60 * 5,
   });
 };

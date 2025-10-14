@@ -37,7 +37,7 @@ export const API_ENDPOINTS = {
   ADD_TO_BLOCKLIST: "/api/user-interactions/block",
   REMOVE_FROM_BLOCKEDLIST: "/api/user-interactions/block/remove",
 
-  IGNORE_PROFILE: "/api/user-interactions/decline",
+  IGNORE_PROFILE: "/api/user-interactions/ignore",
 
   GET_SHORTLIST: "/api/user-interactions/shortlisted",
   GET_BLOCKED_LIST: "/api/user-interactions/blocked",
@@ -47,10 +47,11 @@ export const API_ENDPOINTS = {
   GET_DECLINEDLIST: "/api/user-interactions/declined",
 
   SEND_INTEREST: "/api/user-interactions/request/send",
-  CANCEL_INTEREST_REQUEST: "",
+  CANCEL_INTEREST_REQUEST: "/api/user-interactions/request/cancel",
   ACCEPT_INTEREST: "/api/user-interactions/request/accept",
   DECLINE_INTEREST_REQUEST: "/api/user-interactions/request/decline",
   REMOVE_FROM_DECLINEDLIST: "/api/user-interactions/decline/remove",
+  REMOVE_FROM_ACCEPTEDLIST: "/api/user-interactions/accepted/remove",
 
   PREFERRED_MATCHES_LIST: "/api/user-interactions/preferred",
   NEW_MATCHES_LIST: "/api/user-interactions/new",

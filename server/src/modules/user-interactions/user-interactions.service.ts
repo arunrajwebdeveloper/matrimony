@@ -66,6 +66,7 @@ export class UserInteractionsService {
       ...(userInteractions?.blocked || []),
       ...(userInteractions?.acceptedRequests || []),
       ...(userInteractions?.sentMatchRequests || []),
+      ...(userInteractions?.ignored || []),
     ];
 
     // Build the query based on the user's preferences
@@ -148,6 +149,7 @@ export class UserInteractionsService {
       ...(userInteractions?.blocked || []),
       ...(userInteractions?.acceptedRequests || []),
       ...(userInteractions?.sentMatchRequests || []),
+      ...(userInteractions?.ignored || []),
     ];
 
     // Build query
@@ -491,6 +493,54 @@ export class UserInteractionsService {
     return { message: 'Match request accepted successfully' };
   }
 
+  async cancelMatchRequest(fromUserId: string, toUserId: string) {
+    const session = await this.interactionModel.db.startSession();
+
+    try {
+      await session.withTransaction(async () => {
+        // Find and update the pending match request
+        const matchRequest = await this.interactionModel.findOneAndUpdate(
+          {
+            fromUserId: new Types.ObjectId(fromUserId), // Note: reversed
+            toUserId: new Types.ObjectId(toUserId),
+            interactionType: InteractionType.MATCH_REQUEST_SENT,
+            status: InteractionStatus.PENDING,
+          },
+          { status: InteractionStatus.CANCELLED },
+          { session, new: true },
+        );
+
+        if (!matchRequest) {
+          throw new NotFoundException(
+            'No pending match request found to cancel',
+          );
+        }
+
+        // Update both users' lists
+        await Promise.all([
+          this.interactionListsModel.findOneAndUpdate(
+            { userId: new Types.ObjectId(fromUserId) },
+            {
+              $pull: { sentMatchRequests: new Types.ObjectId(toUserId) },
+            },
+            { session },
+          ),
+          this.interactionListsModel.findOneAndUpdate(
+            { userId: new Types.ObjectId(toUserId) },
+            {
+              $pull: { receivedMatchRequests: new Types.ObjectId(fromUserId) },
+            },
+            { session },
+          ),
+        ]);
+      });
+    } finally {
+      await session.endSession();
+    }
+
+    return { message: 'Match request cancelled successfully' };
+  }
+
   async declineMatchRequest(fromUserId: string, toUserId: string) {
     const session = await this.interactionModel.db.startSession();
 
@@ -525,12 +575,17 @@ export class UserInteractionsService {
         await Promise.all([
           this.interactionListsModel.findOneAndUpdate(
             { userId: new Types.ObjectId(fromUserId) },
-            { $pull: { receivedMatchRequests: new Types.ObjectId(toUserId) } },
+            {
+              $addToSet: { declinedRequests: new Types.ObjectId(toUserId) },
+              $pull: { receivedMatchRequests: new Types.ObjectId(toUserId) },
+            },
             { session },
           ),
           this.interactionListsModel.findOneAndUpdate(
             { userId: new Types.ObjectId(toUserId) },
-            { $pull: { sentMatchRequests: new Types.ObjectId(fromUserId) } },
+            {
+              $pull: { sentMatchRequests: new Types.ObjectId(fromUserId) },
+            },
             { session },
           ),
         ]);
@@ -812,59 +867,59 @@ export class UserInteractionsService {
     };
   }
 
-  async addToDelinedlist(fromUserId: string, toUserId: string) {
-    if (fromUserId === toUserId) {
-      throw new ConflictException('Cannot decline yourself');
-    }
+  // async addToDeclinedlist(fromUserId: string, toUserId: string) {
+  //   if (fromUserId === toUserId) {
+  //     throw new ConflictException('Cannot decline yourself');
+  //   }
 
-    // Check if already shortlisted
-    const existing = await this.interactionModel.findOne({
-      fromUserId: new Types.ObjectId(fromUserId),
-      toUserId: new Types.ObjectId(toUserId),
-      interactionType: InteractionType.DECLINED,
-      status: InteractionStatus.ACTIVE,
-    });
+  //   // Check if already shortlisted
+  //   const existing = await this.interactionModel.findOne({
+  //     fromUserId: new Types.ObjectId(fromUserId),
+  //     toUserId: new Types.ObjectId(toUserId),
+  //     interactionType: InteractionType.DECLINED,
+  //     status: InteractionStatus.ACTIVE,
+  //   });
 
-    if (existing) {
-      throw new ConflictException('User already declined');
-    }
+  //   if (existing) {
+  //     throw new ConflictException('User already declined');
+  //   }
 
-    // Check if user is blocked
-    const isBlocked = await this.isUserBlocked(fromUserId, toUserId);
-    if (isBlocked) {
-      throw new ForbiddenException('Cannot decline blocked user');
-    }
+  //   // Check if user is blocked
+  //   const isBlocked = await this.isUserBlocked(fromUserId, toUserId);
+  //   if (isBlocked) {
+  //     throw new ForbiddenException('Cannot decline blocked user');
+  //   }
 
-    const session = await this.interactionModel.db.startSession();
+  //   const session = await this.interactionModel.db.startSession();
 
-    try {
-      await session.withTransaction(async () => {
-        // Create interaction record
+  //   try {
+  //     await session.withTransaction(async () => {
+  //       // Create interaction record
 
-        const interaction = new this.interactionModel({
-          fromUserId: new Types.ObjectId(fromUserId),
-          toUserId: new Types.ObjectId(toUserId),
-          interactionType: InteractionType.DECLINED,
-          status: InteractionStatus.ACTIVE,
-        });
-        await interaction.save({ session });
+  //       const interaction = new this.interactionModel({
+  //         fromUserId: new Types.ObjectId(fromUserId),
+  //         toUserId: new Types.ObjectId(toUserId),
+  //         interactionType: InteractionType.DECLINED,
+  //         status: InteractionStatus.ACTIVE,
+  //       });
+  //       await interaction.save({ session });
 
-        // Update user lists
-        await this.interactionListsModel.findOneAndUpdate(
-          { userId: new Types.ObjectId(fromUserId) },
-          {
-            $addToSet: { declinedRequests: new Types.ObjectId(toUserId) },
-            $setOnInsert: { userId: new Types.ObjectId(fromUserId) },
-          },
-          { upsert: true, session },
-        );
-      });
-    } finally {
-      await session.endSession();
-    }
+  //       // Update user lists
+  //       await this.interactionListsModel.findOneAndUpdate(
+  //         { userId: new Types.ObjectId(fromUserId) },
+  //         {
+  //           $addToSet: { declinedRequests: new Types.ObjectId(toUserId) },
+  //           $setOnInsert: { userId: new Types.ObjectId(fromUserId) },
+  //         },
+  //         { upsert: true, session },
+  //       );
+  //     });
+  //   } finally {
+  //     await session.endSession();
+  //   }
 
-    return { message: 'User added to declinedlist successfully' };
-  }
+  //   return { message: 'User added to declinedlist successfully' };
+  // }
 
   async removeFromShortlist(fromUserId: string, toUserId: string) {
     const session = await this.interactionModel.db.startSession();
@@ -906,6 +961,34 @@ export class UserInteractionsService {
     return { message: 'User removed from shortlist successfully' };
   }
 
+  async ignoreUser(fromUserId: string, toUserId: string) {
+    const session = await this.interactionModel.db.startSession();
+
+    try {
+      await session.withTransaction(async () => {
+        // Create ignore interaction
+        const interaction = new this.interactionModel({
+          fromUserId: new Types.ObjectId(fromUserId),
+          toUserId: new Types.ObjectId(toUserId),
+          interactionType: InteractionType.IGNORE,
+          status: InteractionStatus.ACTIVE,
+        });
+        await interaction.save({ session });
+
+        // Update user lists
+        await this.interactionListsModel.findOneAndUpdate(
+          { userId: new Types.ObjectId(fromUserId) },
+          { $addToSet: { ignored: new Types.ObjectId(toUserId) } },
+          { session },
+        );
+      });
+    } finally {
+      await session.endSession();
+    }
+
+    return { message: 'User added to ignored successfully' };
+  }
+
   async removeFromDeclinedlist(fromUserId: string, toUserId: string) {
     const session = await this.interactionModel.db.startSession();
 
@@ -944,6 +1027,54 @@ export class UserInteractionsService {
     }
 
     return { message: 'User removed from declinedlist successfully' };
+  }
+
+  async removeFromAcceptedlist(fromUserId: string, toUserId: string) {
+    const session = await this.interactionModel.db.startSession();
+
+    try {
+      await session.withTransaction(async () => {
+        // Update existing shortlist interaction to inactive
+        await this.interactionModel.findOneAndUpdate(
+          {
+            fromUserId: new Types.ObjectId(fromUserId),
+            toUserId: new Types.ObjectId(toUserId),
+            interactionType: InteractionType.MATCH_REQUEST_ACCEPTED,
+            status: InteractionStatus.ACTIVE,
+          },
+          { status: InteractionStatus.EXPIRED },
+          { session },
+        );
+
+        // Create removal interaction
+        const interaction = new this.interactionModel({
+          fromUserId: new Types.ObjectId(fromUserId),
+          toUserId: new Types.ObjectId(toUserId),
+          interactionType: InteractionType.REMOVED_FROM_ACCEPTEDLIST,
+          status: InteractionStatus.ACTIVE,
+        });
+        await interaction.save({ session });
+
+        // Update user lists
+        await Promise.all([
+          await this.interactionListsModel.findOneAndUpdate(
+            { userId: new Types.ObjectId(fromUserId) },
+            { $pull: { acceptedRequests: new Types.ObjectId(toUserId) } },
+            { session },
+          ),
+
+          await this.interactionListsModel.findOneAndUpdate(
+            { userId: new Types.ObjectId(toUserId) },
+            { $pull: { acceptedRequests: new Types.ObjectId(fromUserId) } },
+            { session },
+          ),
+        ]);
+      });
+    } finally {
+      await session.endSession();
+    }
+
+    return { message: 'User removed from acceptedlist successfully' };
   }
 
   async getDeclined(userId: string, page = 1, limit = 20) {

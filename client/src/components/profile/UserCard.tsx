@@ -6,9 +6,27 @@ import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import { ROUTES } from "@/utils/constants";
 import { Ban, Bookmark, CircleCheck, Eye, Heart, Trash2 } from "lucide-react";
 import Avatar from "./Avatar";
-import { useAppSelector } from "@/hooks/hooks";
 import { useInteraction } from "@/features/interactions/useInteraction";
 import CircleSpinner from "../ui/CircleSpinner";
+import { InteractionType } from "@/features/interactions/types";
+
+type InteractionReturn = ReturnType<typeof useInteraction>;
+
+type UseUserInteractionsReturn = {
+  [K in InteractionType]: InteractionReturn;
+} & {
+  isSendLoading: boolean;
+  isCancelRequestLoading: boolean;
+  isAcceptLoading: boolean;
+  isBlockLoading: boolean;
+  isDeclineLoading: boolean;
+  isShortlistLoading: boolean;
+  isRemoveBlockLoading: boolean;
+  isRemoveShortlistLoading: boolean;
+  isRemoveDeclinedlistLoading: boolean;
+  isRemoveAcceptedlistLoading: boolean;
+  isIgnoreLoading: boolean;
+};
 
 function UserCard(props: MatchCardProps) {
   const {
@@ -24,37 +42,96 @@ function UserCard(props: MatchCardProps) {
     isOnline = false,
     profilePicture,
     showAddToShortlist,
-    showRemove,
     showCancelRequest,
     showAcceptRequest,
     showDeclineRequest,
     showSendInterest,
     showIgnore,
+    showRemoveFromDeclined,
+    showRemoveFromAccepted,
+    showRemoveFromShortlisted,
+    showRemoveFromBlocked,
   } = props;
 
   const fullName = `${firstName ?? ""} ${lastName ?? ""}`;
 
-  const send = useInteraction("sendInterest");
-  const cancelRequest = useInteraction("cancelSentInterest");
-  const accept = useInteraction("acceptInterest");
-  const block = useInteraction("blockUser");
-  const decline = useInteraction("declineInterest");
-  const shortlist = useInteraction("shortlistUser");
-  const removeBlock = useInteraction("removeBlockedUser");
-  const removeShortlist = useInteraction("removeShortlistUser");
+  function useUserInteractions(userId: string): UseUserInteractionsReturn {
+    const sendInterest = useInteraction("sendInterest");
+    const cancelSentInterest = useInteraction("cancelSentInterest");
+    const acceptInterest = useInteraction("acceptInterest");
+    const blockUser = useInteraction("blockUser");
+    const declineInterest = useInteraction("declineInterest");
+    const shortlistUser = useInteraction("shortlistUser");
+    const removeBlockedUser = useInteraction("removeBlockedUser");
+    const removeShortlistUser = useInteraction("removeShortlistUser");
+    const removeDeclinedlistUser = useInteraction("removeDeclinedlistUser");
+    const removeAcceptedlistUser = useInteraction("removeAcceptedlistUser");
+    const ignoreUser = useInteraction("ignoreUser");
 
-  const isSending = send.isPending && send.variables === userId;
-  const isCancellingRequest =
-    cancelRequest.isPending && cancelRequest.variables === userId;
-  const isAccepting = accept.isPending && accept.variables === userId;
-  const isBlockLoading = block.isPending && block.variables === userId;
-  const isDeclineLoading = decline.isPending && decline.variables === userId;
-  const isShortlistLoading =
-    shortlist.isPending && shortlist.variables === userId;
-  const isRemoveBlockLoading =
-    removeBlock.isPending && removeBlock.variables === userId;
-  const isRemoveShortlistLoading =
-    removeShortlist.isPending && removeShortlist.variables === userId;
+    return {
+      sendInterest,
+      cancelSentInterest,
+      acceptInterest,
+      blockUser,
+      declineInterest,
+      shortlistUser,
+      removeBlockedUser,
+      removeShortlistUser,
+      removeDeclinedlistUser,
+      removeAcceptedlistUser,
+      ignoreUser,
+
+      isSendLoading:
+        sendInterest.isPending && sendInterest.variables === userId,
+      isCancelRequestLoading:
+        cancelSentInterest.isPending && cancelSentInterest.variables === userId,
+      isAcceptLoading:
+        acceptInterest.isPending && acceptInterest.variables === userId,
+      isBlockLoading: blockUser.isPending && blockUser.variables === userId,
+      isDeclineLoading:
+        declineInterest.isPending && declineInterest.variables === userId,
+      isShortlistLoading:
+        shortlistUser.isPending && shortlistUser.variables === userId,
+      isRemoveBlockLoading:
+        removeBlockedUser.isPending && removeBlockedUser.variables === userId,
+      isRemoveShortlistLoading:
+        removeShortlistUser.isPending &&
+        removeShortlistUser.variables === userId,
+      isRemoveDeclinedlistLoading:
+        removeDeclinedlistUser.isPending &&
+        removeDeclinedlistUser.variables === userId,
+      isRemoveAcceptedlistLoading:
+        removeAcceptedlistUser.isPending &&
+        removeAcceptedlistUser.variables === userId,
+      isIgnoreLoading: ignoreUser.isPending && ignoreUser.variables === userId,
+    };
+  }
+
+  const {
+    sendInterest,
+    cancelSentInterest,
+    acceptInterest,
+    blockUser,
+    declineInterest,
+    shortlistUser,
+    removeBlockedUser,
+    removeShortlistUser,
+    removeDeclinedlistUser,
+    removeAcceptedlistUser,
+    ignoreUser,
+
+    isSendLoading,
+    isCancelRequestLoading,
+    isAcceptLoading,
+    isBlockLoading,
+    isDeclineLoading,
+    isShortlistLoading,
+    isRemoveBlockLoading,
+    isRemoveShortlistLoading,
+    isRemoveDeclinedlistLoading,
+    isRemoveAcceptedlistLoading,
+    isIgnoreLoading,
+  } = useUserInteractions(userId);
 
   return (
     <div className="flex overflow-hidden group">
@@ -93,82 +170,141 @@ function UserCard(props: MatchCardProps) {
         <div className="flex items-center gap-2 mt-3">
           {showSendInterest && (
             <button
-              onClick={() => send.mutate(userId!?.toString())}
-              disabled={isSending}
+              onClick={() => sendInterest.mutate(userId!?.toString())}
+              disabled={isSendLoading}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-green-200 text-green-800 hover:bg-green-300 transition-colors duration-300 rounded-sm gap-1"
             >
-              {isSending ? (
+              {isSendLoading ? (
                 <CircleSpinner size={14} />
               ) : (
                 <Heart size={14} className="flex-1" />
               )}
-              <span className="whitespace-nowrap">
-                {isSending ? "Sending..." : "Send Interest"}
-              </span>
+              <span className="whitespace-nowrap">Send Interest</span>
             </button>
           )}
           {showAcceptRequest && (
             <button
-              // onClick={() => onAcceptRequest?.(userId!?.toString())}
+              onClick={() => acceptInterest.mutate(userId!?.toString())}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-green-200 text-green-800 hover:bg-green-300 transition-colors duration-300 rounded-sm gap-1"
+              disabled={isAcceptLoading}
             >
-              <CircleCheck size={14} className="flex-1" />
+              {isAcceptLoading ? (
+                <CircleSpinner size={14} />
+              ) : (
+                <CircleCheck size={14} className="flex-1" />
+              )}
               <span className="whitespace-nowrap">Accept Request</span>
             </button>
           )}
           {showDeclineRequest && (
             <button
-              // onClick={() => onDeclineRequest?.(userId!?.toString())}
+              onClick={() => declineInterest.mutate(userId!?.toString())}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
+              disabled={isDeclineLoading}
             >
-              <Ban size={14} className="flex-1" />
-              <span className="whitespace-nowrap">Decline Request</span>
-            </button>
-          )}
-          {showRemove && (
-            <button
-              // onClick={() => onRemove?.(userId!?.toString())}
-              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-200 text-red-800 hover:bg-red-300 transition-colors duration-300 rounded-sm gap-1"
-            >
-              <Trash2 size={14} className="flex-1" />
-              <span className="whitespace-nowrap">Remove</span>
-            </button>
-          )}
-          {showCancelRequest && (
-            <button
-              // onClick={() => cancelRequest.mutate(userId!?.toString())}
-              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
-            >
-              {isCancellingRequest ? (
+              {isDeclineLoading ? (
                 <CircleSpinner size={14} />
               ) : (
                 <Ban size={14} className="flex-1" />
               )}
-              <span className="whitespace-nowrap">
-                {isCancellingRequest ? "Cancelling..." : "Cancel Request"}
-              </span>
+              <span className="whitespace-nowrap">Decline Request</span>
+            </button>
+          )}
+          {showCancelRequest && (
+            <button
+              onClick={() => cancelSentInterest.mutate(userId!?.toString())}
+              disabled={isCancelRequestLoading}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              {isCancelRequestLoading ? (
+                <CircleSpinner size={14} />
+              ) : (
+                <Ban size={14} className="flex-1" />
+              )}
+              <span className="whitespace-nowrap">Cancel Request</span>
             </button>
           )}
           {showIgnore && (
             <button
-              // onClick={() => onCancelRequest?.(userId!?.toString())}
+              onClick={() => ignoreUser.mutate(userId!?.toString())}
+              disabled={isIgnoreLoading}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-slate-200 text-slate-800 hover:bg-slate-300 transition-colors duration-300 rounded-sm gap-1"
             >
-              <Ban size={14} className="flex-1" />
+              {isIgnoreLoading ? (
+                <CircleSpinner size={14} />
+              ) : (
+                <Ban size={14} className="flex-1" />
+              )}
               <span className="whitespace-nowrap">Ignore</span>
+            </button>
+          )}
+          {showRemoveFromDeclined && (
+            <button
+              onClick={() => removeDeclinedlistUser.mutate(userId!?.toString())}
+              disabled={isRemoveDeclinedlistLoading}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-200 text-red-800 hover:bg-red-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              {isRemoveDeclinedlistLoading ? (
+                <CircleSpinner size={14} />
+              ) : (
+                <Trash2 size={14} className="flex-1" />
+              )}
+              <span className="whitespace-nowrap">Remove</span>
+            </button>
+          )}
+          {showRemoveFromAccepted && (
+            <button
+              onClick={() => removeAcceptedlistUser.mutate(userId!?.toString())}
+              disabled={isRemoveAcceptedlistLoading}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-200 text-red-800 hover:bg-red-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              {isRemoveAcceptedlistLoading ? (
+                <CircleSpinner size={14} />
+              ) : (
+                <Trash2 size={14} className="flex-1" />
+              )}
+              <span className="whitespace-nowrap">Remove</span>
+            </button>
+          )}
+          {showRemoveFromShortlisted && (
+            <button
+              onClick={() => removeShortlistUser.mutate(userId!?.toString())}
+              disabled={isRemoveShortlistLoading}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-200 text-red-800 hover:bg-red-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              {isRemoveShortlistLoading ? (
+                <CircleSpinner size={14} />
+              ) : (
+                <Trash2 size={14} className="flex-1" />
+              )}
+              <span className="whitespace-nowrap">Remove</span>
+            </button>
+          )}
+          {showRemoveFromBlocked && (
+            <button
+              onClick={() => removeBlockedUser.mutate(userId!?.toString())}
+              disabled={isRemoveBlockLoading}
+              className="flex items-center text-xs cursor-pointer py-1 px-2 bg-red-200 text-red-800 hover:bg-red-300 transition-colors duration-300 rounded-sm gap-1"
+            >
+              {isRemoveBlockLoading ? (
+                <CircleSpinner size={14} />
+              ) : (
+                <Trash2 size={14} className="flex-1" />
+              )}
+              <span className="whitespace-nowrap">Remove</span>
             </button>
           )}
           {showAddToShortlist && (
             <button
-              onClick={() => shortlist.mutate(userId!?.toString())}
+              onClick={() => shortlistUser.mutate(userId!?.toString())}
               className="flex items-center text-xs cursor-pointer py-1 px-2 bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors duration-300 rounded-sm gap-1"
+              disabled={isShortlistLoading}
             >
               {isShortlistLoading ? (
                 <CircleSpinner size={14} />
               ) : (
                 <Bookmark size={14} className="flex-1" />
               )}
-              {/* <span className="whitespace-nowrap">Add to Shortlist</span> */}
             </button>
           )}
         </div>

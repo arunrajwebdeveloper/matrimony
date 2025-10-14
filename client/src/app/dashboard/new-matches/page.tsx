@@ -41,7 +41,7 @@ const NewMatchesPage: React.FC = () => {
               paginationPath="/dashboard/new-matches"
               showSendInterest={true}
               showAddToShortlist={true}
-              showRemove={true}
+              showIgnore={true}
             />
           </div>
         </div>

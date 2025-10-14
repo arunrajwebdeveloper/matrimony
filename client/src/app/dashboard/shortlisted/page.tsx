@@ -38,7 +38,7 @@ const NewMatchesPage: React.FC = () => {
               title="Shortlisted"
               endpoint={API_ENDPOINTS.GET_SHORTLIST}
               paginationPath="/dashboard/shortlisted"
-              showRemove={true}
+              showRemoveFromShortlisted={true}
             />
           </div>
         </div>

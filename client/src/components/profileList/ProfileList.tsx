@@ -101,7 +101,7 @@ function ProfileList({
   // Destructure all necessary infinite query properties
   const {
     data,
-    isPending, // v5 status for initial loading
+    isPending, // status for initial loading
     error,
     fetchNextPage,
     hasNextPage,

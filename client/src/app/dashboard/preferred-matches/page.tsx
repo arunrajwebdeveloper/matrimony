@@ -45,7 +45,7 @@ const PreferredMatchesPage: React.FC = () => {
               paginationPath="/dashboard/preferred-matches"
               showSendInterest={true}
               showAddToShortlist={true}
-              showRemove={true}
+              showIgnore={true}
             />
           </div>
         </div>

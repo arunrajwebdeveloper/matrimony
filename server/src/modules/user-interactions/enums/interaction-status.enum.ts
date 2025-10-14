@@ -4,4 +4,5 @@ export enum InteractionStatus {
   DECLINED = 'declined',
   EXPIRED = 'expired',
   ACTIVE = 'active',
+  CANCELLED = 'cancelled',
 }

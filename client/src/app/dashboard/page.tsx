@@ -102,7 +102,7 @@ const DashboardPage: React.FC = () => {
               itemPerPage={5}
               showSendInterest={true}
               showAddToShortlist={true}
-              showRemove={true}
+              showIgnore={true}
             />
 
             {/* New Matches: Recently joined profiles that meet 
@@ -115,7 +115,7 @@ const DashboardPage: React.FC = () => {
               itemPerPage={5}
               showSendInterest={true}
               showAddToShortlist={true}
-              showRemove={true}
+              showIgnore={true}
             />
 
             <ProfileCard title="Recent Activities" className="mb-5">
