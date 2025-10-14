@@ -12,12 +12,17 @@ import {
   Settings2,
   Image,
   ImagePlus,
+  Link,
+  Bug,
+  CircleAlert,
 } from "lucide-react";
 import OnlineStatusDot from "@/components/profile/OnlineStatusDot";
 import { User, UserProfile } from "@/types";
 import { dateOfBirthFormat } from "@/utils/dateOfBirthFormat";
 import MoreDropdown from "../dropdowns/MoreDropdown";
 import Avatar from "./Avatar";
+import { usePathname } from "next/navigation";
+import { useToast } from "@/contexts/ToastScope";
 
 function ProfileUserCard({
   profileData,
@@ -28,36 +33,52 @@ function ProfileUserCard({
   cover: string;
   currentUser: User | null;
 }) {
+  const pathname = usePathname();
+  const { showSuccess } = useToast();
+
   const isCurrentUser = currentUser?.profileId === profileData?.profileId;
+
+  const handleCopy = async () => {
+    const fullUrl = `${window.location.origin}${pathname}`;
+    try {
+      await navigator.clipboard.writeText(fullUrl);
+      showSuccess("Profile link copied!");
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
 
   const moreOptions = [
     {
       label: "Copy profile link",
-      action: () => {
-        console.log("Copy profile link");
-      },
+      icon: Link,
+      action: handleCopy,
       isShow: true,
     },
     {
       label: "Block",
+      icon: Ban,
       action: () => {
-        console.log("Block");
+        showSuccess("Block option will add soon!");
       },
       isShow: !isCurrentUser,
     },
     {
       label: "Report",
+      icon: CircleAlert,
       action: () => {
-        console.log("Report");
+        showSuccess("Report option will add soon!");
       },
       isShow: !isCurrentUser,
     },
     {
       label: "Report a bug",
+      icon: Bug,
       action: () => {
-        console.log("Report a bug");
+        showSuccess("Report a bug option will add soon!");
       },
       isShow: true,
+      className: "text-red-400 hover:bg-red-50 hover:text-red-500",
     },
   ];
 
@@ -121,32 +142,34 @@ function ProfileUserCard({
           )}
         </div>
       </div>
-      {!isCurrentUser && (
-        <div className="flex items-center justify-center gap-3 mt-6">
-          <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-rose-600 text-white cursor-pointer transition-colors hover:bg-rose-500">
-            <HeartIcon size={18} />
-            <span>Send Interest</span>
-          </button>
-          <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-emerald-600 text-white cursor-pointer transition-colors hover:bg-emerald-500">
-            <Mail size={18} />
-            <span>Send Message</span>
-          </button>
-          <MoreDropdown options={moreOptions} />
-        </div>
-      )}
-      {isCurrentUser && (
-        <div className="flex items-center justify-center gap-3 mt-6">
-          <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-blue-600 text-white cursor-pointer transition-colors hover:bg-blue-500">
-            <Edit size={18} />
-            <span>Edit profile</span>
-          </button>
-          <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-slate-100 text-slate-600 cursor-pointer transition-colors hover:bg-slate-200">
-            <Settings2 size={18} />
-            <span>Settings</span>
-          </button>
-          <MoreDropdown options={moreOptions} />
-        </div>
-      )}
+
+      <div className="flex items-center justify-center gap-3 mt-6">
+        {!isCurrentUser && (
+          <>
+            <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-rose-600 text-white cursor-pointer transition-colors hover:bg-rose-500">
+              <HeartIcon size={18} />
+              <span>Send Interest</span>
+            </button>
+            <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-emerald-600 text-white cursor-pointer transition-colors hover:bg-emerald-500">
+              <Mail size={18} />
+              <span>Send Message</span>
+            </button>
+          </>
+        )}
+        {isCurrentUser && (
+          <>
+            <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-blue-600 text-white cursor-pointer transition-colors hover:bg-blue-500">
+              <Edit size={18} />
+              <span>Edit profile</span>
+            </button>
+            <button className="h-[36px] px-4 font-medium text-xs flex items-center gap-2 rounded bg-slate-100 text-slate-600 cursor-pointer transition-colors hover:bg-slate-200">
+              <Settings2 size={18} />
+              <span>Settings</span>
+            </button>
+          </>
+        )}
+        <MoreDropdown options={moreOptions} />
+      </div>
     </div>
   );
 }

@@ -1,10 +1,12 @@
 import React, { useState, useRef, useLayoutEffect } from "react";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, LucideIcon } from "lucide-react";
 
 interface Options {
   label: string;
+  icon: LucideIcon;
   action: () => void;
   isShow: boolean;
+  className?: string;
 }
 
 const MoreDropdown = ({ options }: { options: Options[] }) => {
@@ -94,20 +96,30 @@ const MoreDropdown = ({ options }: { options: Options[] }) => {
               ${isTopPosition ? "bottom-full mb-2" : "mt-2 top-full"}
             `}
         >
-          <div className="py-1" role="none">
-            {options?.map(({ label, action, isShow }) => {
-              if (!isShow) return null;
+          <div className="py-2 space-y-1" role="none">
+            {options?.map(
+              ({ label, action, isShow, className, icon: Icon }) => {
+                if (!isShow) return null;
 
-              return (
-                <a
-                  key={`menu-option-${label}`}
-                  className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
-                  onClick={action}
-                >
-                  {label}
-                </a>
-              );
-            })}
+                return (
+                  <a
+                    key={`menu-option-${label}`}
+                    className={`flex whitespace-nowrap cursor-pointer items-center gap-2 px-4 py-2 text-sm transition-colors duration-300 ${
+                      className
+                        ? className
+                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    }`}
+                    onClick={() => {
+                      action();
+                      toggleMenu();
+                    }}
+                  >
+                    <Icon size={18} />
+                    <span>{label}</span>
+                  </a>
+                );
+              }
+            )}
           </div>
         </div>
       )}
