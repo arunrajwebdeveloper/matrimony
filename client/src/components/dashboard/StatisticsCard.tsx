@@ -52,7 +52,7 @@ function StatisticsCard({
       </span>
       {users && users?.length !== 0 && (
         <div className="flex items-center mt-6">
-          {users?.slice(0, 5)?.map((photo) => {
+          {users?.map((photo) => {
             return (
               <img
                 key={photo}

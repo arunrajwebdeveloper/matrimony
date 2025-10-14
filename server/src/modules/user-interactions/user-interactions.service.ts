@@ -1057,6 +1057,28 @@ export class UserInteractionsService {
     return { message: 'User removed from acceptedlist successfully' };
   }
 
+  async getUserInteractionSummary(userId: string) {
+    const userLists = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
+
+    if (!userLists) {
+      return {
+        newRequests: 0,
+        acceptedRequests: 0,
+        shortlisted: 0,
+        sentRequests: 0,
+      };
+    }
+
+    return {
+      newRequests: userLists.receivedMatchRequests.length || 0,
+      acceptedRequests: userLists.acceptedRequests.length || 0,
+      shortlisted: userLists.shortlisted.length || 0,
+      sentRequests: userLists.sentMatchRequests.length || 0,
+    };
+  }
+
   async getDeclined(userId: string, page = 1, limit = 20) {
     const userInteractions = await this.interactionListsModel.findOne({
       userId: new Types.ObjectId(userId),
@@ -1095,7 +1117,84 @@ export class UserInteractionsService {
     };
   }
 
+  async getUserDashboardStats(userId: string) {
+    const userObjectId = new Types.ObjectId(userId);
+
+    // Fetch user interaction lists
+    const userLists = await this.interactionListsModel
+      .findOne({ userId: userObjectId })
+      .populate([
+        {
+          path: 'shortlisted',
+          select: 'profile',
+          populate: {
+            path: 'profile',
+            select: 'profilePicture',
+          },
+          options: { limit: 5 },
+        },
+        {
+          path: 'receivedMatchRequests',
+          select: 'profile',
+          populate: {
+            path: 'profile',
+            select: 'profilePicture',
+          },
+          options: { limit: 5 },
+        },
+      ])
+      .lean();
+
+    // Example message count — assuming you have a message model
+    // const unreadMessagesCount = await this.messageModel.countDocuments({
+    //   receiverId: userObjectId,
+    //   isRead: false,
+    // });
+
+    // Example profile views count — if you log views per week
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    // const profileViewsThisWeek = await this.profileViewModel.countDocuments({
+    //   viewedUserId: userObjectId,
+    //   createdAt: { $gte: oneWeekAgo },
+    // });
+
+    const shortlisted = {
+      count: userLists?.shortlisted?.length || 0,
+      avatars:
+        userLists?.shortlisted
+          ?.map((u: any) => u.profile?.profilePicture)
+          ?.filter(Boolean) || [],
+    };
+
+    const receivedMatches = {
+      count: userLists?.receivedMatchRequests?.length || 0,
+      avatars:
+        userLists?.receivedMatchRequests
+          ?.map((u: any) => u.profile?.profilePicture)
+          ?.filter(Boolean) || [],
+    };
+
+    const profileViews = {
+      count: 35,
+      avatars: [],
+    };
+    const newMessages = {
+      count: 28,
+      avatars: [],
+    };
+
+    return {
+      profileViews,
+      newMessages,
+      shortlisted,
+      receivedMatches,
+    };
+  }
+
   // HELPER METHODS
+
   async isUserBlocked(userId1: string, userId2: string): Promise<boolean> {
     const blocked = await this.interactionModel.findOne({
       $or: [
@@ -1175,29 +1274,8 @@ export class UserInteractionsService {
     return { status: 'none' };
   }
 
-  async getUserInteractionSummary(userId: string) {
-    const userLists = await this.interactionListsModel.findOne({
-      userId: new Types.ObjectId(userId),
-    });
-
-    if (!userLists) {
-      return {
-        newRequests: 0,
-        acceptedRequests: 0,
-        shortlisted: 0,
-        sentRequests: 0,
-      };
-    }
-
-    return {
-      newRequests: userLists.receivedMatchRequests.length || 0,
-      acceptedRequests: userLists.acceptedRequests.length || 0,
-      shortlisted: userLists.shortlisted.length || 0,
-      sentRequests: userLists.sentMatchRequests.length || 0,
-    };
-  }
-
   // ANALYTICS METHODS
+
   async getInteractionHistory(userId: string, page = 1, limit = 50) {
     const skip = (page - 1) * limit;
 

@@ -225,10 +225,10 @@ export class UserInteractionsController {
     return this.interactionsService.getUserInteractionSummary(req.user._id);
   }
 
-  // @Get('summary')
-  // async getUserInteractionSummary(@Req() req: any) {
-  //   return this.interactionsService.getUserInteractionSummary(req.user._id);
-  // }
+  @Get('dashboard-summary')
+  async getUserDashboardStats(@Req() req: any) {
+    return this.interactionsService.getUserDashboardStats(req.user._id);
+  }
 
   @Get('history')
   async getInteractionHistory(
