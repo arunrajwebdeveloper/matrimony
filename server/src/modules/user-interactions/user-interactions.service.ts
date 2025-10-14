@@ -867,60 +867,6 @@ export class UserInteractionsService {
     };
   }
 
-  // async addToDeclinedlist(fromUserId: string, toUserId: string) {
-  //   if (fromUserId === toUserId) {
-  //     throw new ConflictException('Cannot decline yourself');
-  //   }
-
-  //   // Check if already shortlisted
-  //   const existing = await this.interactionModel.findOne({
-  //     fromUserId: new Types.ObjectId(fromUserId),
-  //     toUserId: new Types.ObjectId(toUserId),
-  //     interactionType: InteractionType.DECLINED,
-  //     status: InteractionStatus.ACTIVE,
-  //   });
-
-  //   if (existing) {
-  //     throw new ConflictException('User already declined');
-  //   }
-
-  //   // Check if user is blocked
-  //   const isBlocked = await this.isUserBlocked(fromUserId, toUserId);
-  //   if (isBlocked) {
-  //     throw new ForbiddenException('Cannot decline blocked user');
-  //   }
-
-  //   const session = await this.interactionModel.db.startSession();
-
-  //   try {
-  //     await session.withTransaction(async () => {
-  //       // Create interaction record
-
-  //       const interaction = new this.interactionModel({
-  //         fromUserId: new Types.ObjectId(fromUserId),
-  //         toUserId: new Types.ObjectId(toUserId),
-  //         interactionType: InteractionType.DECLINED,
-  //         status: InteractionStatus.ACTIVE,
-  //       });
-  //       await interaction.save({ session });
-
-  //       // Update user lists
-  //       await this.interactionListsModel.findOneAndUpdate(
-  //         { userId: new Types.ObjectId(fromUserId) },
-  //         {
-  //           $addToSet: { declinedRequests: new Types.ObjectId(toUserId) },
-  //           $setOnInsert: { userId: new Types.ObjectId(fromUserId) },
-  //         },
-  //         { upsert: true, session },
-  //       );
-  //     });
-  //   } finally {
-  //     await session.endSession();
-  //   }
-
-  //   return { message: 'User added to declinedlist successfully' };
-  // }
-
   async removeFromShortlist(fromUserId: string, toUserId: string) {
     const session = await this.interactionModel.db.startSession();
 
