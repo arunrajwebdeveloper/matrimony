@@ -30,12 +30,42 @@ function ProfileUserCard({
 }) {
   const isCurrentUser = currentUser?.profileId === profileData?.profileId;
 
+  const moreOptions = [
+    {
+      label: "Copy profile link",
+      action: () => {
+        console.log("Copy profile link");
+      },
+      isShow: true,
+    },
+    {
+      label: "Block",
+      action: () => {
+        console.log("Block");
+      },
+      isShow: !isCurrentUser,
+    },
+    {
+      label: "Report",
+      action: () => {
+        console.log("Report");
+      },
+      isShow: !isCurrentUser,
+    },
+    {
+      label: "Report a bug",
+      action: () => {
+        console.log("Report a bug");
+      },
+      isShow: true,
+    },
+  ];
+
   return (
     <div>
       <div className="w-full h-[240px] overflow-hidden relative group bg-slate-500 rounded-2xl">
         <img
           className="w-full h-[240px] object-cover rounded-2xl"
-          // src={cover}
           src={profileData?.coverImage ?? cover ?? ""}
           alt=""
         />
@@ -101,7 +131,7 @@ function ProfileUserCard({
             <Mail size={18} />
             <span>Send Message</span>
           </button>
-          <MoreDropdown />
+          <MoreDropdown options={moreOptions} />
         </div>
       )}
       {isCurrentUser && (
@@ -114,7 +144,7 @@ function ProfileUserCard({
             <Settings2 size={18} />
             <span>Settings</span>
           </button>
-          <MoreDropdown />
+          <MoreDropdown options={moreOptions} />
         </div>
       )}
     </div>

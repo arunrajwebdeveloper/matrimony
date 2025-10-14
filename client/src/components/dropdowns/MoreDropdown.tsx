@@ -1,7 +1,13 @@
 import React, { useState, useRef, useLayoutEffect } from "react";
 import { Ellipsis } from "lucide-react";
 
-const MoreDropdown: React.FC = () => {
+interface Options {
+  label: string;
+  action: () => void;
+  isShow: boolean;
+}
+
+const MoreDropdown = ({ options }: { options: Options[] }) => {
   // State to track if the menu is open or closed, explicitly typed as boolean
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // State to determine if the menu should be positioned to open upwards, explicitly typed as boolean
@@ -80,7 +86,7 @@ const MoreDropdown: React.FC = () => {
       </button>
 
       {/* The menu dropdown */}
-      {isOpen && (
+      {isOpen && options?.length !== 0 && (
         <div
           ref={menuRef}
           className={`
@@ -89,38 +95,19 @@ const MoreDropdown: React.FC = () => {
             `}
         >
           <div className="py-1" role="none">
-            <a
-              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
-              onClick={() => {
-                setIsOpen(false);
-              }}
-            >
-              Copy profile link
-            </a>
-            <a
-              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
-              onClick={() => {
-                setIsOpen(false);
-              }}
-            >
-              Block
-            </a>
-            <a
-              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
-              onClick={() => {
-                setIsOpen(false);
-              }}
-            >
-              Report
-            </a>
-            <a
-              className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
-              onClick={() => {
-                setIsOpen(false);
-              }}
-            >
-              Report a bug
-            </a>
+            {options?.map(({ label, action, isShow }) => {
+              if (!isShow) return null;
+
+              return (
+                <a
+                  key={`menu-option-${label}`}
+                  className="flex whitespace-nowrap cursor-pointer items-center gap-2 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
+                  onClick={action}
+                >
+                  {label}
+                </a>
+              );
+            })}
           </div>
         </div>
       )}
