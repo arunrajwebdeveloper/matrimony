@@ -21,6 +21,7 @@ export const useInteraction = (type: InteractionType): InteractionReturn => {
     },
     onSuccess: (_, userId) => {
       queryClient.invalidateQueries({ queryKey: ["profiles"] });
+      queryClient.invalidateQueries({ queryKey: ["navigationSummary"] });
 
       // Optionally, invalidate a more specific key if you want:
       // queryClient.invalidateQueries({ queryKey: ["users", "sent"] });

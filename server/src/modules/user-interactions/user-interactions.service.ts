@@ -192,6 +192,12 @@ export class UserInteractionsService {
       throw new ConflictException('Cannot shortlist yourself');
     }
 
+    // Check if user is blocked
+    const isBlocked = await this.isUserBlocked(fromUserId, toUserId);
+    if (isBlocked) {
+      throw new ForbiddenException('Cannot shortlist blocked user');
+    }
+
     // Check if already shortlisted
     const existing = await this.interactionModel.findOne({
       fromUserId: new Types.ObjectId(fromUserId),
@@ -204,18 +210,11 @@ export class UserInteractionsService {
       throw new ConflictException('User already shortlisted');
     }
 
-    // Check if user is blocked
-    const isBlocked = await this.isUserBlocked(fromUserId, toUserId);
-    if (isBlocked) {
-      throw new ForbiddenException('Cannot shortlist blocked user');
-    }
-
     const session = await this.interactionModel.db.startSession();
 
     try {
       await session.withTransaction(async () => {
         // Create interaction record
-
         const interaction = new this.interactionModel({
           fromUserId: new Types.ObjectId(fromUserId),
           toUserId: new Types.ObjectId(toUserId),
@@ -337,7 +336,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.BLOCKED,
             status: InteractionStatus.ACTIVE,
           },
-          { status: InteractionStatus.EXPIRED },
+          {
+            $set: {
+              status: InteractionStatus.EXPIRED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
@@ -449,7 +453,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.MATCH_REQUEST_SENT,
             status: InteractionStatus.PENDING,
           },
-          { status: InteractionStatus.ACCEPTED },
+          {
+            $set: {
+              status: InteractionStatus.ACCEPTED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
@@ -506,7 +515,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.MATCH_REQUEST_SENT,
             status: InteractionStatus.PENDING,
           },
-          { status: InteractionStatus.CANCELLED },
+          {
+            $set: {
+              status: InteractionStatus.CANCELLED,
+              updatedAt: new Date(),
+            },
+          },
           { session, new: true },
         );
 
@@ -554,7 +568,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.MATCH_REQUEST_SENT,
             status: InteractionStatus.PENDING,
           },
-          { status: InteractionStatus.DECLINED },
+          {
+            $set: {
+              status: InteractionStatus.DECLINED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
@@ -880,7 +899,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.SHORTLISTED,
             status: InteractionStatus.ACTIVE,
           },
-          { status: InteractionStatus.EXPIRED },
+          {
+            $set: {
+              status: InteractionStatus.EXPIRED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
@@ -948,7 +972,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.DECLINED,
             status: InteractionStatus.ACTIVE,
           },
-          { status: InteractionStatus.EXPIRED },
+          {
+            $set: {
+              status: InteractionStatus.EXPIRED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
@@ -988,7 +1017,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.MATCH_REQUEST_ACCEPTED,
             status: InteractionStatus.ACTIVE,
           },
-          { status: InteractionStatus.EXPIRED },
+          {
+            $set: {
+              status: InteractionStatus.EXPIRED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
