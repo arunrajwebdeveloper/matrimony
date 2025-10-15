@@ -1,5 +1,3 @@
-// src/components/ProfileListTeaser.tsx
-
 import React from "react";
 import Link from "next/link"; // Assuming you are using Next.js Link
 import { useInfiniteProfiles } from "@/features/profile/useInfiniteProfiles";

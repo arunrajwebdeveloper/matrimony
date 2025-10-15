@@ -16,33 +16,27 @@ import ProfileList from "@/components/profileList/ProfileList";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import ProfileListTeaser from "@/components/profileList/ProfileListTeaser";
 import Link from "next/link";
-
-const statUsers = [
-  "https://images.unsplash.com/photo-1754430543609-aae159c530ef?q=80&w=1000",
-  "https://images.unsplash.com/photo-1607746882042-944635dfe10e?q=80&w=1000",
-  "https://images.unsplash.com/photo-1607990283143-e81e7a2c9349?q=80&w=1000",
-  "https://images.unsplash.com/photo-1629818385919-e6bfcd7f72cf?q=80&w=1000",
-  "https://images.unsplash.com/photo-1604546689004-4ca31460dba1?q=80&w=1000",
-  "https://images.unsplash.com/flagged/photo-1595523667797-051afce20d86?q=80&w=1000",
-];
+import { useDashboardStats } from "@/hooks/useDashboardStats";
+import StatsSkeleton from "@/components/skeleton/StatsSkeleton";
 
 const DashboardPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const { isLoading, error, user, isAuthenticated } = useAppSelector(
-    (state) => state.auth
-  );
+  const { user } = useAppSelector((state) => state.auth);
+
+  const { data: dashboardStats, isLoading: isDashboardStatsLoading } =
+    useDashboardStats();
 
   return (
     <div className="main-container">
       {/* Breadcrumb */}
-      <div className="py-2">
+      <div className="py-2 sticky top-[70px]">
         <Breadcrumb />
       </div>
 
       <div className="flex">
         <div className="w-[25%] px-2">
-          <div className="mt-5 sticky top-[70px]">
+          <div className="mt-5 sticky top-[122px] sidebar-scroller">
             <div className="py-4">
               <h3 className="font-semibold text-black text-md mb-6">Main</h3>
               <Navigation />
@@ -62,32 +56,45 @@ const DashboardPage: React.FC = () => {
                   Basic Statistics
                 </h2>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <StatisticsCard
-                  value={30}
-                  title="Profile Views"
-                  label="This Week"
-                  users={statUsers}
-                />
-                <StatisticsCard
-                  value={7}
-                  title="New Messages"
-                  label="Unread"
-                  users={statUsers}
-                />
-                <StatisticsCard
-                  value={13}
-                  title="Shortlisted"
-                  label="By You"
-                  users={statUsers}
-                />
-                <StatisticsCard
-                  value={36}
-                  title="Matches"
-                  label="Available"
-                  users={statUsers}
-                />
-              </div>
+
+              {isDashboardStatsLoading && (
+                <div className="grid grid-cols-2 gap-3">
+                  {[...Array(4)].map((_, index) => (
+                    <StatsSkeleton key={`dashboard-stats-skel-${index}`} />
+                  ))}
+                </div>
+              )}
+
+              {!isDashboardStatsLoading && dashboardStats?.result && (
+                <div className="grid grid-cols-2 gap-3">
+                  <StatisticsCard
+                    value={dashboardStats?.result?.profileViews?.count}
+                    title="Profile Views"
+                    label="This Week"
+                    users={dashboardStats?.result?.profileViews?.avatars || []}
+                  />
+                  <StatisticsCard
+                    value={dashboardStats?.result?.newMessages?.count}
+                    title="New Messages"
+                    label="Unread"
+                    users={dashboardStats?.result?.newMessages?.avatars || []}
+                  />
+                  <StatisticsCard
+                    value={dashboardStats?.result?.shortlisted?.count}
+                    title="Shortlisted"
+                    label="By You"
+                    users={dashboardStats?.result?.shortlisted?.avatars || []}
+                  />
+                  <StatisticsCard
+                    value={dashboardStats?.result?.receivedMatches?.count}
+                    title="New Requests"
+                    label="Received"
+                    users={
+                      dashboardStats?.result?.receivedMatches?.avatars || []
+                    }
+                  />
+                </div>
+              )}
             </div>
 
             {/* LISTS */}
@@ -102,7 +109,7 @@ const DashboardPage: React.FC = () => {
               itemPerPage={5}
               showSendInterest={true}
               showAddToShortlist={true}
-              showRemove={true}
+              showIgnore={true}
             />
 
             {/* New Matches: Recently joined profiles that meet 
@@ -115,7 +122,7 @@ const DashboardPage: React.FC = () => {
               itemPerPage={5}
               showSendInterest={true}
               showAddToShortlist={true}
-              showRemove={true}
+              showIgnore={true}
             />
 
             <ProfileCard title="Recent Activities" className="mb-5">
@@ -132,7 +139,7 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
         <div className="w-[25%] px-2">
-          <div className="mt-5">
+          <div className="mt-5 sticky top-[122px] sidebar-scroller">
             {/* <div className="mb-3">
               <ProfileCompletionCard />
             </div> */}

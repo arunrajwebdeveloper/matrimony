@@ -78,31 +78,11 @@ export class UserInteractionsController {
     return this.interactionsService.getShortlisted(req.user._id, page, limit);
   }
 
-  // DECLINE ENDPOINTS
+  // IGNORE ENDPOINTS
 
-  @Post('decline/:userId')
-  async declinedUser(@Req() req: any, @Param('userId') userId: string) {
-    return this.interactionsService.addToDelinedlist(req.user._id, userId);
-  }
-
-  @Post('decline/remove/:userId')
-  async removeFromDeclinedlist(
-    @Req() req: any,
-    @Param('userId') userId: string,
-  ) {
-    return this.interactionsService.removeFromDeclinedlist(
-      req.user._id,
-      userId,
-    );
-  }
-
-  @Get('declined')
-  async getDeclined(
-    @Req() req: any,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
-  ) {
-    return this.interactionsService.getDeclined(req.user._id, page, limit);
+  @Post('ignore/:userId')
+  async ignoreUser(@Req() req: any, @Param('userId') userId: string) {
+    return this.interactionsService.ignoreUser(req.user._id, userId);
   }
 
   // BLOCK ENDPOINTS
@@ -141,17 +121,53 @@ export class UserInteractionsController {
     return this.interactionsService.declineMatchRequest(req.user._id, userId);
   }
 
+  @Post('request/cancel/:userId')
+  async cancelMatchRequest(@Req() req: any, @Param('userId') userId: string) {
+    return this.interactionsService.cancelMatchRequest(req.user._id, userId);
+  }
+
   @Get('request/pending')
-  async getPendingMatchRequests(
+  async getReceivedMatchRequests(
     @Req() req: any,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
   ) {
-    return this.interactionsService.getPendingMatchRequests(
+    return this.interactionsService.getReceivedMatchRequests(
       req.user._id,
       page,
       limit,
     );
+  }
+
+  @Post('decline/remove/:userId')
+  async removeFromDeclinedlist(
+    @Req() req: any,
+    @Param('userId') userId: string,
+  ) {
+    return this.interactionsService.removeFromDeclinedlist(
+      req.user._id,
+      userId,
+    );
+  }
+
+  @Post('accepted/remove/:userId')
+  async removeFromAcceptedlist(
+    @Req() req: any,
+    @Param('userId') userId: string,
+  ) {
+    return this.interactionsService.removeFromAcceptedlist(
+      req.user._id,
+      userId,
+    );
+  }
+
+  @Get('declined')
+  async getDeclined(
+    @Req() req: any,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+  ) {
+    return this.interactionsService.getDeclined(req.user._id, page, limit);
   }
 
   @Get('request/sent')
@@ -168,12 +184,16 @@ export class UserInteractionsController {
   }
 
   @Get('accepted-requests')
-  async getMatches(
+  async getAcceptedRequests(
     @Req() req: any,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
   ) {
-    return this.interactionsService.getMatches(req.user._id, page, limit);
+    return this.interactionsService.getAcceptedRequests(
+      req.user._id,
+      page,
+      limit,
+    );
   }
 
   // PROFILE VIEW ENDPOINTS
@@ -200,9 +220,14 @@ export class UserInteractionsController {
     return this.interactionsService.getRelationshipStatus(req.user._id, userId);
   }
 
-  @Get('summary')
+  @Get('interaction-summary')
   async getUserInteractionSummary(@Req() req: any) {
     return this.interactionsService.getUserInteractionSummary(req.user._id);
+  }
+
+  @Get('dashboard-summary')
+  async getUserDashboardStats(@Req() req: any) {
+    return this.interactionsService.getUserDashboardStats(req.user._id);
   }
 
   @Get('history')

@@ -1,6 +1,12 @@
 export type InteractionType =
   | "sendInterest"
+  | "cancelSentInterest"
   | "acceptInterest"
   | "declineInterest"
   | "blockUser"
-  | "removeUser";
+  | "ignoreUser"
+  | "shortlistUser"
+  | "removeBlockedUser"
+  | "removeShortlistUser"
+  | "removeDeclinedlistUser"
+  | "removeAcceptedlistUser";

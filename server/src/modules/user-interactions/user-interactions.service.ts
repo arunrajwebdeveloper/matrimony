@@ -66,6 +66,7 @@ export class UserInteractionsService {
       ...(userInteractions?.blocked || []),
       ...(userInteractions?.acceptedRequests || []),
       ...(userInteractions?.sentMatchRequests || []),
+      ...(userInteractions?.ignored || []),
     ];
 
     // Build the query based on the user's preferences
@@ -148,6 +149,7 @@ export class UserInteractionsService {
       ...(userInteractions?.blocked || []),
       ...(userInteractions?.acceptedRequests || []),
       ...(userInteractions?.sentMatchRequests || []),
+      ...(userInteractions?.ignored || []),
     ];
 
     // Build query
@@ -190,6 +192,12 @@ export class UserInteractionsService {
       throw new ConflictException('Cannot shortlist yourself');
     }
 
+    // Check if user is blocked
+    const isBlocked = await this.isUserBlocked(fromUserId, toUserId);
+    if (isBlocked) {
+      throw new ForbiddenException('Cannot shortlist blocked user');
+    }
+
     // Check if already shortlisted
     const existing = await this.interactionModel.findOne({
       fromUserId: new Types.ObjectId(fromUserId),
@@ -202,18 +210,11 @@ export class UserInteractionsService {
       throw new ConflictException('User already shortlisted');
     }
 
-    // Check if user is blocked
-    const isBlocked = await this.isUserBlocked(fromUserId, toUserId);
-    if (isBlocked) {
-      throw new ForbiddenException('Cannot shortlist blocked user');
-    }
-
     const session = await this.interactionModel.db.startSession();
 
     try {
       await session.withTransaction(async () => {
         // Create interaction record
-
         const interaction = new this.interactionModel({
           fromUserId: new Types.ObjectId(fromUserId),
           toUserId: new Types.ObjectId(toUserId),
@@ -335,7 +336,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.BLOCKED,
             status: InteractionStatus.ACTIVE,
           },
-          { status: InteractionStatus.EXPIRED },
+          {
+            $set: {
+              status: InteractionStatus.EXPIRED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
@@ -447,7 +453,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.MATCH_REQUEST_SENT,
             status: InteractionStatus.PENDING,
           },
-          { status: InteractionStatus.ACCEPTED },
+          {
+            $set: {
+              status: InteractionStatus.ACCEPTED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
@@ -491,6 +502,59 @@ export class UserInteractionsService {
     return { message: 'Match request accepted successfully' };
   }
 
+  async cancelMatchRequest(fromUserId: string, toUserId: string) {
+    const session = await this.interactionModel.db.startSession();
+
+    try {
+      await session.withTransaction(async () => {
+        // Find and update the pending match request
+        const matchRequest = await this.interactionModel.findOneAndUpdate(
+          {
+            fromUserId: new Types.ObjectId(fromUserId), // Note: reversed
+            toUserId: new Types.ObjectId(toUserId),
+            interactionType: InteractionType.MATCH_REQUEST_SENT,
+            status: InteractionStatus.PENDING,
+          },
+          {
+            $set: {
+              status: InteractionStatus.CANCELLED,
+              updatedAt: new Date(),
+            },
+          },
+          { session, new: true },
+        );
+
+        if (!matchRequest) {
+          throw new NotFoundException(
+            'No pending match request found to cancel',
+          );
+        }
+
+        // Update both users' lists
+        await Promise.all([
+          this.interactionListsModel.findOneAndUpdate(
+            { userId: new Types.ObjectId(fromUserId) },
+            {
+              $pull: { sentMatchRequests: new Types.ObjectId(toUserId) },
+            },
+            { session },
+          ),
+          this.interactionListsModel.findOneAndUpdate(
+            { userId: new Types.ObjectId(toUserId) },
+            {
+              $pull: { receivedMatchRequests: new Types.ObjectId(fromUserId) },
+            },
+            { session },
+          ),
+        ]);
+      });
+    } finally {
+      await session.endSession();
+    }
+
+    return { message: 'Match request cancelled successfully' };
+  }
+
   async declineMatchRequest(fromUserId: string, toUserId: string) {
     const session = await this.interactionModel.db.startSession();
 
@@ -504,7 +568,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.MATCH_REQUEST_SENT,
             status: InteractionStatus.PENDING,
           },
-          { status: InteractionStatus.DECLINED },
+          {
+            $set: {
+              status: InteractionStatus.DECLINED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
@@ -525,12 +594,17 @@ export class UserInteractionsService {
         await Promise.all([
           this.interactionListsModel.findOneAndUpdate(
             { userId: new Types.ObjectId(fromUserId) },
-            { $pull: { receivedMatchRequests: new Types.ObjectId(toUserId) } },
+            {
+              $addToSet: { declinedRequests: new Types.ObjectId(toUserId) },
+              $pull: { receivedMatchRequests: new Types.ObjectId(toUserId) },
+            },
             { session },
           ),
           this.interactionListsModel.findOneAndUpdate(
             { userId: new Types.ObjectId(toUserId) },
-            { $pull: { sentMatchRequests: new Types.ObjectId(fromUserId) } },
+            {
+              $pull: { sentMatchRequests: new Types.ObjectId(fromUserId) },
+            },
             { session },
           ),
         ]);
@@ -587,21 +661,35 @@ export class UserInteractionsService {
 
   // GET OPERATIONS
   async getShortlisted(userId: string, page = 1, limit = 20) {
-    const skip = (page - 1) * limit;
-
-    const userLists = await this.interactionListsModel
+    const userInteractions = await this.interactionListsModel
       .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'shortlisted',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
-      });
+      .exec();
 
-    const total = userLists?.shortlisted?.length || 0;
+    if (!userInteractions) {
+      throw new NotFoundException('Interaction list not found');
+    }
+
+    const skip = (page - 1) * limit;
+    const total = userInteractions?.shortlisted?.length || 0;
+    const shortlistedIds = userInteractions?.shortlisted || [];
+
+    const query: any = {
+      user: { $in: shortlistedIds }, // include interacted profiles
+    };
+
+    // Run queries in parallel for efficiency
+    const profiles = await this.profileModel
+      .find(query)
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
 
     return {
-      data: userLists?.shortlisted || [],
+      data: profiles,
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -612,21 +700,34 @@ export class UserInteractionsService {
   }
 
   async getBlocked(userId: string, page = 1, limit = 20) {
+    const userInteractions = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
+
+    if (!userInteractions) {
+      throw new NotFoundException('Interaction list not found');
+    }
+
     const skip = (page - 1) * limit;
+    const blockedIds = userInteractions?.blocked || [];
+    const total = blockedIds?.length || 0;
 
-    const userLists = await this.interactionListsModel
-      .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'blocked',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
-      });
+    const query: any = {
+      user: { $in: blockedIds },
+    };
 
-    const total = userLists?.blocked?.length || 0;
+    // Find all profiles whose 'user' field matches any of those sent userIds
+    const profiles = await this.profileModel
+      .find(query)
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
     return {
-      data: userLists?.blocked || [],
+      data: profiles || [],
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -636,22 +737,35 @@ export class UserInteractionsService {
     };
   }
 
-  async getMatches(userId: string, page = 1, limit = 20) {
+  async getAcceptedRequests(userId: string, page = 1, limit = 20) {
+    const userInteractions = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
+
+    if (!userInteractions) {
+      throw new NotFoundException('Interaction list not found');
+    }
+
     const skip = (page - 1) * limit;
+    const acceptedRequestIds = userInteractions?.acceptedRequests || [];
+    const total = acceptedRequestIds?.length || 0;
 
-    const userLists = await this.interactionListsModel
-      .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'acceptedRequests',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
-      });
+    const query: any = {
+      user: { $in: acceptedRequestIds },
+    };
 
-    const total = userLists?.acceptedRequests?.length || 0;
+    // Find all profiles whose 'user' field matches any of those sent userIds
+    const profiles = await this.profileModel
+      .find(query)
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
     return {
-      data: userLists?.acceptedRequests || [],
+      data: profiles || [],
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -661,22 +775,35 @@ export class UserInteractionsService {
     };
   }
 
-  async getPendingMatchRequests(userId: string, page = 1, limit = 20) {
+  async getReceivedMatchRequests(userId: string, page = 1, limit = 20) {
+    const userInteractions = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
+
+    if (!userInteractions) {
+      throw new NotFoundException('Interaction list not found');
+    }
+
     const skip = (page - 1) * limit;
+    const receivedRequestIds = userInteractions?.receivedMatchRequests || [];
+    const total = receivedRequestIds?.length || 0;
 
-    const userLists = await this.interactionListsModel
-      .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'receivedMatchRequests',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
-      });
+    const query: any = {
+      user: { $in: receivedRequestIds },
+    };
 
-    const total = userLists?.receivedMatchRequests?.length || 0;
+    // Find all profiles whose 'user' field matches any of those sent userIds
+    const profiles = await this.profileModel
+      .find(query)
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
     return {
-      data: userLists?.receivedMatchRequests || [],
+      data: profiles || [],
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -690,33 +817,24 @@ export class UserInteractionsService {
     const skip = (page - 1) * limit;
 
     // Find the user's interaction list
-    const userList = await this.interactionListsModel.findOne({
+    const userInteractions = await this.interactionListsModel.findOne({
       userId: new Types.ObjectId(userId),
     });
 
-    if (!userList) {
+    if (!userInteractions) {
       throw new NotFoundException('Interaction list not found');
     }
 
-    const sentUserIds = userList.sentMatchRequests || [];
+    const sentUserIds = userInteractions?.sentMatchRequests || [];
+    const total = sentUserIds.length || 0;
 
-    const total = sentUserIds.length;
-
-    if (total === 0) {
-      return {
-        data: [],
-        page,
-        totalPages: 0,
-        total: 0,
-        limit,
-        hasNextPage: false,
-        hasPrevPage: false,
-      };
-    }
+    const query: any = {
+      user: { $in: sentUserIds },
+    };
 
     // Find all profiles whose 'user' field matches any of those sent userIds
     const profiles = await this.profileModel
-      .find({ user: { $in: sentUserIds } })
+      .find(query)
       .select(
         'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
       )
@@ -726,7 +844,7 @@ export class UserInteractionsService {
 
     // Return paginated response
     return {
-      data: profiles,
+      data: profiles || [],
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -768,60 +886,6 @@ export class UserInteractionsService {
     };
   }
 
-  async addToDelinedlist(fromUserId: string, toUserId: string) {
-    if (fromUserId === toUserId) {
-      throw new ConflictException('Cannot decline yourself');
-    }
-
-    // Check if already shortlisted
-    const existing = await this.interactionModel.findOne({
-      fromUserId: new Types.ObjectId(fromUserId),
-      toUserId: new Types.ObjectId(toUserId),
-      interactionType: InteractionType.DECLINED,
-      status: InteractionStatus.ACTIVE,
-    });
-
-    if (existing) {
-      throw new ConflictException('User already declined');
-    }
-
-    // Check if user is blocked
-    const isBlocked = await this.isUserBlocked(fromUserId, toUserId);
-    if (isBlocked) {
-      throw new ForbiddenException('Cannot decline blocked user');
-    }
-
-    const session = await this.interactionModel.db.startSession();
-
-    try {
-      await session.withTransaction(async () => {
-        // Create interaction record
-
-        const interaction = new this.interactionModel({
-          fromUserId: new Types.ObjectId(fromUserId),
-          toUserId: new Types.ObjectId(toUserId),
-          interactionType: InteractionType.DECLINED,
-          status: InteractionStatus.ACTIVE,
-        });
-        await interaction.save({ session });
-
-        // Update user lists
-        await this.interactionListsModel.findOneAndUpdate(
-          { userId: new Types.ObjectId(fromUserId) },
-          {
-            $addToSet: { declinedRequests: new Types.ObjectId(toUserId) },
-            $setOnInsert: { userId: new Types.ObjectId(fromUserId) },
-          },
-          { upsert: true, session },
-        );
-      });
-    } finally {
-      await session.endSession();
-    }
-
-    return { message: 'User added to declinedlist successfully' };
-  }
-
   async removeFromShortlist(fromUserId: string, toUserId: string) {
     const session = await this.interactionModel.db.startSession();
 
@@ -835,7 +899,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.SHORTLISTED,
             status: InteractionStatus.ACTIVE,
           },
-          { status: InteractionStatus.EXPIRED },
+          {
+            $set: {
+              status: InteractionStatus.EXPIRED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
@@ -862,6 +931,34 @@ export class UserInteractionsService {
     return { message: 'User removed from shortlist successfully' };
   }
 
+  async ignoreUser(fromUserId: string, toUserId: string) {
+    const session = await this.interactionModel.db.startSession();
+
+    try {
+      await session.withTransaction(async () => {
+        // Create ignore interaction
+        const interaction = new this.interactionModel({
+          fromUserId: new Types.ObjectId(fromUserId),
+          toUserId: new Types.ObjectId(toUserId),
+          interactionType: InteractionType.IGNORE,
+          status: InteractionStatus.ACTIVE,
+        });
+        await interaction.save({ session });
+
+        // Update user lists
+        await this.interactionListsModel.findOneAndUpdate(
+          { userId: new Types.ObjectId(fromUserId) },
+          { $addToSet: { ignored: new Types.ObjectId(toUserId) } },
+          { session },
+        );
+      });
+    } finally {
+      await session.endSession();
+    }
+
+    return { message: 'User added to ignored successfully' };
+  }
+
   async removeFromDeclinedlist(fromUserId: string, toUserId: string) {
     const session = await this.interactionModel.db.startSession();
 
@@ -875,7 +972,12 @@ export class UserInteractionsService {
             interactionType: InteractionType.DECLINED,
             status: InteractionStatus.ACTIVE,
           },
-          { status: InteractionStatus.EXPIRED },
+          {
+            $set: {
+              status: InteractionStatus.EXPIRED,
+              updatedAt: new Date(),
+            },
+          },
           { session },
         );
 
@@ -902,22 +1004,110 @@ export class UserInteractionsService {
     return { message: 'User removed from declinedlist successfully' };
   }
 
-  async getDeclined(userId: string, page = 1, limit = 20) {
-    const skip = (page - 1) * limit;
+  async removeFromAcceptedlist(fromUserId: string, toUserId: string) {
+    const session = await this.interactionModel.db.startSession();
 
-    const userLists = await this.interactionListsModel
-      .findOne({ userId: new Types.ObjectId(userId) })
-      .populate({
-        path: 'declinedRequests',
-        select:
-          'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
-        options: { skip, limit },
+    try {
+      await session.withTransaction(async () => {
+        // Update existing shortlist interaction to inactive
+        await this.interactionModel.findOneAndUpdate(
+          {
+            fromUserId: new Types.ObjectId(fromUserId),
+            toUserId: new Types.ObjectId(toUserId),
+            interactionType: InteractionType.MATCH_REQUEST_ACCEPTED,
+            status: InteractionStatus.ACTIVE,
+          },
+          {
+            $set: {
+              status: InteractionStatus.EXPIRED,
+              updatedAt: new Date(),
+            },
+          },
+          { session },
+        );
+
+        // Create removal interaction
+        const interaction = new this.interactionModel({
+          fromUserId: new Types.ObjectId(fromUserId),
+          toUserId: new Types.ObjectId(toUserId),
+          interactionType: InteractionType.REMOVED_FROM_ACCEPTEDLIST,
+          status: InteractionStatus.ACTIVE,
+        });
+        await interaction.save({ session });
+
+        // Update user lists
+        await Promise.all([
+          await this.interactionListsModel.findOneAndUpdate(
+            { userId: new Types.ObjectId(fromUserId) },
+            { $pull: { acceptedRequests: new Types.ObjectId(toUserId) } },
+            { session },
+          ),
+
+          await this.interactionListsModel.findOneAndUpdate(
+            { userId: new Types.ObjectId(toUserId) },
+            { $pull: { acceptedRequests: new Types.ObjectId(fromUserId) } },
+            { session },
+          ),
+        ]);
       });
+    } finally {
+      await session.endSession();
+    }
 
-    const total = userLists?.declinedRequests?.length || 0;
+    return { message: 'User removed from acceptedlist successfully' };
+  }
+
+  async getUserInteractionSummary(userId: string) {
+    const userLists = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
+
+    if (!userLists) {
+      return {
+        newRequests: 0,
+        acceptedRequests: 0,
+        shortlisted: 0,
+        sentRequests: 0,
+      };
+    }
 
     return {
-      data: userLists?.declinedRequests || [],
+      newRequests: userLists.receivedMatchRequests.length || 0,
+      acceptedRequests: userLists.acceptedRequests.length || 0,
+      shortlisted: userLists.shortlisted.length || 0,
+      sentRequests: userLists.sentMatchRequests.length || 0,
+    };
+  }
+
+  async getDeclined(userId: string, page = 1, limit = 20) {
+    const userInteractions = await this.interactionListsModel.findOne({
+      userId: new Types.ObjectId(userId),
+    });
+
+    if (!userInteractions) {
+      throw new NotFoundException('Interaction list not found');
+    }
+
+    const skip = (page - 1) * limit;
+    const declinedRequestIds = userInteractions?.declinedRequests || [];
+    const total = declinedRequestIds?.length || 0;
+
+    const query: any = {
+      user: { $in: declinedRequestIds },
+    };
+
+    // Find all profiles whose 'user' field matches any of those sent userIds
+    const profiles = await this.profileModel
+      .find(query)
+      .select(
+        'user firstName lastName profileId dateOfBirth occupation city state motherTongue isOnline profilePicture',
+      )
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    return {
+      data: profiles || [],
       page,
       totalPages: Math.ceil(total / limit),
       total,
@@ -927,7 +1117,84 @@ export class UserInteractionsService {
     };
   }
 
+  async getUserDashboardStats(userId: string) {
+    const userObjectId = new Types.ObjectId(userId);
+
+    // Fetch user interaction lists
+    const userLists = await this.interactionListsModel
+      .findOne({ userId: userObjectId })
+      .populate([
+        {
+          path: 'shortlisted',
+          select: 'profile',
+          populate: {
+            path: 'profile',
+            select: 'profilePicture',
+          },
+          options: { limit: 5 },
+        },
+        {
+          path: 'receivedMatchRequests',
+          select: 'profile',
+          populate: {
+            path: 'profile',
+            select: 'profilePicture',
+          },
+          options: { limit: 5 },
+        },
+      ])
+      .lean();
+
+    // Example message count — assuming you have a message model
+    // const unreadMessagesCount = await this.messageModel.countDocuments({
+    //   receiverId: userObjectId,
+    //   isRead: false,
+    // });
+
+    // Example profile views count — if you log views per week
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    // const profileViewsThisWeek = await this.profileViewModel.countDocuments({
+    //   viewedUserId: userObjectId,
+    //   createdAt: { $gte: oneWeekAgo },
+    // });
+
+    const shortlisted = {
+      count: userLists?.shortlisted?.length || 0,
+      avatars:
+        userLists?.shortlisted
+          ?.map((u: any) => u.profile?.profilePicture)
+          ?.filter(Boolean) || [],
+    };
+
+    const receivedMatches = {
+      count: userLists?.receivedMatchRequests?.length || 0,
+      avatars:
+        userLists?.receivedMatchRequests
+          ?.map((u: any) => u.profile?.profilePicture)
+          ?.filter(Boolean) || [],
+    };
+
+    const profileViews = {
+      count: 35,
+      avatars: [],
+    };
+    const newMessages = {
+      count: 28,
+      avatars: [],
+    };
+
+    return {
+      profileViews,
+      newMessages,
+      shortlisted,
+      receivedMatches,
+    };
+  }
+
   // HELPER METHODS
+
   async isUserBlocked(userId1: string, userId2: string): Promise<boolean> {
     const blocked = await this.interactionModel.findOne({
       $or: [
@@ -1007,35 +1274,8 @@ export class UserInteractionsService {
     return { status: 'none' };
   }
 
-  async getUserInteractionSummary(userId: string) {
-    const userLists = await this.interactionListsModel.findOne({
-      userId: new Types.ObjectId(userId),
-    });
-
-    if (!userLists) {
-      return {
-        shortlisted: 0,
-        blocked: 0,
-        acceptedRequests: 0,
-        sentMatchRequests: 0,
-        receivedMatchRequests: 0,
-        totalProfileViews: 0,
-        totalProfileViewsGiven: 0,
-      };
-    }
-
-    return {
-      shortlisted: userLists.shortlisted?.length || 0,
-      blocked: userLists.blocked?.length || 0,
-      acceptedRequests: userLists.acceptedRequests?.length || 0,
-      sentMatchRequests: userLists.sentMatchRequests?.length || 0,
-      receivedMatchRequests: userLists.receivedMatchRequests?.length || 0,
-      totalProfileViews: userLists.totalProfileViews || 0,
-      totalProfileViewsGiven: userLists.totalProfileViewsGiven || 0,
-    };
-  }
-
   // ANALYTICS METHODS
+
   async getInteractionHistory(userId: string, page = 1, limit = 50) {
     const skip = (page - 1) * limit;
 

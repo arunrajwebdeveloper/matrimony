@@ -4,16 +4,32 @@ import Link from "next/link";
 import { navItems } from "./navItems";
 import { usePathname } from "next/navigation";
 import { NavigationItemType } from "@/types/menu";
+import { useNavigationSummary } from "@/hooks/useNavigationSummary";
+import NavigationSkeleton from "../skeleton/NavigationSkeleton";
 
 export default function Navigation() {
   const pathname = usePathname();
 
-  return (
-    <div>
-      {navItems.map(
-        ({ label, icon: Icon, count, href }: NavigationItemType) => {
-          // const isActive = pathname === href;
+  const { data, isLoading } = useNavigationSummary();
 
+  if (isLoading)
+    return (
+      <div className="space-y-7">
+        {[...Array(8)].map((_, index) => (
+          <NavigationSkeleton key={`nav-skel-${index}`} index={index} />
+        ))}
+      </div>
+    );
+
+  const navlist = navItems?.map((item) => ({
+    ...item,
+    count: data?.result?.[item?.key] ?? item?.count,
+  }));
+
+  return (
+    <div className="space-y-2">
+      {navlist?.map(
+        ({ label, icon: Icon, count, href }: NavigationItemType) => {
           const isActive =
             pathname === href ||
             (href.startsWith("/dashboard/settings") &&
@@ -21,7 +37,7 @@ export default function Navigation() {
 
           return (
             <Link
-              className={`flex items-center justify-between py-2 text-sm my-2 font-medium transition ${
+              className={`flex items-center justify-between py-2 text-sm font-medium transition ${
                 isActive
                   ? "text-blue-600"
                   : "text-slate-600 hover:text-slate-900"
