@@ -135,7 +135,7 @@ function UserCard(props: MatchCardProps) {
 
   return (
     <div className="flex overflow-hidden group">
-      <div className="w-[130px] relative flex-none rounded-full">
+      <div className="w-[130px] h-[130px] relative flex-none rounded-full">
         <Avatar
           src={profilePicture!}
           firstname={`${firstName || ""}`}
