@@ -93,6 +93,50 @@ export class SignedUrlInterceptor implements NestInterceptor {
       );
     }
 
+    /**
+     * Handle Dashboard Stats structure
+     * {
+     *   profileViews: { count, avatars: [] },
+     *   newMessages: { count, avatars: [] },
+     *   shortlisted: { count, avatars: [] },
+     *   receivedMatches: { count, avatars: [] }
+     * }
+     */
+    if (
+      entity?.profileViews &&
+      entity?.newMessages &&
+      entity?.shortlisted &&
+      entity?.receivedMatches
+    ) {
+      const sections = [
+        'profileViews',
+        'newMessages',
+        'shortlisted',
+        'receivedMatches',
+      ];
+
+      for (const key of sections) {
+        const avatars = entity[key]?.avatars;
+
+        if (Array.isArray(avatars) && avatars.length > 0) {
+          // Filter out empty filenames (skip if falsy)
+          const validAvatars = avatars.filter(Boolean);
+
+          if (validAvatars.length > 0) {
+            entity[key].avatars = await Promise.all(
+              validAvatars.map((img: string) =>
+                this.sign(img, userId, FOLDER_TYPES.PROFILE_PICTURES),
+              ),
+            );
+          } else {
+            entity[key].avatars = [];
+          }
+        }
+      }
+
+      return entity;
+    }
+
     return entity;
   }
 
