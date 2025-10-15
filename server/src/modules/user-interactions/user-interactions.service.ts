@@ -1068,6 +1068,7 @@ export class UserInteractionsService {
         acceptedRequests: 0,
         shortlisted: 0,
         sentRequests: 0,
+        declinedRequests: 0,
       };
     }
 
@@ -1076,6 +1077,7 @@ export class UserInteractionsService {
       acceptedRequests: userLists.acceptedRequests.length || 0,
       shortlisted: userLists.shortlisted.length || 0,
       sentRequests: userLists.sentMatchRequests.length || 0,
+      declinedRequests: userLists.declinedRequests.length || 0,
     };
   }
 

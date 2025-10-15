@@ -28,15 +28,15 @@ body {
   margin: auto;
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1280px) {
   .main-container {
-    max-width: 1080px;
+    max-width: 1140px;
   }
 }
 
 @media screen and (min-width: 1600px) {
   .main-container {
-    max-width: 1180px;
+    max-width: 1160px;
   }
 }
 
@@ -89,6 +89,7 @@ body {
 
 .sidebar-scroller {
   max-height: calc(100dvh - 122px);
+  padding-right: 20px;
   overflow-y: auto;
   overflow-x: hidden;
   /* Hide scrollbar for IE, Edge, and Firefox */
@@ -99,6 +100,32 @@ body {
 .sidebar-scroller::-webkit-scrollbar {
   display: none;
 }
+
+/* .sidebar-scroller {
+  max-height: calc(100dvh - 122px);
+  overflow-y: auto;
+  padding-right: 10px;
+}
+.sidebar-scroller > div {
+  overflow-x: hidden;
+}
+.sidebar-scroller::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+.sidebar-scroller::-webkit-scrollbar {
+  width: 3px;
+  background-color: #fff;
+}
+
+.sidebar-scroller::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 20px;
+}
+
+.sidebar-scroller::-webkit-scrollbar-thumb:hover {
+  background-color: #bebebe;
+} */
 
 /* RANGE SLIDER */
 
